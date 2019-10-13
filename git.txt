@@ -5,8 +5,6 @@
 
 
 
-
-
 git log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
 
 echo 'xxx' > .gitignore
@@ -78,3 +76,10 @@ Remove all untracked files and directories. (`-f` is `force`, `-d` is `remove di
 
 git clean -fd
 
+--------------------------------
+non-bare repo push
+--------------------------------
+
+# pushing to non-bare repo even if branch is checked out in remote repo -> execute in remote repo:
+
+git config receive.denyCurrentBranch updateInstead
