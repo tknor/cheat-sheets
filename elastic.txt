@@ -1,0 +1,686 @@
+
+
+
+
+
+------------------------------
+CURL
+------------------------------
+
+curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
+
+------------------------------
+URL params
+------------------------------
+
+/_search?q=john
+/_search?q=job_description:veteran
+
+/accounts/person/_search?q=john
+/accounts/person/_search?q=job_description:veteran
+
+/_search?q=john&size=10
+
+------------------------------
+search whole elastic
+------------------------------
+
+GET _search
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+------------------------------
+search for documents in index
+------------------------------
+
+GET /flies/_search
+
+GET /flies/fly/_search
+
+------------------------------
+searches
+------------------------------
+
+- query produces hits with scores
+
+- term query takes input as a term and looks for it
+- match query takes input as a text and constructs terms and looks for them
+
+Leaf:
+	term, terms
+	match, multi_match
+	match_phrase
+	match_all
+	match_none
+	range
+
+Compound:
+	bool query
+		- next level must be one or more groups
+			- must, filter, should, must_not
+			- group can contain other queries (leaf or compound)
+		- document that returns from more groups has higher score
+
+***	
+
+# works
+# document has "status" : "Operational"
+# elastic stores term "status" : "operational"
+# term query looks for "status" : "operational"
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status" : "operational" }
+  }
+}
+
+# does not work
+# document has "status" : "Operational"
+# elastic stores term "status" : "operational"
+# term query looks for "status" : "Operational"
+# it does not exist
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status" : "Operational" }
+  }
+}
+
+-----------------
+
+# works
+# document has "status" : "Operational"
+# elastic stores field "status.keyword" : "Operational"
+# term query looks for "status.keyword" : "Operational"
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status.keyword" : "Operational" }
+  }
+}
+
+# does not work
+# document has "status" : "Operational"
+# elastic stores field "status.keyword" : "Operational"
+# term query looks for "status.keyword" : "operational"
+# it does not exist
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status.keyword" : "operational" }
+  }
+}
+
+-----------------
+
+# does not work
+# equivalent to "term" : { "vendor.keyword" : "sukhoi" }
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor.keyword" : "sukhoi" }
+    }
+}
+
+# works
+# equivalent to "term" : { "vendor.keyword" : "Sukhoi" }
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor.keyword" : "Sukhoi" }
+    }
+}
+
+-----------------
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "sukhoi", constructs temporary terms:
+	"vendor" : "sukhoi"
+# one of the values is present, it returns documents with "Sukhoi"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "sukhoi" }
+    }
+}
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "Sukhoi", constructs temporary terms:
+	"vendor" : "sukhoi"
+# one of the values is present, it returns documents with "Sukhoi"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "Sukhoi" }
+    }
+}
+
+-----------------
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "sukhoi-gurevich", constructs temporary terms:
+	"vendor" : "sukhoi"
+	"vendor" : "gurevich"
+# two values are present, it returns documents with "Sukhoi" and documents with "Mikoyan-Gurevich"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "sukhoi-gurevich" }
+    }
+}
+
+-----------------
+
+# must is IF
+# equivalent to filter, filter is in filter context, must is in query context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}
+        ]
+      }
+    }
+}
+
+# must is AND
+# equivalent to filter, filter is in filter context, must is in query context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}, 
+          { "term": { "model" : "27" }}
+        ]
+      }
+    }
+}
+
+-----------------
+
+# must_not is IF NOT
+# in filter context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must_not": [
+          { "match": { "vendor" : "Sukhoi" }}
+        ]
+      }
+    }
+}
+
+# must_not is NAND
+# in filter context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must_not": [
+          { "match": { "vendor" : "Sukhoi" }},
+          { "match": { "country" : "UK" }}
+        ]
+      }
+    }
+}
+
+-----------------
+
+# should is IF
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "should": [
+          { "match": { "vendor" : "Grumman" }}
+        ]
+      }
+    }
+}
+
+# should is OR
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "should": [
+          { "match": { "vendor" : "Sukhoi" }},
+          { "match": { "vendor" : "Grumman" }}
+        ]
+      }
+    }
+}
+
+-----------------
+wildcard
+-----------------
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "wildcard": { "model.keyword": "M*" }
+    }
+}
+
+-----------------
+multi term
+-----------------
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "term" : { "vendor": "sukhoi" }
+    }
+}
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "terms" : { "vendor": ["sukhoi", "grumman"] }
+    }
+}
+
+equivalent to:
+
+			GET /flies/fly/_search
+			{
+				"query" : {
+					"bool": {
+						"should": [
+							{ "term" : { "vendor" : "sukhoi" }},
+							{ "term" : { "vendor" : "grumman" }}
+						]
+					}
+				}
+			}
+
+-----------------
+multi match
+-----------------
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "Gurevich" }
+    }
+}
+
+GET /_search
+{
+  "query": {
+    "multi_match" : {
+      "query": "Gurevich", 
+      "fields": [ "vendor", "model" ] 
+    }
+  }
+}
+
+equivalent to:
+
+			GET /_search
+			{
+				"query": {
+					"bool" : {
+						"should": [
+							{ "match": { "vendor": "Gurevich" }},
+							{ "match": { "model": "Gurevich" }}
+						]
+					}
+				}
+			}
+
+-----------------
+naming queries
+-----------------
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "terms" : {
+          "_name" : "franta",
+          "vendor": ["sukhoi", "grumman"]
+        }
+    }
+}
+
+GET /_search
+{
+  "query": {
+    "multi_match" : {
+      "_name" : "alois",
+      "query": "Gurevich", 
+      "fields": [ "vendor", "model" ] 
+    }
+  }
+}
+
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "_name" : "franta", 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}, 
+          { "term": { "model" : "27" }}
+        ]
+      }
+    }
+}
+
+----------------------------------
+bool query inside bool query
+----------------------------------
+
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}, 
+          { "bool": { 
+              "should": [
+                { "term": { "model" : "27" }},
+                { "term": { "model" : "33" }}
+              ]
+            }}
+        ]
+      }
+    }
+}
+
+------------------------------
+delete document by ID
+------------------------------
+
+DELETE /flies/_doc/12345
+
+------------------------------
+delete all documents in index
+------------------------------
+
+POST /flies/fly/_delete_by_query
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+----------------------------
+create index
+----------------------------
+
+PUT /flies
+
+----------------------------
+create document
+----------------------------
+
+POST /accounts/person/3
+{
+    "name" : "Magyar",
+    "lastname" : "Orban",
+    "job_description" : "better not to say"
+}
+
+----------------------------
+edit document
+----------------------------
+
+PUT /accounts/person/3/_update
+{
+      "doc" : {
+          "job_description" : "Dental Specialist"
+       }
+}
+
+----------------------------
+list indices
+----------------------------
+
+GET /_cat/indices?v
+
+----------------------------
+limit results
+----------------------------
+
+GET /flies/fly/_search
+{
+  "size": 10
+}
+
+----------------------------
+show only certain fields
+----------------------------
+
+GET /flies/fly/_search
+{
+  "_source": [ "vendor", "model" ]
+}
+
+----------------------------
+sorting / ordering
+----------------------------
+
+GET /flies/fly/_search
+{
+	"query": {
+		"match_all": {}
+	},
+    "sort": [
+        {"vendor.keyword": "asc"},
+        {"model.keyword": "asc"}
+    ]
+}
+
+--------------------------------------------------------
+paging (default 10000 limit, "from + size" < 10000)
+--------------------------------------------------------
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match_all": {}
+    },
+    "from" : 0,
+    "size" : 3
+}
+
+------------------------------------------------------------------------------------
+creating index pattern... hanging problem, 403 forbidden in browser console
+------------------------------------------------------------------------------------
+
+curl -d @in.json -XPUT -H "Content-Type: application/json" localhost:9200/_all/_settings
+
+{
+	"index.blocks.read_only_allow_delete": null
+}
+
+--------------------------------------------------------
+create index with keyword fields and normalizer
+--------------------------------------------------------
+
+PUT /flies
+{
+	"settings": {
+		"number_of_shards": 1,
+		"analysis": {
+			"normalizer": {
+				"my_normalizer": {
+					"type": "custom",
+					"char_filter": [],
+					"filter": ["lowercase"]
+				}
+			}
+		}
+	},
+	"mappings": {
+		"fly": {
+			"properties": {
+				"vendor": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword"
+						},
+						"lckeyword": {
+							"type": "keyword",
+							"normalizer": "my_normalizer"
+						}
+					}
+				},
+				"model": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword"
+						},
+						"lckeyword": {
+							"type": "keyword",
+							"normalizer": "my_normalizer"
+						}
+					}
+				},
+				"country": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword"
+						},
+						"lckeyword": {
+							"type": "keyword",
+							"normalizer": "my_normalizer"
+						}
+					}
+				},
+				"status": {
+					"type": "text",
+					"fields": {
+						"keyword": {
+							"type": "keyword"
+						},
+						"lckeyword": {
+							"type": "keyword",
+							"normalizer": "my_normalizer"
+						}
+					}
+				},
+				"pretty": {
+					"type": "boolean"
+				},
+				"invented": {
+					"type": "date"
+				},
+				"manufactured": {
+					"type": "integer"
+				},
+				"designation": {
+					"type": "keyword"
+				}
+			}
+		}
+	}
+}
+
+----------------------------
+update index
+----------------------------
+
+PUT /flies/_mapping/fly
+{
+	"properties": {
+		"name": {
+			"type": "text",
+			"fields": {
+				"sort-keyword": {
+					"type": "keyword"
+				},
+				"filter-keyword": {
+					"type": "keyword"
+				}
+			}
+		}
+	}
+}
+
+----------------------------
+bulk create
+----------------------------
+
+POST /flies/fly/_bulk
+{ "create": { "_id" : 100 } }
+{ "vendor" : "McDonnell Douglas", "model" : "F-15 Eagle", "country" : "US", "status" : "Operational" }
+{ "create": { "_id" : 101 } }
+{ "vendor" : "McDonnell Douglas", "model" : "AV-8B Harrier", "country" : "US, UK", "status" : "Operational" }
+{ "create": { "_id" : 102 } }
+{ "vendor" : "McDonnell Douglas", "model" : "F/A-18 Hornet", "country" : "US", "status" : "Operational" }
+{ "create": { "_id" : 103 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-15", "country" : "USSR", "status" : "Production" }
+{ "create": { "_id" : 104 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-19", "country" : "USSR", "status" : "Production" }
+{ "create": { "_id" : 105 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-21", "country" : "USSR", "status" : "Operational" }
+{ "create": { "_id" : 106 } }
+{ "vendor" : "Sukhoi", "model" : "Su-27", "country" : "USSR", "status" : "Operational" }
+{ "create": { "_id" : 107 } }
+{ "vendor" : "Sukhoi", "model" : "Su-33", "country" : "Russia", "status" : "Operational" }
+{ "create": { "_id" : 108 } }
+{ "vendor" : "Grumman", "model" : "F-14 Tomcat", "country" : "US", "status" : "Operational" }
+
+POST /flies/fly/_bulk
+{ "create": { "_id" : 100 } }
+{ "vendor" : "McDonnell Douglas", "model" : "F-15 Eagle", "country" : "US", "status" : "Operational", "pretty" : "true", "invented" : "1972-01-01", "manufactured" : "1196", "designation" : "Eagle" }
+{ "create": { "_id" : 101 } }
+{ "vendor" : "McDonnell Douglas", "model" : "AV-8B Harrier", "country" : "US, UK", "status" : "Operational", "pretty" : "false", "invented" : "1993-01-01", "manufactured" : "133", "designation" : "Harrier" }
+{ "create": { "_id" : 102 } }
+{ "vendor" : "McDonnell Douglas", "model" : "F/A-18 Hornet", "country" : "US", "status" : "Operational", "pretty" : "false", "invented" : "1978-01-01", "manufactured" : "1480", "designation" : "Hornet" }
+{ "create": { "_id" : 103 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-15", "country" : "USSR", "status" : "Production", "pretty" : "false", "invented" : "1947-01-01", "manufactured" : "18000", "designation" : "Fagot" }
+{ "create": { "_id" : 104 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-19", "country" : "USSR", "status" : "Production", "pretty" : "false", "invented" : "1953-01-01", "manufactured" : "2172", "designation" : "Farmer" }
+{ "create": { "_id" : 105 } }
+{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-21", "country" : "USSR", "status" : "Operational", "pretty" : "false", "invented" : "1955-01-01", "manufactured" : "11496", "designation" : "Fishbed" }
+{ "create": { "_id" : 106 } }
+{ "vendor" : "Sukhoi", "model" : "Su-27", "country" : "USSR", "status" : "Operational", "pretty" : "true", "invented" : "1977-01-01", "manufactured" : "680", "designation" : "Flanker" }
+{ "create": { "_id" : 107 } }
+{ "vendor" : "Sukhoi", "model" : "Su-33", "country" : "Russia", "status" : "Operational", "pretty" : "true", "invented" : "1987-01-01", "manufactured" : "24", "designation" : "Flanker-D" }
+{ "create": { "_id" : 108 } }
+{ "vendor" : "Grumman", "model" : "F-14 Tomcat", "country" : "US", "status" : "Operational", "pretty" : "true", "invented" : "1970-01-01", "manufactured" : "712", "designation" : "Tomcat" }

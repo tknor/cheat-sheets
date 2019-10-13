@@ -1,0 +1,43 @@
+
+--all-namespaces
+-n=<namespace>
+
+kubectl version
+kubectl cluster-info
+
+kubectl get nodes
+kubectl get namespaces
+kubectl get deployments
+kubectl get deployments -o wide
+kubectl get deployment <deployment> -o yaml
+kubectl get pods
+kubectl get pod <pod>
+kubectl get pod <pod> -o yaml
+kubectl describe pod <pod>
+kubectl get configmaps
+kubectl edit configmap <configmap>
+kubectl get pv
+kubectl get pvc
+
+kubectl logs <pod>
+kubectl logs -f <pod>
+kubectl exec <pod> env
+kubectl exec -ti <pod> bash
+kubectl exec -ti <pod> sh
+curl localhost:8080
+
+kubectl apply -f xxx.yaml
+kubectl create namespace <namespace>
+
+kubectl delete deployment <deployment>
+kubectl delete pods --all --namespace <namespace>					// ??? syntax
+
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context garmin
+kubectl config use-context dev
+kubectl config use-context test
+kubectl config use-context uat
+
+kubectl config set-context --current --namespace=garmin				// changes current context in config file! rather add new context manually and use "config use-context"
+kubectl config view | grep namespace

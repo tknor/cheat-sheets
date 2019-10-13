@@ -1,0 +1,14 @@
+
+curl localhost:8080
+curl -v localhost:8080
+
+***
+
+curl localhost:9200 | json_pp
+
+***
+
+curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
