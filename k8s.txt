@@ -29,6 +29,7 @@ curl localhost:8080
 kubectl apply -f xxx.yaml
 kubectl create namespace <namespace>
 
+kubectl delete pod <pod>
 kubectl delete deployment <deployment>
 kubectl delete pods --all --namespace <namespace>					// ??? syntax
 

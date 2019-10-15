@@ -473,7 +473,7 @@ PUT /accounts/person/3/_update
 }
 
 ----------------------------
-list indices
+list indexes / indices
 ----------------------------
 
 GET /_cat/indices?v
@@ -639,6 +639,57 @@ PUT /flies/_mapping/fly
 			}
 		}
 	}
+}
+
+----------------------------
+nested properties and query
+----------------------------
+
+PUT /anindex
+{
+  "mappings": {
+    "adoc": {
+      "properties": {
+        "address": {
+          "type": "nested" 
+        }
+      }
+    }
+  }
+}
+
+PUT /anindex/adoc/1
+{
+  "name" : "John Brambor",
+  "address" : [
+    {
+      "town" : "Gateshead",
+      "province" : "Tyne and Wear",
+      "country" : "GB"
+    },
+    {
+      "town" : "Praha",
+      "province" : "Stredocesky kraj",
+      "country" : "CZ"
+    }
+  ]
+}
+
+GET /anindex/adoc/_search
+{
+  "query": {
+    "nested": {
+      "path": "address",
+      "query": {
+        "bool": {
+          "must": [
+            { "match": { "address.town": "Ostrava" }},
+            { "match": { "address.country":  "CZ" }}
+          ]
+        }
+      }
+    }
+  }
 }
 
 ----------------------------
