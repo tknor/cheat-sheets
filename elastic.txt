@@ -648,7 +648,7 @@ nested properties and query
 PUT /anindex
 {
   "mappings": {
-    "adoc": {
+    "_doc": {
       "properties": {
         "address": {
           "type": "nested" 
@@ -658,7 +658,20 @@ PUT /anindex
   }
 }
 
-PUT /anindex/adoc/1
+... after removal of types
+
+PUT anindex
+{
+  "mappings": {
+	"properties": {
+        "address": {
+          "type": "nested" 
+        }
+    }
+  }
+}
+
+PUT /anindex/_doc/1
 {
   "name" : "John Brambor",
   "address" : [
@@ -675,7 +688,7 @@ PUT /anindex/adoc/1
   ]
 }
 
-GET /anindex/adoc/_search
+GET /anindex/_doc/_search
 {
   "query": {
     "nested": {
