@@ -1,3 +1,15 @@
+#!/bin/bash
+
+set -e						// immediate exit on error
+set -u						// immediate exit on unset variable
+set -x						// mirroring commands to stderr
+
+echo "Hello"
+
+read -p "Press ENTER continue"
+read -n 1 -s -r -p "Press any key to continue"
+
+***
 
 curl localhost:8080
 curl -v localhost:8080

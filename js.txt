@@ -1,0 +1,9 @@
+
+npm init
+npm init -y
+
+npx license mit > LICENSE
+npx gitignore node
+npx covgen crimsondeed@gmail.com
+
+npm install --save --save-exact bsv

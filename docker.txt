@@ -1,7 +1,11 @@
 
-docker images
+docker images											// alias to docker image ls
+docker build											// alias to docker image build
+docker ps												// alias to docker container ls
 
-docker build -t <username>/<app> .
+docker image ls
+docker image build -t <username>/<app> .
+docker image rm
 
 docker inspect <container>
 docker logs <container>
@@ -11,23 +15,23 @@ docker exec -it <container> /bin/bash
 docker exec -it <container> cat /etc/os-release
 winpty docker exec -it <container> bash
 
-docker login --username=yourhubusername --email=youremail@company.com
+docker login --username=<user> --email=<email>
 
-docker ps
-docker ps -a
-docker ps -aq
-docker rm -f $(docker ps -aq)
+docker container ls
+docker container ls -a
+docker container ls -aq
+docker rm -f $(docker container ls -aq)
 
 docker tag bb38976d03cf <username>/<app>:firsttry
 
-docker run -p 49160:3000 -d --name boomstick garmin/boomstick
-docker run -p 49160:3000 -d --name boomcrutch some-registry.io/garmin/boomcrutch:1.2.3
-docker run -p 49160:6379 --name some-redis -d redis redis-server --appendonly yes
+docker run -d --name <preferred_name> <image>:<version>				// detached, named
+docker run -d --rm <image>:<version>								// with clean up ?
+docker run -d -p 49160:3000 <image>:<version>						// port forwarding
+docker run -d <image>:<version> --appendonly yes					// ?
+docker run <registry>/<user>/<image>:<version>
 
-docker run --rm -d --name <preferred_name> <image>:<version>
-
-docker create
-docker start <container>
+docker create											// part of docker run
+docker start <container>								// part of docker run
 docker stop <container>
 
 docker-compose up
@@ -35,7 +39,7 @@ docker-compose up -d									// detached
 docker-compose up -d --build							// clean builds containers
 docker-compose -f <alt-docker-compose-file> up
 docker-compose down
-docker-compose create <container>
-docker-compose start <container>
+docker-compose create <container>						// part of docker-compose up
+docker-compose start <container>						// part of docker-compose up
 docker-compose nework create <network>
 docker-compose nework create docker_default

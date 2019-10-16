@@ -660,7 +660,7 @@ PUT /anindex
 
 ... after removal of types
 
-PUT anindex
+PUT /anindex
 {
   "mappings": {
 	"properties": {
