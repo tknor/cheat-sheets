@@ -6,4 +6,4 @@ set -x
 
 git pull
 
-read -p "Press ENTER to continue"
+read -n 1 -s -r -p "Press any key to continue"

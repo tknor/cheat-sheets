@@ -8,4 +8,4 @@ git add .
 git commit -m "-"
 git push origin master
 
-read -p "Press ENTER to continue"
+read -n 1 -s -r -p "Press any key to continue"

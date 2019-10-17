@@ -7,6 +7,9 @@ docker image ls
 docker image build -t <username>/<app> .
 docker image rm
 
+docker network ls
+docker network connect <network> <container>
+
 docker inspect <container>
 docker logs <container>
 
@@ -14,6 +17,8 @@ docker exec -it <container> bash
 docker exec -it <container> /bin/bash
 docker exec -it <container> cat /etc/os-release
 winpty docker exec -it <container> bash
+
+docker cp file.txt <container>:/usr/home/file.txt		// before copying: sed -i 's/\r//' file.txt // line endings (win -> unix)
 
 docker login --username=<user> --email=<email>
 
@@ -24,11 +29,12 @@ docker rm -f $(docker container ls -aq)
 
 docker tag bb38976d03cf <username>/<app>:firsttry
 
-docker run -d --name <preferred_name> <image>:<version>				// detached, named
-docker run -d --rm <image>:<version>								// with clean up ?
-docker run -d -p 49160:3000 <image>:<version>						// port forwarding
-docker run -d <image>:<version> --appendonly yes					// ?
+docker run -d --name <preferred_name> <image>:<version>						// detached, named
+docker run -d --rm <image>:<version>										// with clean up ?
+docker run -d -p 49160:3000 <image>:<version>								// port forwarding
+docker run -d <image>:<version> --appendonly yes							// ?
 docker run <registry>/<user>/<image>:<version>
+docker run -d -e "XPACK1=value1" -e "XPACK2=value2" <image>:<version>		// set environmental variables
 
 docker create											// part of docker run
 docker start <container>								// part of docker run

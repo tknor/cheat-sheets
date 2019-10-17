@@ -6,19 +6,20 @@ set -x						// mirroring commands to stderr
 
 echo "Hello"
 
+VAR_MY="value_my"			// store value in variable
+cd $VAR_PWD					// retrieve value from variable
+
+VAR_PWD=$(pwd)				// store command result to variable
+cd $VAR_PWD
+
 read -p "Press ENTER continue"
 read -n 1 -s -r -p "Press any key to continue"
 
-***
+sed -i 's/\r//' file.txt			// line endings (win -> unix)
 
 curl localhost:8080
+curl localhost:9200 | json_pp		// prettify JSON
 curl -v localhost:8080
-
-***
-
-curl localhost:9200 | json_pp
-
-***
 
 curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
