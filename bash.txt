@@ -25,3 +25,23 @@ curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
+
+***
+
+. common.sh
+
+function script_start() {
+
+    set -e
+    set -u
+    set -x
+
+    VAR_PWD=$(pwd)
+}
+
+function script_end() {
+
+    cd $VAR_PWD
+
+    read -n 1 -s -r -p "Press any key to continue"
+}

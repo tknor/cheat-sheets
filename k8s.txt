@@ -19,6 +19,10 @@ kubectl edit configmap <configmap>
 kubectl get pv
 kubectl get pvc
 
+kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep <part-of-pod-name>
+
+kubectl port-forward <pod> <port-in-pod>:<port-on-localhost>		// forwarding pod's port during process run
+
 kubectl logs <pod>
 kubectl logs -f <pod>
 kubectl exec <pod> env
