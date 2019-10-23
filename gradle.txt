@@ -1,0 +1,8 @@
+
+plugins {
+	id "com.dorongold.task-tree" version "1.4"			// tree view of task dependencies; usage: gradle taskTree <task>
+}
+
+gradle -q <task>										// suppress logging, only tasks' output
+gradle dependencies
+gradle tasks --all
