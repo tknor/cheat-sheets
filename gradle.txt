@@ -1,8 +1,28 @@
 
 plugins {
-	id "com.dorongold.task-tree" version "1.4"			// tree view of task dependencies; usage: gradle taskTree <task>
+	id "com.dorongold.task-tree" version "1.4"					// tree view of task dependencies; usage: gradle taskTree <task>
 }
 
-gradle -q <task>										// suppress logging, only tasks' output
+// logging setting (levels: quiet, error, warn, lifecycle, info, debug, trace)
+
+gradle <task>													// LIFECYCLE and higher
+
+gradle -q <task>												// QUIET and higher
+gradle --quiet <task>											//
+gradle -w <task>												// WARN and higher
+gradle --warn <task>											//
+gradle -i <task>												// INFO and higher
+gradle --info <task>											//
+gradle -d <task>												// DEBUG and higher (that is, all log messages)
+gradle --debug <task>											//
+
 gradle dependencies
+gradle tasks
 gradle tasks --all
+gradle properties
+gradle help --task <task>
+gradle -P<projectProperty>="<projectPropertyValue>" <task>
+gradle <task> <task>											// chaining tasks
+
+gradle -m <task>												// see what tasks would be executed
+gradle --dry-run <task>											// see what tasks would be executed

@@ -1,6 +1,6 @@
 
 --all-namespaces
--n=<namespace>
+--namespace <namespace> OR -n <namespace>
 
 kubectl version
 kubectl cluster-info
@@ -36,6 +36,7 @@ kubectl create namespace <namespace>
 kubectl delete pod <pod>
 kubectl delete deployment <deployment>
 kubectl delete pods --all --namespace <namespace>					// ??? syntax
+kubectl delete pods --all -n <namespace>							// ??? syntax
 
 kubectl config get-contexts
 kubectl config current-context
