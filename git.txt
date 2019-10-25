@@ -1,10 +1,12 @@
 
+--------------------------------
+uncategorized
+--------------------------------
+
 git init
 
 git log
 git log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
-
-echo 'xxx' > .gitignore
 
 --------------------------------
 sub-tree

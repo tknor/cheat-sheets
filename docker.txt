@@ -2,10 +2,16 @@
 docker images											// alias to docker image ls
 docker build											// alias to docker image build
 docker ps												// alias to docker container ls
+docker rm												// alias to docker container rm
 
 docker image ls
-docker image build -t <username>/<app> .
+docker image build .									// . is a PATH to build file and copied folders, etc.
+docker image build -t <name> .
+docker image build -t <name>:<tag> .
+docker image build -f <alt-Dockerfile-file> .
 docker image rm
+
+// name when building for docker hub: <username>/<app>
 
 docker network ls
 docker network connect <network> <container>
@@ -13,32 +19,53 @@ docker network connect <network> <container>
 docker inspect <container>
 docker logs <container>
 
-docker exec -it <container> bash
+docker exec -it <container> bash									// interactive terminal
+docker exec -it <container> sh										// interactive terminal
 docker exec -it <container> /bin/bash
-docker exec -it <container> cat /etc/os-release
-winpty docker exec -it <container> bash
+docker exec <container> bash -c "cat /etc/os-release"				// because 'cat' is shell built-in, not standalone command
+docker exec <container> bash -c 'cat /etc/os-release'
 
-docker cp file.txt <container>:/usr/home/file.txt		// before copying: sed -i 's/\r//' file.txt // line endings (win -> unix)
+winpty docker exec -it ...											// when running from Windows (Git Bash)
+
+docker cp file.txt <container>:/usr/home/file.txt					// before copying: sed -i 's/\r//' file.txt // line endings (win -> unix)
 
 docker login --username=<user> --email=<email>
 
 docker container ls
 docker container ls -a
-docker container ls -aq
-docker rm -f $(docker container ls -aq)
+docker container ls -aq												// list of container IDs
+docker container ls -aqf "name=^<container-name>$"					// gets id of a container by name
+docker container rm -f $(docker container ls -aq)					// stopping and removing all containers
 
 docker tag bb38976d03cf <username>/<app>:firsttry
 
-docker run -d --name <preferred_name> <image>:<version>						// detached, named
-docker run -d --rm <image>:<version>										// with clean up ?
-docker run -d -p 49160:3000 <image>:<version>								// port forwarding
-docker run -d <image>:<version> --appendonly yes							// ?
-docker run <registry>/<user>/<image>:<version>
-docker run -d -e "XPACK1=value1" -e "XPACK2=value2" <image>:<version>		// set environmental variables
+docker run <image>:<version>										// version is optional
+docker run -d --name <preferred_name> <image>						// detached, named
+docker run -d --rm <image>											// does not leave stopped container
+docker run -d -p <port-local>:<port-container> <image>				// port forwarding, safe target e.g. 46160
+docker run -d -P <image>											// random 80 / 443 port mapping
+docker run -d <image> --appendonly yes								// ?
+docker run -d -e "XPACK1=value1" -e "XPACK2=value2" <image>			// set environmental variables
+docker run -v <local-dir>:<container-dir>:ro <image>				// mounting local folder (:ro means read-only) // e.g. -v /var/www:/var/html:ro
+
+// <image> specification can contain registry and user: <registry>/<user>/<image>
 
 docker create											// part of docker run
 docker start <container>								// part of docker run
+
+// build (from image) is not part of docker run - image must be in local registry or docker hub registry
+
 docker stop <container>
+docker stop $(docker container ls -aq)					// stopping all containers
+
+// pruning (should not affect running containers):
+
+docker image prune -f									// all dangling images (unreferenced, untagged)
+docker image prune -a -f								// all images unused by existing containers
+docker container prune -f								// all stopped containers
+docker volume prune -f									// all unused volumes
+docker network prune -f									// all unused networks
+docker system prune --volumes -f						// everything
 
 docker-compose up
 docker-compose up -d									// detached

@@ -1,9 +1,7 @@
 #!/bin/bash
 
-set -e
-set -u
-set -x
+. common.sh
+
+script_start
 
 git pull
-
-read -n 1 -s -r -p "Press any key to continue"

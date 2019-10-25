@@ -47,11 +47,6 @@ GET /flies/fly/_search
 searches
 ------------------------------
 
-- query produces hits with scores
-
-- term query takes input as a term and looks for it
-- match query takes input as a text and constructs terms and looks for them
-
 Leaf:
 	term, terms
 	match, multi_match
@@ -62,17 +57,11 @@ Leaf:
 
 Compound:
 	bool query
-		- next level must be one or more groups
-			- must, filter, should, must_not
-			- group can contain other queries (leaf or compound)
-		- document that returns from more groups has higher score
+		- must, filter, should, must_not
 
-***	
-
-# works
-# document has "status" : "Operational"
-# elastic stores term "status" : "operational"
-# term query looks for "status" : "operational"
+------------------------------
+leaf searches
+------------------------------
 
 GET /flies/fly/_search
 {
@@ -81,60 +70,12 @@ GET /flies/fly/_search
   }
 }
 
-# does not work
-# document has "status" : "Operational"
-# elastic stores term "status" : "operational"
-# term query looks for "status" : "Operational"
-# it does not exist
-
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status" : "Operational" }
-  }
-}
-
------------------
-
-# works
-# document has "status" : "Operational"
-# elastic stores field "status.keyword" : "Operational"
-# term query looks for "status.keyword" : "Operational"
-
 GET /flies/fly/_search
 {
   "query" : {
     "term" : { "status.keyword" : "Operational" }
   }
 }
-
-# does not work
-# document has "status" : "Operational"
-# elastic stores field "status.keyword" : "Operational"
-# term query looks for "status.keyword" : "operational"
-# it does not exist
-
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status.keyword" : "operational" }
-  }
-}
-
------------------
-
-# does not work
-# equivalent to "term" : { "vendor.keyword" : "sukhoi" }
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor.keyword" : "sukhoi" }
-    }
-}
-
-# works
-# equivalent to "term" : { "vendor.keyword" : "Sukhoi" }
 
 GET /flies/fly/_search
 {
@@ -143,38 +84,12 @@ GET /flies/fly/_search
     }
 }
 
------------------
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "sukhoi", constructs temporary terms:
-	"vendor" : "sukhoi"
-# one of the values is present, it returns documents with "Sukhoi"
-
 GET /flies/fly/_search
 {
     "query" : {
         "match" : { "vendor" : "sukhoi" }
     }
 }
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "Sukhoi", constructs temporary terms:
-	"vendor" : "sukhoi"
-# one of the values is present, it returns documents with "Sukhoi"
 
 GET /flies/fly/_search
 {
@@ -183,21 +98,6 @@ GET /flies/fly/_search
     }
 }
 
------------------
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "sukhoi-gurevich", constructs temporary terms:
-	"vendor" : "sukhoi"
-	"vendor" : "gurevich"
-# two values are present, it returns documents with "Sukhoi" and documents with "Mikoyan-Gurevich"
-
 GET /flies/fly/_search
 {
     "query" : {
@@ -205,10 +105,10 @@ GET /flies/fly/_search
     }
 }
 
------------------
+------------------------------
+bool searches
+------------------------------
 
-# must is IF
-# equivalent to filter, filter is in filter context, must is in query context
 GET /flies/fly/_search
 {
     "query": { 
@@ -220,8 +120,6 @@ GET /flies/fly/_search
     }
 }
 
-# must is AND
-# equivalent to filter, filter is in filter context, must is in query context
 GET /flies/fly/_search
 {
     "query": { 
@@ -234,10 +132,6 @@ GET /flies/fly/_search
     }
 }
 
------------------
-
-# must_not is IF NOT
-# in filter context
 GET /flies/fly/_search
 {
     "query": { 
@@ -249,8 +143,6 @@ GET /flies/fly/_search
     }
 }
 
-# must_not is NAND
-# in filter context
 GET /flies/fly/_search
 {
     "query": { 
@@ -263,9 +155,6 @@ GET /flies/fly/_search
     }
 }
 
------------------
-
-# should is IF
 GET /flies/fly/_search
 {
     "query": { 
@@ -277,7 +166,6 @@ GET /flies/fly/_search
     }
 }
 
-# should is OR
 GET /flies/fly/_search
 {
     "query": { 
@@ -748,3 +636,250 @@ POST /flies/fly/_bulk
 { "vendor" : "Sukhoi", "model" : "Su-33", "country" : "Russia", "status" : "Operational", "pretty" : "true", "invented" : "1987-01-01", "manufactured" : "24", "designation" : "Flanker-D" }
 { "create": { "_id" : 108 } }
 { "vendor" : "Grumman", "model" : "F-14 Tomcat", "country" : "US", "status" : "Operational", "pretty" : "true", "invented" : "1970-01-01", "manufactured" : "712", "designation" : "Tomcat" }
+
+------------------------------
+queries notes
+------------------------------
+
+- query produces hits with scores
+
+- term query takes input as a term and looks for it
+- match query takes input as a text and constructs terms and looks for them
+
+Leaf:
+	term, terms
+	match, multi_match
+	match_phrase
+	match_all
+	match_none
+	range
+
+Compound:
+	bool query
+		- next level must be one or more groups
+			- must, filter, should, must_not
+			- group can contain other queries (leaf or compound)
+		- document that returns from more groups has higher score
+
+***	
+
+# works
+# document has "status" : "Operational"
+# elastic stores term "status" : "operational"
+# term query looks for "status" : "operational"
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status" : "operational" }
+  }
+}
+
+# does not work
+# document has "status" : "Operational"
+# elastic stores term "status" : "operational"
+# term query looks for "status" : "Operational"
+# it does not exist
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status" : "Operational" }
+  }
+}
+
+-----------------
+
+# works
+# document has "status" : "Operational"
+# elastic stores field "status.keyword" : "Operational"
+# term query looks for "status.keyword" : "Operational"
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status.keyword" : "Operational" }
+  }
+}
+
+# does not work
+# document has "status" : "Operational"
+# elastic stores field "status.keyword" : "Operational"
+# term query looks for "status.keyword" : "operational"
+# it does not exist
+
+GET /flies/fly/_search
+{
+  "query" : {
+    "term" : { "status.keyword" : "operational" }
+  }
+}
+
+-----------------
+
+# does not work
+# equivalent to "term" : { "vendor.keyword" : "sukhoi" }
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor.keyword" : "sukhoi" }
+    }
+}
+
+# works
+# equivalent to "term" : { "vendor.keyword" : "Sukhoi" }
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor.keyword" : "Sukhoi" }
+    }
+}
+
+-----------------
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "sukhoi", constructs temporary terms:
+	"vendor" : "sukhoi"
+# one of the values is present, it returns documents with "Sukhoi"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "sukhoi" }
+    }
+}
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "Sukhoi", constructs temporary terms:
+	"vendor" : "sukhoi"
+# one of the values is present, it returns documents with "Sukhoi"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "Sukhoi" }
+    }
+}
+
+-----------------
+
+# works
+# documents have
+	"vendor" : "Sukhoi"
+	"vendor" : "Mikoyan-Gurevich"
+# elastic stores terms
+	"vendor" : "sukhoi"
+	"vendor" : "mikoyan"
+	"vendor" : "gurevich"
+# match query takes "vendor" : "sukhoi-gurevich", constructs temporary terms:
+	"vendor" : "sukhoi"
+	"vendor" : "gurevich"
+# two values are present, it returns documents with "Sukhoi" and documents with "Mikoyan-Gurevich"
+
+GET /flies/fly/_search
+{
+    "query" : {
+        "match" : { "vendor" : "sukhoi-gurevich" }
+    }
+}
+
+-----------------
+
+# must is IF
+# equivalent to filter, filter is in filter context, must is in query context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}
+        ]
+      }
+    }
+}
+
+# must is AND
+# equivalent to filter, filter is in filter context, must is in query context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must": [
+          { "match": { "vendor" : "Sukhoi" }}, 
+          { "term": { "model" : "27" }}
+        ]
+      }
+    }
+}
+
+-----------------
+
+# must_not is IF NOT
+# in filter context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must_not": [
+          { "match": { "vendor" : "Sukhoi" }}
+        ]
+      }
+    }
+}
+
+# must_not is NAND
+# in filter context
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "must_not": [
+          { "match": { "vendor" : "Sukhoi" }},
+          { "match": { "country" : "UK" }}
+        ]
+      }
+    }
+}
+
+-----------------
+
+# should is IF
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "should": [
+          { "match": { "vendor" : "Grumman" }}
+        ]
+      }
+    }
+}
+
+# should is OR
+GET /flies/fly/_search
+{
+    "query": { 
+      "bool": { 
+        "should": [
+          { "match": { "vendor" : "Sukhoi" }},
+          { "match": { "vendor" : "Grumman" }}
+        ]
+      }
+    }
+}
