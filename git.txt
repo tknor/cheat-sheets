@@ -1,12 +1,57 @@
 
---------------------------------
-uncategorized
---------------------------------
-
 git init
+
+git config --list --show-origin
+
+git config user.name "John Doe"
+git config --global user.name "John Doe"
+
+git config user.email johndoe@example.com
+git config --global user.email johndoe@example.com
+
+git add .											// stage all files (considers .gitignore)
+git reset											// unstage all files
+git reset <file>
+git reset --hard									// revert changes to all modified files (destructive)
+git reset <file> --hard
+
+git remote
+git remote -v
+git remote add <preferred-name> <path-to-git-file>
+
+// remote can also be stored locally
+
+git rebase -i HEAD~4								// rebasing (e.g. squashing) last 4 commits to one
+
+git branch  										// local
+git branch -a										// local & remote
+git branch -r										// remote only
+git branch my-branch								// creates branch
+
+git checkout my-branch								// switch to branch
 
 git log
 git log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
+
+git fetch origin HEAD								// first part of git pull
+git merge HEAD										// second part of git pull
+
+git pull
+git push origin master
+
+git rev-parse HEAD > filename						// HEAD commit hash to filename
+git describe --all --long > filename				// HEAD commit hash to filename too?
+
+git clean -f										// remove all untracked files, forced
+git clean -fd										// remove all untracked files and directories, forced
+
+--------------------------------
+non-bare repo
+--------------------------------
+
+pushing to non-bare repo even if branch is checked out in remote repo -> execute in remote repo:
+
+git config receive.denyCurrentBranch updateInstead
 
 --------------------------------
 sub-tree
@@ -16,69 +61,17 @@ git remote add <my-name-for-remote> <url-to-remote-git-file>
 git subtree add --prefix=<local-folder-name> <my-name-for-remote> <branch-on-remote>
 
 --------------------------------
-remotes
+.gitignore
 --------------------------------
 
-git remote
-git remote -v
+assuming 'build' can be both folder and file, and root folder is folder containing .gitignore:
 
---------------------------------
-branches
---------------------------------
+/build									// any build in root
+/build/									// build folder in root
+build									// any build anywhere
+build/									// build folder anywhere
 
-git branch  					// local
-git branch -a					// local & remote
-git branch -r					// remote only
+**/another/build						// any build anywhere,		asterisks needed due to middle folder in path ?
+**/another/build/						// build folder anywhere,	asterisks needed due to middle folder in path ?
 
-git branch my-branch			// creates branch
-
-git checkout my-branch			// switch to branch
-
---------------------------------
-pull
---------------------------------
-
-git fetch origin HEAD
-git merge HEAD
-
-OR
-
-git pull
-
---------------------------------
-push
---------------------------------
-
-git push origin master
-
---------------------------------
-HEAD commit hash to filename
---------------------------------
-
-git rev-parse HEAD > filename
-
---------------------------------
-similar to above?
---------------------------------
-
-git describe --all --long > filename
-
---------------------------------
-Revert changes to modified files
---------------------------------
-
-git reset --hard
-
---------------------------------
-Remove all untracked files and directories. (`-f` is `force`, `-d` is `remove directories`)
---------------------------------
-
-git clean -fd
-
---------------------------------
-non-bare repo push
---------------------------------
-
-# pushing to non-bare repo even if branch is checked out in remote repo -> execute in remote repo:
-
-git config receive.denyCurrentBranch updateInstead
+<whatever>build/**						// should match also anything under the folder, but it works without them
