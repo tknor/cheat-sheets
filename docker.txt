@@ -27,6 +27,9 @@ docker exec <container> bash -c 'cat /etc/os-release'
 
 winpty docker exec -it ...											// when running from Windows (Git Bash)
 
+CTRL + P then CTRL + Q												// exit shell, but leaving the container running
+docker attach <container>											// regain shell access
+
 docker cp file.txt <container>:/usr/home/file.txt					// before copying: sed -i 's/\r//' file.txt // line endings (win -> unix)
 
 docker login --username=<user> --email=<email>

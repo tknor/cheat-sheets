@@ -1,22 +1,22 @@
 
-#!/bin/bash					// header
+#!/bin/bash													// header
 
-. common.sh					// including other scripts
+. common.sh													// including other scripts
 
-set -e						// immediate exit on error
-set -u						// immediate exit on unset variable
-set -x						// mirroring commands to stderr
+set -e														// immediate exit on error
+set -u														// immediate exit on unset variable
+set -x														// mirroring commands to stderr
 
 echo "Hello"
-echo 'Hello' > .gitignore	// write to file (overwrite)
-echo 'Hello' >> .gitignore	// write to file (append)
+echo 'Hello' > .gitignore									// write to file (overwrite)
+echo 'Hello' >> .gitignore									// write to file (append)
 
-printf "Hello\n"			// more consistent than echo, definitely supports newlines
+printf "Hello\n"											// more consistent than echo, definitely supports newlines
 
-VAR_MY="value_my"			// store value in variable
-cd $VAR_PWD					// retrieve value from variable
+VAR_MY="value_my"											// store value in variable
+cd $VAR_PWD													// retrieve value from variable
 
-VAR_PWD=$(pwd)				// store command result to variable
+VAR_PWD=$(pwd)												// store command result to variable
 cd $VAR_PWD
 
 mkdir -p src/main/resources/META-INF						// create folder with all the parents

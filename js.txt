@@ -7,3 +7,8 @@ npx gitignore node
 npx covgen crimsondeed@gmail.com
 
 npm install --save --save-exact bsv
+
+npm install -g bitcom
+
+npm install --save datapay
+npm install --save bsv
