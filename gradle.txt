@@ -1,8 +1,4 @@
 
-plugins {
-	id "com.dorongold.task-tree" version "1.4"					// tree view of task dependencies; usage: gradle taskTree <task>
-}
-
 // logging setting (levels: quiet, error, warn, lifecycle, info, debug, trace)
 
 gradle <task>													// LIFECYCLE and higher
@@ -26,3 +22,26 @@ gradle <task> <task>											// chaining tasks
 
 gradle -m <task>												// see what tasks would be executed
 gradle --dry-run <task>											// see what tasks would be executed
+
+------------------------------------
+
+plugins {
+	id "com.dorongold.task-tree" version "1.4"					// tree view of task dependencies; usage: gradle taskTree <task>
+}
+
+------------------------------------
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+  dependencies {
+    classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.4"
+  }
+}
+
+apply plugin: "com.dorongold.task-tree"
+
+------------------------------------

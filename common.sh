@@ -2,12 +2,6 @@
 
 CONST_CHEATS_FOLDER=~/Workspaces/Git/cheat-sheets
 
-CONST_WL_TRANSFORMER="hs360-ref-watchlist-transformer"
-CONST_WL_MGMT="hs360-ref-watchlist-mgmt"
-CONST_CEP="hs360-ref-cep"
-
-CONST_PORT_WL_TRANSFORMER="8080:8080"
-
 function separator() {
 	printf "\n"
 }
@@ -28,7 +22,7 @@ function script_start() {
 
     set -e
     set -u
-#    set -x
+    #set -x
 
 	trap script_end EXIT
 
@@ -74,5 +68,5 @@ function delete_pod() {
 }
 
 function logs_from_pod() {
-	kubectl logs $VAR_POD_NAME
+	kubectl logs $VAR_POD_NAME > ~/Desktop/logs.txt
 }
