@@ -316,6 +316,62 @@ GET /flies/fly/_search
 }
 
 ------------------------------
+combining nested and non-nested
+------------------------------
+
+GET flies/_search
+{
+	"query": {
+		"bool": {
+			"must": [{
+					"bool": {
+						"should": [
+							{
+								"match": {}
+							}, {
+								"match": {}
+							}
+						]
+					}
+				}, {
+					"nested": {
+						"path": "ADDRESS",
+						"query": {
+							"bool": {
+								"should": [{
+										"bool": {
+											"must": [
+												{
+													"match": {}
+												}, 
+												{
+													"match": {}
+												}
+											]
+										}
+									}, {
+										"bool": {
+											"must": [
+												{
+													"match": {}
+												}, 
+												{
+													"match": {}
+												}
+											]
+										}
+									}
+								]
+							}
+						}
+					}
+				}
+			]
+		}
+	}
+}
+
+------------------------------
 delete document by ID
 ------------------------------
 
