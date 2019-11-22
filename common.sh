@@ -12,8 +12,6 @@ function phase() {
 
 function script_end {
 	
-	cd $VAR_PWD
-	
 	phase "press any key to continue"
     read -n 1 -s -r
 }
@@ -22,11 +20,9 @@ function script_start() {
 
     set -e
     set -u
-    #set -x
+    # set -x
 
 	trap script_end EXIT
-
-    VAR_PWD=$(pwd)
 }
 
 function stop_docker_container() {
