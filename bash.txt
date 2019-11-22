@@ -21,8 +21,23 @@ cd $VAR_PWD
 
 mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
+rm file.txt
+rm [file_prefix]*
+rm -f file.txt												// delete write-protected file, also is silent when file does not exist
+
+tail file.txt
+tail -f file.txt
+tail -1000 file.txt
+
 read -p "press ENTER continue"
 read -n 1 -s -r -p "press any key to continue"
+
+chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
+
+wc -l file.txt												// number of lines in a file
+wc -l < file.txt											// outputs only the number
+
+yum install lsof											// installing lsof command
 
 return <n>
 exit <n>

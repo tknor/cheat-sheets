@@ -5,7 +5,7 @@ docker ps												// alias to docker container ls
 docker rm												// alias to docker container rm
 
 docker image ls
-docker image build .									// . is a PATH to build file and copied folders, etc.
+docker image build .												// . is a PATH to build file and copied folders, etc.
 docker image build -t <name> .
 docker image build -t <name>:<tag> .
 docker image build -f <alt-Dockerfile-file> .
@@ -14,6 +14,7 @@ docker image rm
 // name when building for docker hub: <username>/<app>
 
 docker network ls
+docker network inspect <network>									// also lists containers in network with their IPs
 docker network connect <network> <container>
 
 docker inspect <container>
@@ -22,6 +23,8 @@ docker logs <container>
 docker exec -it <container> bash									// interactive terminal
 docker exec -it <container> sh										// interactive terminal
 docker exec -it <container> /bin/bash
+docker exec -u 0 -it <container> bash								// interactive terminal as a ROOT user
+
 docker exec <container> bash -c "cat /etc/os-release"				// because 'cat' is shell built-in, not standalone command
 docker exec <container> bash -c 'cat /etc/os-release'
 
