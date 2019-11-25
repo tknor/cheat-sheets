@@ -12,3 +12,6 @@ npm install -g bitcom
 
 npm install --save datapay
 npm install --save bsv
+
+npm install -g bitbus
+npm install -g bitbus --unsafe-perm
