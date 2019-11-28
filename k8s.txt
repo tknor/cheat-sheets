@@ -30,6 +30,9 @@ kubectl exec -ti <pod> bash
 kubectl exec -ti <pod> sh
 curl localhost:8080
 
+kubectl cp <pod>:/folder/file.txt ./copied-here/
+kubectl cp <namespace>/<pod>:/folder/file.txt ./copied-here/
+
 kubectl apply -f xxx.yaml
 kubectl create namespace <namespace>
 

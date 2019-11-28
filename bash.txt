@@ -11,6 +11,9 @@ echo "Hello"
 echo 'Hello' > .gitignore									// write to file (overwrite)
 echo 'Hello' >> .gitignore									// write to file (append)
 
+find														// list folder structure
+find . -not -path '*/\.*'									// structure without those starting with dot
+
 printf "Hello\n"											// more consistent than echo, definitely supports newlines
 
 VAR_MY="value_my"											// store value in variable
@@ -19,11 +22,18 @@ cd $VAR_PWD													// retrieve value from variable
 VAR_PWD=$(pwd)												// store command result to variable
 cd $VAR_PWD
 
+$(($VAR_NUMBER - 1))										// arithmetic evaluation
+
+echo $VAR_R
+
+cp -r /source-folder /destination-folder					// recursive copy
+
 mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
 rm file.txt
 rm [file_prefix]*
-rm -f file.txt												// delete write-protected file, also is silent when file does not exist
+rm -f file.txt												// forced - deletes write-protected file & silent when file does not exist
+rm -rf folder												// delete folder recursively and forced
 
 tail file.txt
 tail -f file.txt

@@ -66,3 +66,7 @@ function delete_pod() {
 function logs_from_pod() {
 	kubectl logs $VAR_POD_NAME > ~/Desktop/logs.txt
 }
+
+function logs_from_pod_display_only() {
+	kubectl logs $VAR_POD_NAME
+}
