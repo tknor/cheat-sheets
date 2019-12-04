@@ -39,6 +39,8 @@ tail file.txt
 tail -f file.txt
 tail -1000 file.txt
 
+[ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
+
 read -p "press ENTER continue"
 read -n 1 -s -r -p "press any key to continue"
 
@@ -71,6 +73,16 @@ if [[ $(docker container ls -aq) ]]; then
     echo "there are containers"
 else
     echo "there are no containers"
+fi
+
+-------------------------------
+
+// test for folder existence
+
+if [ -d "/folder" ]; then
+    echo "exists"
+else
+    echo "does not exist"
 fi
 
 -------------------------------

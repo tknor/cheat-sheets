@@ -28,6 +28,12 @@ git branch -a										// local & remote
 git branch -r										// remote only
 git branch my-branch								// creates branch
 
+git add .
+git add "file"
+git status
+git commit -m "commit message"
+git commit --amend
+
 git checkout my-branch								// switch to branch
 
 git log
@@ -45,6 +51,8 @@ git describe --all --long > filename				// HEAD commit hash to filename too?
 git clean -f										// remove all untracked files, forced
 git clean -fd										// remove all untracked files and directories, forced
 
+git update-index --chmod=+x script.sh				// making e.g. script file executable before commit
+
 --------------------------------
 non-bare repo
 --------------------------------
@@ -59,6 +67,16 @@ sub-tree
 
 git remote add <my-name-for-remote> <url-to-remote-git-file>
 git subtree add --prefix=<local-folder-name> <my-name-for-remote> <branch-on-remote>
+
+git subtree push --prefix=<local-folder-name> <my-name-for-remote> <branch-name>
+git subtree pull --prefix=<local-folder-name> <my-name-for-remote> <branch-name>
+
+// remove sub-module
+
+git submodule deinit <path_to_submodule>
+git rm <path_to_submodule>
+git commit-m "Removed submodule "
+rm -rf .git/modules/<path_to_submodule>
 
 --------------------------------
 .gitignore
