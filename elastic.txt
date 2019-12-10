@@ -179,6 +179,22 @@ GET /flies/fly/_search
 }
 
 -----------------
+timestamp range query
+-----------------
+
+GET _search
+{
+  "query": {
+    "range": {
+      "@timestamp": {
+        "gte": "2019-12-09T11:30:00",
+        "lte": "2019-12-09T11:33:00"
+      }
+    }
+  }
+}
+
+-----------------
 wildcard
 -----------------
 
