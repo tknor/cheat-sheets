@@ -6,8 +6,8 @@ docker rm												// alias to docker container rm
 
 docker image ls
 docker image build .												// . is a PATH to build file and copied folders, etc.
-docker image build -t <name> .
-docker image build -t <name>:<tag> .
+docker image build -t <name> .										// name the image
+docker image build -t <name>:<tag> .								// name the image with optional tag
 docker image build -f <alt-Dockerfile-file> .
 docker image rm
 
@@ -33,6 +33,7 @@ winpty docker exec -it ...											// when running from Windows (Git Bash)
 CTRL + P then CTRL + Q												// exit shell, but leaving the container running
 docker attach <container>											// regain shell access
 
+docker cp <container>:/usr/home/file.txt file.txt
 docker cp file.txt <container>:/usr/home/file.txt					// before copying: sed -i 's/\r//' file.txt // line endings (win -> unix)
 
 docker login --username=<user> --email=<email>
@@ -53,6 +54,9 @@ docker run -d -P <image>											// random 80 / 443 port mapping
 docker run -d <image> --appendonly yes								// ?
 docker run -d -e "XPACK1=value1" -e "XPACK2=value2" <image>			// set environmental variables
 docker run -v <local-dir>:<container-dir>:ro <image>				// mounting local folder (:ro means read-only) // e.g. -v /var/www:/var/html:ro
+
+docker cp file.txt <container>:/file.txt
+docker cp <container>:/file.txt file.txt
 
 // <image> specification can contain registry and user: <registry>/<user>/<image>
 
@@ -82,3 +86,11 @@ docker-compose create <container>						// part of docker-compose up
 docker-compose start <container>						// part of docker-compose up
 docker-compose nework create <network>
 docker-compose nework create docker_default
+
+ARG <name>[=<default value>]
+--build-arg <varname>=<value>
+
+// add to docker file if you need to keep container running
+
+CMD tail -f /dev/null
+

@@ -19,6 +19,7 @@ gradle properties
 gradle help --task <task>
 gradle -P<projectProperty>="<projectPropertyValue>" <task>
 gradle <task> <task>											// chaining tasks
+gradle <task> -x <excluded_task>
 
 gradle -m <task>												// see what tasks would be executed
 gradle --dry-run <task>											// see what tasks would be executed

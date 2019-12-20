@@ -51,7 +51,8 @@ git describe --all --long > filename				// HEAD commit hash to filename too?
 git clean -f										// remove all untracked files, forced
 git clean -fd										// remove all untracked files and directories, forced
 
-git update-index --chmod=+x script.sh				// making e.g. script file executable before commit
+git ls-files -s script.sh							// checking permissions
+git update-index --chmod=+x script.sh				// changing permissions, making e.g. script file executable before commit
 
 --------------------------------
 non-bare repo

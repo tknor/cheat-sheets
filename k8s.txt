@@ -15,9 +15,11 @@ kubectl get pod <pod>
 kubectl get pod <pod> -o yaml
 kubectl describe pod <pod>
 kubectl get configmaps
-kubectl edit configmap <configmap>
 kubectl get pv
 kubectl get pvc
+
+kubectl edit deployment <deployment>
+kubectl edit configmap <configmap>
 
 kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep <part-of-pod-name>
 
@@ -30,6 +32,9 @@ kubectl exec -ti <pod> bash
 kubectl exec -ti <pod> sh
 curl localhost:8080
 
+kubectl exec <pod> df
+kubectl -n <namespace> exec <pod> df								// list all file systems, their disk space
+
 kubectl cp <pod>:/folder/file.txt ./copied-here/
 kubectl cp <namespace>/<pod>:/folder/file.txt ./copied-here/
 
@@ -38,8 +43,9 @@ kubectl create namespace <namespace>
 
 kubectl delete pod <pod>
 kubectl delete deployment <deployment>
-kubectl delete pods --all --namespace <namespace>					// ??? syntax
-kubectl delete pods --all -n <namespace>							// ??? syntax
+kubectl delete pods --all --namespace <namespace>								// ??? syntax
+kubectl delete pods --all -n <namespace>										// ??? syntax
+kubectl delete pod <pod> --grace-period=0 --force --namespace <namespace>
 
 kubectl config get-contexts
 kubectl config current-context

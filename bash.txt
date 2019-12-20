@@ -41,6 +41,11 @@ tail -1000 file.txt
 
 [ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
 
+sudo lsof -i -P -n | grep LISTEN
+sudo netstat -tulpn | grep LISTEN
+sudo lsof -i:22 ## see a specific port such as 22 ##
+sudo nmap -sTU -O IP-address-Here
+
 read -p "press ENTER continue"
 read -n 1 -s -r -p "press any key to continue"
 
