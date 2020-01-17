@@ -20,9 +20,15 @@ gradle help --task <task>
 gradle -P<projectProperty>="<projectPropertyValue>" <task>
 gradle <task> <task>											// chaining tasks
 gradle <task> -x <excluded_task>
+gradle <task> --rerun-tasks										// rerun task even if it is UP-TO-DATE
 
 gradle -m <task>												// see what tasks would be executed
 gradle --dry-run <task>											// see what tasks would be executed
+
+gradle test --tests *TestClass.testMethod						// only specific test
+gradle test --tests *TestClass
+gradle test --tests specific.package*
+gradle someTestTask --tests *TestClass1 --tests *TestClass2
 
 ------------------------------------
 

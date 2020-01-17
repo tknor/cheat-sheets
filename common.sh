@@ -20,7 +20,7 @@ function script_start() {
 
     set -e
     set -u
-    # set -x
+    set -x
 
 	trap script_end EXIT
 }
