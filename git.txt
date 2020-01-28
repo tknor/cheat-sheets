@@ -33,6 +33,7 @@ git add "file"
 git status
 git commit -m "commit message"
 git commit --amend
+git commit --allow-empty							// allows empty commit with no changes, added files, etc.
 
 git checkout my-branch								// switch to branch
 
