@@ -1,6 +1,21 @@
 #!/bin/bash
 
-CONST_CHEATS_FOLDER=~/Workspaces/Git/cheat-sheets
+# flagged for removal
+# CONST_CHEATS_FOLDER=~/Workspaces/Git/cheat-sheets
+
+# OPTIONS:
+# w - will not wait in the end
+# x - will output commands
+
+VAR_X_OPTION=0
+VAR_W_OPTION=0
+
+while getopts "xw" option; do
+	case "${option}" in
+		x) VAR_X_OPTION=1;;
+		w) VAR_W_OPTION=1;;
+	esac
+ done
 
 function separator() {
 	printf "\n"
@@ -12,15 +27,21 @@ function phase() {
 
 function script_end {
 	
-	phase "press any key to continue"
+if [[ $VAR_W_OPTION != 1 ]]; then
+    phase "press any key to continue"
     read -n 1 -s -r
+fi
+	
 }
 
 function script_start() {
 
     set -e
     set -u
-    set -x
+
+	if [[ $VAR_X_OPTION == 1 ]]; then
+		set -x
+	fi
 
 	trap script_end EXIT
 }

@@ -70,7 +70,18 @@ curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhos
 curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
 
--------------------------------
+--------------------------------
+Open SSH
+--------------------------------
+
+ssh-keygen -t ed25519 -C "email@example.com"				// generate SSH key pair, key type ED25519, with comment, prompts for output file later
+ssh-keygen -t rsa -b 4096 -C "email@example.com"
+
+ssh -T git@gitlab.com										// replies with welcome message if your PubKey on server == some PubKey in your ~/.ssh key pairs
+
+--------------------------------
+bash conditions
+--------------------------------
 
 // test for non-empty command's output
 
@@ -80,7 +91,7 @@ else
     echo "there are no containers"
 fi
 
--------------------------------
+--------------
 
 // test for folder existence
 
@@ -90,7 +101,17 @@ else
     echo "does not exist"
 fi
 
--------------------------------
+--------------
+
+// test for variable value
+
+if [[ $VAR_SOME == 1 ]]; then
+    echo "variable value is 1"
+else
+    echo "variable value is not 1"
+fi
+
+--------------
 
 // test for last command's success
 
@@ -100,7 +121,7 @@ else
     echo "last command succeeded"
 fi
 
--------------------------------
+--------------
 
 // tests above combined
 
