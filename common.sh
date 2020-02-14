@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# flagged for removal
-# CONST_CHEATS_FOLDER=~/Workspaces/Git/cheat-sheets
-
 # OPTIONS:
-# w - will not wait in the end
+# w - will wait in the end
 # x - will output commands
 
 VAR_X_OPTION=0
@@ -27,7 +24,7 @@ function phase() {
 
 function script_end {
 	
-if [[ $VAR_W_OPTION != 1 ]]; then
+if [[ $VAR_W_OPTION == 1 ]]; then
     phase "press any key to continue"
     read -n 1 -s -r
 fi
@@ -85,7 +82,8 @@ function delete_pod() {
 }
 
 function logs_from_pod() {
-	kubectl logs $VAR_POD_NAME > ~/Desktop/logs.txt
+	mkdir ~/Desktop/temp
+	kubectl logs $VAR_POD_NAME > ~/Desktop/temp/logs.txt
 }
 
 function logs_from_pod_display_only() {

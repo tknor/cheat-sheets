@@ -63,6 +63,15 @@ Compound:
 leaf searches
 ------------------------------
 
+GET /flies/fly/_search (GET /flies/_search)
+{
+   "query" : {
+     "match":{
+        "_id": "xxxxxxxxxxxxxx"
+     }
+   }
+}
+
 GET /flies/fly/_search
 {
   "query" : {
@@ -579,6 +588,24 @@ PUT /flies
 		}
 	}
 }
+
+----------------------------
+check policy
+----------------------------
+
+GET _ilm/policy/flies_policy
+
+----------------------------
+check mapping
+----------------------------
+
+GET /flies/_mapping
+
+----------------------------
+check settings
+----------------------------
+
+GET /flies/_settings
 
 ----------------------------
 update index
