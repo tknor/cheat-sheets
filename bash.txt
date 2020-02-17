@@ -83,7 +83,7 @@ ssh -T git@gitlab.com										// replies with welcome message if your PubKey on
 bash conditions
 --------------------------------
 
-// test for non-empty command's output
+// test for non-empty commands output
 
 if [[ $(docker container ls -aq) ]]; then
     echo "there are containers"
@@ -101,6 +101,14 @@ else
     echo "does not exist"
 fi
 
+// test for file existence
+
+if [ -f "/file.txt" ]; then
+    echo "exists"
+else
+    echo "does not exist"
+fi
+
 --------------
 
 // test for variable value
@@ -113,7 +121,7 @@ fi
 
 --------------
 
-// test for last command's success
+// test for last commands success
 
 if [[ $? != 0 ]]; then
     echo "last command failed"

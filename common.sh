@@ -73,6 +73,7 @@ function open_sh_to_pod() {
 	winpty kubectl exec -it $VAR_POD_NAME sh
 }
 
+# params: 1 porting (e.g. 8080:8080)
 function port_forward_from_pod() {
 	kubectl port-forward $VAR_POD_NAME $1
 }
@@ -81,11 +82,31 @@ function delete_pod() {
 	kubectl delete pod $VAR_POD_NAME
 }
 
-function logs_from_pod() {
-	mkdir ~/Desktop/temp
-	kubectl logs $VAR_POD_NAME > ~/Desktop/temp/logs.txt
+function download_logs_from_pod() {
+
+	mkdir -p ~/Desktop/temp
+	rm -f ~/Desktop/temp/text.txt
+	echo "n/a" > ~/Desktop/temp/text.txt
+
+	kubectl logs $VAR_POD_NAME > ~/Desktop/temp/text.txt
 }
 
-function logs_from_pod_display_only() {
+# params: 1 pod name, 2 absolute file path
+function download_text_file_from_pod() {
+
+	mkdir -p ~/Desktop/temp
+	rm -f ~/Desktop/temp/text.txt
+	rm -f ~/Desktop/temp/temp.txt
+	echo "n/a" > ~/Desktop/temp/text.txt
+
+	cd ~/Desktop/
+	kubectl cp $1:$2 ./temp/temp.txt
+
+  if [ -f "temp/temp.txt" ]; then
+      cat temp/temp.txt > temp/text.txt
+  fi
+}
+
+function show_logs_from_pod() {
 	kubectl logs $VAR_POD_NAME
 }
