@@ -20,12 +20,12 @@ docker network connect <network> <container>
 docker inspect <container>
 docker logs <container>
 
+docker exec -u 0 -it <container> bash								// interactive terminal as a ROOT user
 docker exec -it <container> bash									// interactive terminal
 docker exec -it <container> sh										// interactive terminal
 docker exec -it <container> /bin/bash
-docker exec -u 0 -it <container> bash								// interactive terminal as a ROOT user
-
-docker exec <container> bash -c "cat /etc/os-release"				// because 'cat' is shell built-in, not standalone command
+docker exec <container> mkdir -p /folder/sub-folder					// standard command
+docker exec <container> bash -c "cat /etc/os-release"				// ... because 'cat' is shell built-in, not standalone command
 docker exec <container> bash -c 'cat /etc/os-release'
 
 winpty docker exec -it ...											// when running from Windows (Git Bash)

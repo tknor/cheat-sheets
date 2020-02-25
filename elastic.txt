@@ -403,6 +403,12 @@ delete document by ID
 DELETE /flies/_doc/12345
 
 ------------------------------
+delete index
+------------------------------
+
+DELETE /flies
+
+------------------------------
 delete all documents in index
 ------------------------------
 
