@@ -62,7 +62,10 @@ function stop_and_remove_docker_containers() {
 }
 
 function pod_name() {
+
 	VAR_POD_NAME=$(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep $1)
+
+	phase "pod name = '$VAR_POD_NAME'"
 }
 
 function open_bash_to_pod() {
@@ -84,15 +87,21 @@ function delete_pod() {
 
 function download_logs_from_pod() {
 
+  phase "downloading logs"
+
 	mkdir -p ~/Desktop/temp
 	rm -f ~/Desktop/temp/text.txt
 	echo "n/a" > ~/Desktop/temp/text.txt
 
 	kubectl logs $VAR_POD_NAME > ~/Desktop/temp/text.txt
+
+	phase "logs downloaded"
 }
 
 # params: 1 pod name, 2 absolute file path
 function download_text_file_from_pod() {
+
+  phase "downloading text file"
 
 	mkdir -p ~/Desktop/temp
 	rm -f ~/Desktop/temp/text.txt
@@ -104,9 +113,15 @@ function download_text_file_from_pod() {
 
   if [ -f "temp/temp.txt" ]; then
       cat temp/temp.txt > temp/text.txt
+	  rm -f ~/Desktop/temp/temp.txt
   fi
+
+  phase "text file downloaded"
 }
 
 function show_logs_from_pod() {
+
+  phase "showing logs"
+
 	kubectl logs $VAR_POD_NAME
 }

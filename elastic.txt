@@ -25,6 +25,17 @@ URL params
 /_search?q=john&size=10
 
 ------------------------------
+setting pagination / paging limit
+------------------------------
+
+PUT /world_check/_settings
+{
+    "index" : {
+        "max_result_window" : 100000
+    }
+}
+
+------------------------------
 search whole elastic
 ------------------------------
 
@@ -417,6 +428,20 @@ POST /flies/fly/_delete_by_query
   "query": {
     "match_all": {}
   }
+}
+
+----------------------------
+aliases
+----------------------------
+
+GET /_aliases
+
+POST /_aliases
+{
+    "actions" : [
+		{ "add" : { "index" : "index1", "alias" : "alias1" } },
+        { "remove" : { "index" : "index2", "alias" : "alias2" } }
+    ]
 }
 
 ----------------------------
