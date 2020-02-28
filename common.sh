@@ -43,48 +43,68 @@ function script_start() {
 	trap script_end EXIT
 }
 
+# params:
+# 1 container
 function stop_docker_container() {
 
 	phase "stopping container '$1'"
-	VAR_CONTAINER=$(docker container ls -aqf "name=^$1$")
-	if [[ $VAR_CONTAINER ]]; then
-		docker stop $VAR_CONTAINER
+
+	TEMP=$(docker container ls -aqf "name=^$1$")
+	if [[ $TEMP ]]; then
+		docker stop $TEMP
 	fi
+
+	phase "container stopped"
 }
 
 function stop_and_remove_docker_containers() {
 
 	phase "stopping and removing all containers"
-	VAR_CONTAINERS=$(docker container ls -aq)
-	if [[ $VAR_CONTAINERS ]]; then
-		docker container rm -f $VAR_CONTAINERS
+
+	TEMP=$(docker container ls -aq)
+	if [[ $TEMP ]]; then
+		docker container rm -f $TEMP
 	fi
+
+	phase "done"
 }
 
+# params:
+# 1 pod name part
+# result in TEMP
 function pod_name() {
 
-	VAR_POD_NAME=$(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep $1)
-
-	phase "pod name = '$VAR_POD_NAME'"
+	TEMP=$(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep $1)
+	phase "pod = '$TEMP'"
 }
 
+# params:
+# 1 pod
 function open_bash_to_pod() {
-	winpty kubectl exec -it $VAR_POD_NAME bash
+	winpty kubectl exec -it $1 bash
 }
 
+# params:
+# 1 pod
 function open_sh_to_pod() {
-	winpty kubectl exec -it $VAR_POD_NAME sh
+	winpty kubectl exec -it $1 sh
 }
 
-# params: 1 porting (e.g. 8080:8080)
+# params:
+# 1 pod
+# 2 porting (e.g. 8080:8080)
 function port_forward_from_pod() {
-	kubectl port-forward $VAR_POD_NAME $1
+	kubectl port-forward $1 $2
 }
 
+# params:
+# 1 pod
 function delete_pod() {
-	kubectl delete pod $VAR_POD_NAME
+	kubectl delete pod $1
 }
 
+# params:
+# 1 pod
 function download_logs_from_pod() {
 
   phase "downloading logs"
@@ -93,12 +113,14 @@ function download_logs_from_pod() {
 	rm -f ~/Desktop/temp/text.txt
 	echo "n/a" > ~/Desktop/temp/text.txt
 
-	kubectl logs $VAR_POD_NAME > ~/Desktop/temp/text.txt
+	kubectl logs $1 > ~/Desktop/temp/text.txt
 
 	phase "logs downloaded"
 }
 
-# params: 1 pod name, 2 absolute file path
+# params:
+# 1 pod name
+# 2 absolute file path
 function download_text_file_from_pod() {
 
   phase "downloading text file"
@@ -119,9 +141,11 @@ function download_text_file_from_pod() {
   phase "text file downloaded"
 }
 
+# params:
+# 1 pod
 function show_logs_from_pod() {
 
   phase "showing logs"
 
-	kubectl logs $VAR_POD_NAME
+	kubectl logs $1
 }

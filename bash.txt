@@ -80,8 +80,32 @@ ssh-keygen -t rsa -b 4096 -C "email@example.com"
 ssh -T git@gitlab.com										// replies with welcome message if your PubKey on server == some PubKey in your ~/.ssh key pairs
 
 --------------------------------
+bash prompt
+--------------------------------
+
+echo "Question?"
+select yn in "Yes" "No"; do
+    case $yn in
+        Yes ) command-that-does-something; break;;
+        No ) exit;;
+    esac
+done
+
+--------------------------------
 bash conditions
 --------------------------------
+
+// else if
+
+if [[ $1 == "a" ]]; then
+	...
+elif [[ $1 == "b" ]]; then
+	...
+else
+    ...
+fi
+
+--------------
 
 // test for non-empty commands output
 
