@@ -1,7 +1,20 @@
 
 
-
+GET /_aliases
+GET /_cat/indices
 GET /_cat/indices?v
+GET _ilm/policy/some_policy
+GET /some_index
+GET /some_index/_settings
+GET /some_index/_mapping
+
+GET /some_index/_search
+{
+  "query": {
+    "match_all": {}
+  },
+  "size": "100"
+}
 
 ------------------------------
 CURL
@@ -331,6 +344,63 @@ GET /flies/fly/_search
 }
 
 ----------------------------------
+delete document found by query
+----------------------------------
+
+POST /flies/_delete_by_query
+{
+  "query": {
+    "match": {
+      "vendor": "Sukhoi"
+    }
+  }
+}
+
+----------------------------------
+filter script search query
+----------------------------------
+
+// timestamp that has .000Z (no millis after second)
+
+GET /flies/_search
+{
+    "query": {
+        "bool" : {
+            "filter" : {
+                "script" : {
+                    "script" : {
+                        "source": "doc['timestamp'].value.getMillisOfSecond() == 0",
+                        "lang": "painless"
+                     }
+                }
+            }
+        }
+    }
+}
+
+----------------------------------
+filter script delete query
+----------------------------------
+
+// timestamp that has .000Z (no millis after second)
+
+POST /flies/_delete_by_query
+{
+  "query": {
+        "bool" : {
+            "filter" : {
+                "script" : {
+                    "script" : {
+                        "source": "doc['timestamp'].value.getMillisOfSecond() == 0",
+                        "lang": "painless"
+                     }
+                }
+            }
+        }
+    }
+}
+
+----------------------------------
 bool query inside bool query
 ----------------------------------
 
@@ -488,7 +558,7 @@ GET /flies/fly/_search
 }
 
 ----------------------------
-show only certain fields
+show only certain, specific fields
 ----------------------------
 
 GET /flies/fly/_search
