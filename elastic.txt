@@ -350,6 +350,13 @@ delete document found by query
 POST /flies/_delete_by_query
 {
   "query": {
+    "match_all": {}
+  }
+}
+
+POST /flies/_delete_by_query
+{
+  "query": {
     "match": {
       "vendor": "Sukhoi"
     }
