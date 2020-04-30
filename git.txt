@@ -23,6 +23,10 @@ git remote add <preferred-name> <path-to-git-file>
 
 git rebase -i HEAD~4								// rebasing (e.g. squashing) last 4 commits to one
 
+git stash											// alias for 'git stash push'
+git stash push
+git stash apply
+
 git branch  										// local
 git branch -a										// local & remote
 git branch -r										// remote only
@@ -34,6 +38,8 @@ git status
 git commit -m "commit message"
 git commit --amend
 git commit --allow-empty							// allows empty commit with no changes, added files, etc.
+
+git merge other-branch
 
 git checkout my-branch								// switch to branch
 

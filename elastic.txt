@@ -746,7 +746,18 @@ PUT /anindex
     "_doc": {
       "properties": {
         "address": {
-          "type": "nested" 
+			"type": "nested",
+			"properties" : {
+				"city" : {
+					"type" : "text"
+				},
+				"country" : {
+					"type" : "text"
+				},
+				"province" : {
+					"type" : "text"
+				}
+			}
         }
       }
     }
@@ -758,10 +769,18 @@ PUT /anindex
 PUT /anindex
 {
   "mappings": {
-	"properties": {
-        "address": {
-          "type": "nested" 
+    "properties": {
+      "address": {
+        "type": "nested",
+        "properties" : {
+          "city" : {
+            "type" : "text"
+          },
+          "street" : {
+            "type" : "text"
+          }
         }
+      }
     }
   }
 }

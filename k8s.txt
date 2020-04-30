@@ -17,6 +17,7 @@ kubectl describe pod <pod>
 kubectl get configmaps
 kubectl get pv
 kubectl get pvc
+kubectl get volumeattachment
 
 kubectl edit deployment <deployment>
 kubectl edit configmap <configmap>
@@ -46,6 +47,8 @@ kubectl delete deployment <deployment>
 kubectl delete pods --all --namespace <namespace>								// ??? syntax
 kubectl delete pods --all -n <namespace>										// ??? syntax
 kubectl delete pod <pod> --grace-period=0 --force --namespace <namespace>
+
+kubectl delete pvc <pvc>														// 
 
 kubectl config get-contexts
 kubectl config current-context
