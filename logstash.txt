@@ -1,0 +1,65 @@
+
+----------------
+template
+----------------
+
+input {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "source"
+        docinfo => true
+        docinfo_fields => ["_index", "_id"]
+        docinfo_target => "_originatingWLIndex"
+    }
+}
+
+filter {
+    
+}
+
+
+output {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "target"
+        document_type => "_doc"
+        document_id => "%{[@metadata][_id]}"
+    }
+}
+
+----------------
+transformations / filters
+----------------
+
+	mutate {
+        add_field => {
+            "[@metadata][_id]" => "%{[_originatingWLIndex][_id]}"
+            "[@metadata][_type]" => "_doc"
+            "[@metadata][_index]" => "%{[_originatingWLIndex][_index]}"
+        }
+    }
+
+	# simple concatenate
+	mutate {
+        add_field => { "target" => "%{source1} %{source2}"}
+    }
+	
+	
+	mutate {
+        add_field => { "target" => "%{[source_object][source_object_sub_field]}"}
+    }
+
+	mutate {
+		copy => { "source_field" => "source_field_copy" }
+	}
+
+	# works on nested object, having at least 1 item
+	# works on object array, having at least 1 item
+	# does not work on object
+	mutate {
+        add_field => { "target" => "%{[source_nested_object][0][source_object_sub_field]}"}
+	}
+
+	mutate {
+		rename => {"[source_field]" => "[source_field_renamed]"}
+    }
