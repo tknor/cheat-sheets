@@ -612,7 +612,53 @@ curl -d @in.json -XPUT -H "Content-Type: application/json" localhost:9200/_all/_
 }
 
 --------------------------------------------------------
-create index with keyword fields and normalizer
+create index with normalizer, analyzer, filter
+--------------------------------------------------------
+
+FROM docker.elastic.co/elasticsearch/elasticsearch:7.2.1
+RUN bin/elasticsearch-plugin install analysis-phonetic
+
+PUT /flies
+{
+    "settings": {
+        "number_of_shards": 1,
+        "analysis": {
+            "normalizer": {
+                "lowercase_normalizer": {
+                    "type": "custom",
+                    "char_filter": [],
+                    "filter": ["lowercase"]
+                }
+            },
+            "analyzer": {
+                "metaphone_phonetic_analyzer": {
+                    "tokenizer": "standard",
+                    "filter": [ "lowercase", "metaphone_filter"
+                    ]
+                },
+				"beider_morse_phonetic_analyzer" : {
+					"tokenizer" : "standard",
+					"filter" : [ "lowercase", "beider_morse_filter"]
+				}
+            },
+            "filter": {
+                "metaphone_filter": {
+                    "type": "phonetic",
+                    "encoder": "metaphone",
+                    "replace": false
+                },
+				"beider_morse_filter" : {
+					"languageset" : "any",
+					"type" : "phonetic",
+					"encoder" : "beider_morse"
+				}
+            }
+        }
+    }
+}
+
+--------------------------------------------------------
+create index with keyword fields and lowercase normalizer
 --------------------------------------------------------
 
 PUT /flies
@@ -820,7 +866,7 @@ GET /anindex/_doc/_search
 }
 
 ----------------------------
-bulk create
+bulk / batch create
 ----------------------------
 
 POST /flies/fly/_bulk
