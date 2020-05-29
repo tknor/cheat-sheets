@@ -14,9 +14,14 @@ input {
 }
 
 filter {
-    
+    mutate {
+        add_field => {
+            "[@metadata][_id]" => "%{[_originatingWLIndex][_id]}"
+            "[@metadata][_type]" => "_doc"
+            "[@metadata][_index]" => "%{[_originatingWLIndex][_index]}"
+        }
+    }
 }
-
 
 output {
     elasticsearch {
@@ -31,35 +36,51 @@ output {
 transformations / filters
 ----------------
 
-	mutate {
-        add_field => {
-            "[@metadata][_id]" => "%{[_originatingWLIndex][_id]}"
-            "[@metadata][_type]" => "_doc"
-            "[@metadata][_index]" => "%{[_originatingWLIndex][_index]}"
-        }
-    }
-
 	# simple concatenate
 	mutate {
-        add_field => { "target" => "%{source1} %{source2}"}
+        add_field => { "target_field" => "%{source_field_1} %{source_field_2}"}
     }
 	
-	
-	mutate {
-        add_field => { "target" => "%{[source_object][source_object_sub_field]}"}
-    }
-
 	mutate {
 		copy => { "source_field" => "source_field_copy" }
 	}
+	
+	# works on object
+	# does not work on object arrays or nested object arrays
+	mutate {
+        add_field => { "target_field" => "%{[source_object_field][source_object_sub_field]}"}
+    }
 
 	# works on nested object, having at least 1 item
 	# works on object array, having at least 1 item
 	# does not work on object
 	mutate {
-        add_field => { "target" => "%{[source_nested_object][0][source_object_sub_field]}"}
+        add_field => { "target_field" => "%{[source_nested_object_field][0][source_object_sub_field]}"}
 	}
 
 	mutate {
-		rename => {"[source_field]" => "[source_field_renamed]"}
+		rename => {"[source_field]" => "[target_field]"}
+    }
+
+	mutate {
+		remove_field => [ "source_field" ]
+	}
+
+	# works on object
+	# does not work on object arrays or nested object arrays
+	mutate {
+		remove_field => [ "[source_object_field][source_object_sub_field]" ]
+	}
+
+	# equivalent code for sub-field removal
+    ruby {
+        code => '
+            original_nested_object_array = event.get("NESTED");
+            new_nested_object_array = Array.new()
+            original_nested_object_array.each { |original_nested_object|
+                original_nested_object.delete("an_objects_field");
+                new_nested_object_array.push(original_nested_object);
+            }
+            event.set("NESTED", new_nested_object_array)
+        '
     }
