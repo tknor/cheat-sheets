@@ -1,6 +1,6 @@
 
 ----------------------------
-template xml file - stdout
+template XML file - stdout
 ----------------------------
 
 input {
