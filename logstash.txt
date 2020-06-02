@@ -1,5 +1,26 @@
 
 ----------------------------
+template xml file - stdout
+----------------------------
+
+input {
+    file {
+        path => "/path_to_source/source.xml"
+        type => "xml"
+    }
+}
+
+filter {
+
+}
+
+output {
+    stdout {
+        codec => rubydebug { metadata => true }
+    }
+}
+
+----------------------------
 template elastic - elastic
 ----------------------------
 

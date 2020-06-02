@@ -109,11 +109,11 @@ function download_logs_from_pod() {
 
   phase "downloading logs"
 
-	mkdir -p ~/Desktop/temp
-	rm -f ~/Desktop/temp/text.txt
-	echo "n/a" > ~/Desktop/temp/text.txt
+	mkdir -p $CONST_TEMP_FOLDER
+	rm -f $CONST_TEMP_FOLDER/text.txt
+	echo "n/a" > $CONST_TEMP_FOLDER/text.txt
 
-	kubectl logs $1 > ~/Desktop/temp/text.txt
+	kubectl logs $1 > $CONST_TEMP_FOLDER/text.txt
 
 	phase "logs downloaded"
 }
@@ -125,17 +125,16 @@ function download_text_file_from_pod() {
 
   phase "downloading text file"
 
-	mkdir -p ~/Desktop/temp
-	rm -f ~/Desktop/temp/text.txt
-	rm -f ~/Desktop/temp/temp.txt
-	echo "n/a" > ~/Desktop/temp/text.txt
+	mkdir -p $CONST_TEMP_FOLDER
+	rm -f $CONST_TEMP_FOLDER/text.txt
+	rm -f $CONST_TEMP_FOLDER/temp.txt
+	echo "n/a" > $CONST_TEMP_FOLDER/text.txt
 
-	cd ~/Desktop/
-	kubectl cp $1:$2 ./temp/temp.txt
+	kubectl cp $1:$2 $CONST_TEMP_FOLDER/temp.txt
 
-  if [ -f "temp/temp.txt" ]; then
-      cat temp/temp.txt > temp/text.txt
-	  rm -f ~/Desktop/temp/temp.txt
+  if [ -f "$CONST_TEMP_FOLDER/temp.txt" ]; then
+      cat $CONST_TEMP_FOLDER/temp.txt > $CONST_TEMP_FOLDER/text.txt
+	  rm -f $CONST_TEMP_FOLDER/temp.txt
   fi
 
   phase "text file downloaded"
@@ -149,3 +148,4 @@ function show_logs_from_pod() {
 
 	kubectl logs $1
 }
+

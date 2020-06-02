@@ -1,0 +1,19 @@
+alias xdc=\'$ffs/./docker-clean.sh\'
+alias xdl=\'$ffs/./docker-list.sh\'
+alias xdu=\'$ffs/./docker-local-up.sh\'
+alias xdd=\'$ffs/./docker-local-down.sh\'
+alias xdts=\'$ffs/./docker-sh.sh\'
+alias xdtb=\'$ffs/./docker-bash.sh\'
+
+alias xk=\'$ffs/./ku-set-context.sh\'
+
+alias xpts=\'$ffs/./pod-sh.sh\'
+alias xptb=\'$ffs/./pod-bash.sh\'
+alias xpd=\'$ffs/./pod-delete.sh\'
+alias xpls=\'$ffs/./pod-log-show.sh\'
+alias xpld=\'$ffs/./pod-log-download.sh\'
+alias xptfd=\'$ffs/./pod-text-file-download.sh\'
+alias xppf=\'$ffs/./pod-port-forward.sh\'
+alias xse=\'$ffs/./service-endpoint.sh\'
+
+alias xe=\'$ffs/./elk.sh\'
