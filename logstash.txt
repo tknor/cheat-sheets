@@ -91,3 +91,13 @@ transformations / filters
 			add_field => { "field" => ""}
 		}
 	}
+	
+--------------------------
+other
+--------------------------
+
+logstash -f myconfiguration.conf --path.data /usr/share/logstash/mydatafolder --debug
+
+logstash-plugin list
+logstash-plugin install logstash-codec-avro_schema_registry
+logstash-plugin install logstash-codec-avro
