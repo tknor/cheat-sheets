@@ -1,4 +1,7 @@
 
+----------------------------
+basic operations
+----------------------------
 
 GET /_aliases
 GET /_cat/indices
@@ -6,14 +9,38 @@ GET /_cat/indices?v
 GET _ilm/policy/some_policy
 GET /some_index
 GET /some_index/_settings
-GET /some_index/_mapping
+GET /some_index/_mappings
 
 GET /some_index/_search
 {
   "query": {
     "match_all": {}
   },
-  "size": "100"
+  "size": "10"
+}
+
+POST /some_index/_delete_by_query
+{
+  "query": {
+    "match_all": {}
+  }
+}
+
+DELETE /some_index/_doc/12345
+DELETE /some_index
+
+PUT /accounts
+
+POST /accounts/person/1
+{
+    "name" : "Tomas",
+}
+
+PUT /accounts/person/1/_update
+{
+    "doc": {
+        "name": "Tomas"
+    }
 }
 
 ------------------------------
@@ -38,36 +65,6 @@ URL params
 /_search?q=john&size=10
 
 ------------------------------
-setting pagination / paging limit
-------------------------------
-
-PUT /world_check/_settings
-{
-    "index" : {
-        "max_result_window" : 100000
-    }
-}
-
-------------------------------
-search whole elastic
-------------------------------
-
-GET _search
-{
-  "query": {
-    "match_all": {}
-  }
-}
-
-------------------------------
-search for documents in index
-------------------------------
-
-GET /flies/_search
-
-GET /flies/fly/_search
-
-------------------------------
 searches
 ------------------------------
 
@@ -82,67 +79,66 @@ Leaf:
 Compound:
 	bool query
 		- must, filter, should, must_not
-
+		
 ------------------------------
-leaf searches
+simple search query examples
 ------------------------------
 
-GET /flies/fly/_search (GET /flies/_search)
+GET _search
 {
-   "query" : {
-     "match":{
-        "_id": "xxxxxxxxxxxxxx"
-     }
-   }
-}
-
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status" : "operational" }
+  "query": {
+    "match_all": {}
   }
 }
 
 GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status.keyword" : "Operational" }
-  }
-}
 
-GET /flies/fly/_search
+GET /flies/_search
+
 {
-    "query" : {
-        "match" : { "vendor.keyword" : "Sukhoi" }
+    "query": {
+        "match": {
+            "_id": "12345"
+        }
     }
 }
 
-GET /flies/fly/_search
 {
-    "query" : {
-        "match" : { "vendor" : "sukhoi" }
+    "query": {
+        "term": {
+            "status": "operational"
+        }
     }
 }
 
-GET /flies/fly/_search
 {
-    "query" : {
-        "match" : { "vendor" : "Sukhoi" }
+    "query": {
+        "term": {
+            "status.keyword": "Operational"
+        }
     }
 }
 
-GET /flies/fly/_search
 {
-    "query" : {
-        "match" : { "vendor" : "sukhoi-gurevich" }
+    "query": {
+        "match": {
+            "vendor.keyword": "Sukhoi"
+        }
+    }
+}
+
+{
+    "query": {
+        "match": {
+            "vendor": "sukhoi"
+        }
     }
 }
 
 ------------------------------
-bool searches
+bool search query examples
 ------------------------------
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -153,7 +149,6 @@ GET /flies/fly/_search
     }
 }
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -165,7 +160,6 @@ GET /flies/fly/_search
     }
 }
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -176,7 +170,6 @@ GET /flies/fly/_search
     }
 }
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -188,7 +181,6 @@ GET /flies/fly/_search
     }
 }
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -199,7 +191,6 @@ GET /flies/fly/_search
     }
 }
 
-GET /flies/fly/_search
 {
     "query": { 
       "bool": { 
@@ -211,77 +202,70 @@ GET /flies/fly/_search
     }
 }
 
------------------
-timestamp range query
------------------
+--------------------------------------
+timestamp range search query example
+--------------------------------------
 
-GET _search
 {
-  "query": {
-    "range": {
-      "@timestamp": {
-        "gte": "2019-12-09T11:30:00",
-        "lte": "2019-12-09T11:33:00"
-      }
+    "query": {
+        "range": {
+            "@timestamp": {
+                "gte": "2019-12-09T11:30:00",
+                "lte": "2019-12-09T11:33:00"
+            }
+        }
     }
-  }
 }
 
------------------
-wildcard
------------------
+------------------------------
+wildcard search query example
+------------------------------
 
-GET /flies/fly/_search
 {
     "query" : {
         "wildcard": { "model.keyword": "M*" }
     }
 }
 
------------------
-multi term
------------------
+---------------------------------
+multi term search query example
+---------------------------------
 
-GET /flies/fly/_search
 {
     "query" : {
         "term" : { "vendor": "sukhoi" }
     }
 }
 
-GET /flies/fly/_search
 {
     "query" : {
         "terms" : { "vendor": ["sukhoi", "grumman"] }
     }
 }
 
-equivalent to:
+is equivalent to:
 
-			GET /flies/fly/_search
-			{
-				"query" : {
-					"bool": {
-						"should": [
-							{ "term" : { "vendor" : "sukhoi" }},
-							{ "term" : { "vendor" : "grumman" }}
-						]
-					}
-				}
-			}
+{
+	"query" : {
+		"bool": {
+			"should": [
+				{ "term" : { "vendor" : "sukhoi" }},
+				{ "term" : { "vendor" : "grumman" }}
+			]
+		}
+	}
+}
 
------------------
-multi match
------------------
+----------------------------------
+multi match search query example
+----------------------------------
 
-GET /flies/fly/_search
 {
     "query" : {
         "match" : { "vendor" : "Gurevich" }
     }
 }
 
-GET /_search
 {
   "query": {
     "multi_match" : {
@@ -293,79 +277,20 @@ GET /_search
 
 equivalent to:
 
-			GET /_search
-			{
-				"query": {
-					"bool" : {
-						"should": [
-							{ "match": { "vendor": "Gurevich" }},
-							{ "match": { "model": "Gurevich" }}
-						]
-					}
-				}
-			}
-
------------------
-naming queries
------------------
-
-GET /flies/fly/_search
 {
-    "query" : {
-        "terms" : {
-          "_name" : "franta",
-          "vendor": ["sukhoi", "grumman"]
-        }
-    }
+	"query": {
+		"bool" : {
+			"should": [
+				{ "match": { "vendor": "Gurevich" }},
+				{ "match": { "model": "Gurevich" }}
+			]
+		}
+	}
 }
 
-GET /_search
-{
-  "query": {
-    "multi_match" : {
-      "_name" : "alois",
-      "query": "Gurevich", 
-      "fields": [ "vendor", "model" ] 
-    }
-  }
-}
-
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "_name" : "franta", 
-        "must": [
-          { "match": { "vendor" : "Sukhoi" }}, 
-          { "term": { "model" : "27" }}
-        ]
-      }
-    }
-}
-
-----------------------------------
-delete document found by query
-----------------------------------
-
-POST /flies/_delete_by_query
-{
-  "query": {
-    "match_all": {}
-  }
-}
-
-POST /flies/_delete_by_query
-{
-  "query": {
-    "match": {
-      "vendor": "Sukhoi"
-    }
-  }
-}
-
-----------------------------------
-filter script search query
-----------------------------------
+------------------------------------
+filter script search query example
+------------------------------------
 
 // timestamp that has .000Z (no millis after second)
 
@@ -385,33 +310,46 @@ GET /flies/_search
     }
 }
 
-----------------------------------
-filter script delete query
-----------------------------------
+-----------------
+naming queries
+-----------------
 
-// timestamp that has .000Z (no millis after second)
-
-POST /flies/_delete_by_query
 {
-  "query": {
-        "bool" : {
-            "filter" : {
-                "script" : {
-                    "script" : {
-                        "source": "doc['timestamp'].value.getMillisOfSecond() == 0",
-                        "lang": "painless"
-                     }
-                }
-            }
+    "query": {
+        "terms": {
+            "_name": "query_001",
+            "vendor": ["sukhoi", "grumman"]
         }
     }
 }
 
-----------------------------------
-bool query inside bool query
-----------------------------------
+{
+    "query": {
+        "multi_match": {
+            "_name": "query_001",
+            "query": "Gurevich",
+            "fields": ["vendor", "model"]
+        }
+    }
+}
 
-GET /flies/fly/_search
+{
+    "query": {
+        "bool": {
+            "_name": "query_001",
+            "must": [
+				{ "match": { "vendor": "Sukhoi" } },
+				{ "term": { "model": "27" } }
+            ]
+        }
+    }
+}
+
+------------------------------
+bool query inside bool query
+------------------------------
+
+GET /flies/_search
 {
     "query": { 
       "bool": { 
@@ -428,9 +366,9 @@ GET /flies/fly/_search
     }
 }
 
-------------------------------
+---------------------------------
 combining nested and non-nested
-------------------------------
+---------------------------------
 
 GET flies/_search
 {
@@ -439,11 +377,8 @@ GET flies/_search
 			"must": [{
 					"bool": {
 						"should": [
-							{
-								"match": {}
-							}, {
-								"match": {}
-							}
+							{ "match": {} },
+							{ "match": {} }
 						]
 					}
 				}, {
@@ -454,23 +389,15 @@ GET flies/_search
 								"should": [{
 										"bool": {
 											"must": [
-												{
-													"match": {}
-												}, 
-												{
-													"match": {}
-												}
+												{ "match": {} }, 
+												{ "match": {} }
 											]
 										}
 									}, {
 										"bool": {
 											"must": [
-												{
-													"match": {}
-												}, 
-												{
-													"match": {}
-												}
+												{ "match": {} }, 
+												{ "match": {} }
 											]
 										}
 									}
@@ -482,29 +409,6 @@ GET flies/_search
 			]
 		}
 	}
-}
-
-------------------------------
-delete document by ID
-------------------------------
-
-DELETE /flies/_doc/12345
-
-------------------------------
-delete index
-------------------------------
-
-DELETE /flies
-
-------------------------------
-delete all documents in index
-------------------------------
-
-POST /flies/fly/_delete_by_query
-{
-  "query": {
-    "match_all": {}
-  }
 }
 
 ----------------------------
@@ -522,40 +426,6 @@ POST /_aliases
 }
 
 ----------------------------
-create index
-----------------------------
-
-PUT /flies
-
-----------------------------
-create document
-----------------------------
-
-POST /accounts/person/3
-{
-    "name" : "Magyar",
-    "lastname" : "Orban",
-    "job_description" : "better not to say"
-}
-
-----------------------------
-edit document
-----------------------------
-
-PUT /accounts/person/3/_update
-{
-      "doc" : {
-          "job_description" : "Dental Specialist"
-       }
-}
-
-----------------------------
-list indexes / indices
-----------------------------
-
-GET /_cat/indices?v
-
-----------------------------
 limit results
 ----------------------------
 
@@ -564,9 +434,9 @@ GET /flies/fly/_search
   "size": 10
 }
 
-----------------------------
+------------------------------------
 show only certain, specific fields
-----------------------------
+------------------------------------
 
 GET /flies/fly/_search
 {
@@ -611,9 +481,61 @@ curl -d @in.json -XPUT -H "Content-Type: application/json" localhost:9200/_all/_
 	"index.blocks.read_only_allow_delete": null
 }
 
---------------------------------------------------------
-create index with normalizer, analyzer, filter
---------------------------------------------------------
+--------------------------
+synonym analyzer example
+--------------------------
+
+PUT /source
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "synonym_analyzer": {
+                        "tokenizer": "whitespace",
+                        "filter": [
+                            "lowercase",
+                            "synonym_filter"]
+                    }
+                },
+                "filter": {
+                    "synonym_filter": {
+                        "type": "synonym",
+                        "synonyms": [
+                            "tom, tomas, thomas, tomik, tommy, tomasek"
+                        ]
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "name": {
+                "type": "text",
+                "analyzer": "synonym_analyzer"
+            }
+        }
+    }
+}
+
+POST /source/_doc/1
+{
+    "name": "Tomas"
+}
+
+GET /source/_search
+{
+    "query": {
+        "match": {
+            "name": "Tom"
+        }
+    }
+}
+
+---------------------------
+phonetic analyzer example
+---------------------------
 
 FROM docker.elastic.co/elasticsearch/elasticsearch:7.2.1
 RUN bin/elasticsearch-plugin install analysis-phonetic
@@ -623,13 +545,6 @@ PUT /flies
     "settings": {
         "number_of_shards": 1,
         "analysis": {
-            "normalizer": {
-                "lowercase_normalizer": {
-                    "type": "custom",
-                    "char_filter": [],
-                    "filter": ["lowercase"]
-                }
-            },
             "analyzer": {
                 "metaphone_phonetic_analyzer": {
                     "tokenizer": "standard",
@@ -657,9 +572,9 @@ PUT /flies
     }
 }
 
---------------------------------------------------------
-create index with keyword fields and lowercase normalizer
---------------------------------------------------------
+------------------------------
+lowercase normalizer example
+------------------------------
 
 PUT /flies
 {
@@ -667,7 +582,7 @@ PUT /flies
 		"number_of_shards": 1,
 		"analysis": {
 			"normalizer": {
-				"my_normalizer": {
+				"lowercase_normalizer": {
 					"type": "custom",
 					"char_filter": [],
 					"filter": ["lowercase"]
@@ -686,84 +601,18 @@ PUT /flies
 						},
 						"lckeyword": {
 							"type": "keyword",
-							"normalizer": "my_normalizer"
+							"normalizer": "lowercase_normalizer"
 						}
 					}
-				},
-				"model": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"type": "keyword"
-						},
-						"lckeyword": {
-							"type": "keyword",
-							"normalizer": "my_normalizer"
-						}
-					}
-				},
-				"country": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"type": "keyword"
-						},
-						"lckeyword": {
-							"type": "keyword",
-							"normalizer": "my_normalizer"
-						}
-					}
-				},
-				"status": {
-					"type": "text",
-					"fields": {
-						"keyword": {
-							"type": "keyword"
-						},
-						"lckeyword": {
-							"type": "keyword",
-							"normalizer": "my_normalizer"
-						}
-					}
-				},
-				"pretty": {
-					"type": "boolean"
-				},
-				"invented": {
-					"type": "date"
-				},
-				"manufactured": {
-					"type": "integer"
-				},
-				"designation": {
-					"type": "keyword"
 				}
 			}
 		}
 	}
 }
 
-----------------------------
-check policy
-----------------------------
-
-GET _ilm/policy/flies_policy
-
-----------------------------
-check mapping
-----------------------------
-
-GET /flies/_mapping
-
-----------------------------
-check settings
-----------------------------
-
-GET /flies/_settings
-
-----------------------------
-update index
-----------------------------
+-----------------------
+update index mapping
+-----------------------
 
 PUT /flies/_mapping/fly
 {
@@ -783,26 +632,26 @@ PUT /flies/_mapping/fly
 }
 
 ----------------------------
-nested properties and query
+nested fields example
 ----------------------------
 
-PUT /anindex
+PUT / anindex
 {
-  "mappings": {
-    "properties": {
-      "address": {
-        "type": "nested",
-        "properties" : {
-          "city" : {
-            "type" : "text"
-          },
-          "street" : {
-            "type" : "text"
-          }
+    "mappings": {
+        "properties": {
+            "address": {
+                "type": "nested",
+                "properties": {
+                    "city": {
+                        "type": "text"
+                    },
+                    "street": {
+                        "type": "text"
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
 
 PUT /anindex/_doc/1
@@ -810,33 +659,72 @@ PUT /anindex/_doc/1
   "name" : "John Brambor",
   "address" : [
     {
-      "town" : "Gateshead",
-      "province" : "Tyne and Wear",
-      "country" : "GB"
+      "city" : "London",
+      "street" : "Elm street"
     },
     {
-      "town" : "Praha",
-      "province" : "Stredocesky kraj",
-      "country" : "CZ"
+      "city" : "Prague",
+      "street" : "Dvorakova"
     }
   ]
 }
 
 GET /anindex/_doc/_search
 {
-  "query": {
-    "nested": {
-      "path": "address",
-      "query": {
-        "bool": {
-          "must": [
-            { "match": { "address.town": "Ostrava" }},
-            { "match": { "address.country":  "CZ" }}
-          ]
+    "query": {
+        "nested": {
+            "path": "address",
+            "query": {
+                "bool": {
+                    "must": [
+						{ "match": { "address.city": "Prague" }},
+						{ "match": { "address.street":  "Dvorakova" }}
+                    ]
+                }
+            }
         }
-      }
     }
-  }
+}
+
+----------------------------------
+setting pagination / paging limit
+----------------------------------
+
+PUT /world_check/_settings
+{
+    "index" : {
+        "max_result_window" : 100000
+    }
+}
+
+----------------------------
+index template example
+----------------------------
+
+PUT _template/flies_template
+{
+    "order": 0,
+    "index_patterns": [
+        "flies-*"
+    ],
+    "settings": {
+        "index": {
+            "lifecycle": {
+                "name": "flies_policy",
+                "rollover_alias": "flies"
+            },
+            "number_of_shards": "1",
+            "number_of_replicas": "0"
+        }
+    },
+    "mappings": {
+        "properties": {
+            "timestamp": {
+                "type": "date"
+            }
+        }
+    },
+    "aliases": {}
 }
 
 ----------------------------

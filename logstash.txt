@@ -1,7 +1,7 @@
 
-----------------
-template
-----------------
+----------------------------
+template elastic - elastic
+----------------------------
 
 input {
     elasticsearch {
@@ -32,9 +32,9 @@ output {
     }
 }
 
-----------------
+----------------------------
 transformations / filters
-----------------
+----------------------------
 
 	# simple concatenate
 	mutate {
@@ -84,3 +84,10 @@ transformations / filters
             event.set("NESTED", new_nested_object_array)
         '
     }
+
+	# create field (if it does not exist) with empty string value
+	if !([field]) {
+		mutate {
+			add_field => { "field" => ""}
+		}
+	}
