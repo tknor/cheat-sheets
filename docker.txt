@@ -24,9 +24,10 @@ docker exec -u 0 -it <container> bash								// interactive terminal as a ROOT u
 docker exec -it <container> bash									// interactive terminal
 docker exec -it <container> sh										// interactive terminal
 docker exec -it <container> /bin/bash
-docker exec <container> mkdir -p /folder/sub-folder					// standard command
-docker exec <container> bash -c "cat /etc/os-release"				// ... because 'cat' is shell built-in, not standalone command
-docker exec <container> bash -c 'cat /etc/os-release'
+docker exec <container> pwd											// standard standalone command (sometimes does not work)
+docker exec <container> bash -c "mkdir -p /folder/sub-folder"		// works even for shell built-in commands (like 'cat' command)
+docker exec <container> bash -c 'mkdir -p /folder/sub-folder'
+docker exec <container> bash -c "cd folder && ls -la"				// for multiple commands
 
 winpty docker exec -it ...											// when running from Windows (Git Bash)
 
