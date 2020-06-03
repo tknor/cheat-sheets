@@ -31,6 +31,8 @@ git branch  										// local
 git branch -a										// local & remote
 git branch -r										// remote only
 git branch my-branch								// creates branch
+git branch -d my-branch								// deletes local branch
+git push origin --delete my-branch					// deletes remote branch
 
 git add .
 git add "file"
