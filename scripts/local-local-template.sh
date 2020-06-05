@@ -3,7 +3,7 @@
 CONST_CHEATS_FOLDER=~/Workspaces/Git/cheat-sheets
 CONST_SCRIPTS_FOLDER=$CONST_CHEATS_FOLDER/scripts/
 CONST_SCRIPTS_LOCAL_FOLDER=$CONST_CHEATS_FOLDER/scripts/local
-CONST_SCRIPTS_LOCAL_BACKUP_FOLDER=~/Data/scripts-local-backup
+CONST_SCRIPTS_LOCAL_BACKUP_FOLDER=/c/Users/Garmin/Google Drive/Projects/non-Git/scripts-local-backup-nb
 CONST_TEMP_FOLDER=~/Desktop/temp
 
 . $CONST_SCRIPTS_FOLDER/common.sh

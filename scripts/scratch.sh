@@ -11,3 +11,5 @@ script_start
 
 #VAR_TEXT_MOD="$VAR_TEXT-opt"
 #echo $VAR_TEXT_MOD
+
+
