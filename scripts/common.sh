@@ -70,6 +70,20 @@ function stop_and_remove_docker_containers() {
 }
 
 # params:
+# 1 image
+function remove_docker_image() {
+
+	phase "removing image '$1'"
+
+	TEMP=$(docker image ls $1 | wc -l)
+	if [[ $TEMP == 2 ]]; then
+		docker image rm $1
+	fi
+
+	phase "done"
+}
+
+# params:
 # 1 pod name part
 # result in TEMP
 function pod_name() {
