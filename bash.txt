@@ -70,6 +70,49 @@ curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhos
 curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
 curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
 
+ssh root@<ip>
+
+adduser <username>
+passwd
+
+apt update
+apt upgrade
+apt install sudo
+
+usermod -aG sudo <username>
+
+--------------------------------
+Debian 9 management
+--------------------------------
+
+# connect as root
+
+ssh root@<ip>
+
+# create non-root user
+
+adduser <username>
+
+# connect as user
+# check sudo is installed
+
+sudo apt update
+
+# if not, connect as root
+
+apt update
+apt upgrade
+
+# restart server
+# connect as root
+# install sudo
+
+apt install sudo
+
+# add user to sudo group
+
+usermod -aG sudo <username>
+
 --------------------------------
 Open SSH
 --------------------------------

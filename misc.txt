@@ -1,22 +1,20 @@
 
--------
+--------------
 Spring
--------
+--------------
 
 VM options
 	-Dspring.profiles.active=local
 	
 spring.main.web-application-type=none
 
-
--------
+--------------
 Kafka
--------
+--------------
 
 winpty docker exec -it docker_zookeeper bash
 
 /usr/bin/kafka-console-consumer --bootstrap-server broker:9092 --topic cs180.test
 
-/usr/bin/kafka-avro-console-producer --broker-list broker:9092 --topic cs180.test --property value.schema='{"type":"record","name":"myschema","fields":[{"name":"text","type":"string"}]}'
-{"text": "mytext"}
-
+/usr/bin/kafka-avro-console-producer --broker-list broker:9092 --topic cs180.test --property value.schema='{"type":"record","name":"myschema","fields":[{"name":"myfield","type":"string"}]}'
+{"myfield": "myvalue"}
