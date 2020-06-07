@@ -1,6 +1,5 @@
 
-alias xcu=\'$ffs/./cheats-push.sh\'
-alias xcd=\'$ffs/./cheats-pull.sh\'
+alias xgp=\'$ffs/./git-push-master.sh\'
 
 alias xdc=\'$ffs/./docker-clean.sh\'
 alias xdl=\'$ffs/./docker-list.sh\'

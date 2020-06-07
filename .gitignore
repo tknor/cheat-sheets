@@ -1,3 +1,8 @@
 
+/.idea
+/.vscode
 /scripts/.idea
+/scripts/.vscode
 /scripts/local
+/scripts/scripts-local
+/scripts/local-common.sh

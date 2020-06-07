@@ -9,14 +9,19 @@ npx covgen crimsondeed@gmail.com
 npm install firebase-functions@latest firebase-admin@latest --save
 npm install -g firebase-tools
 
-npm install -g bitcom
+npm init                                        // create package.json file
+npm install                                     // installs modules listed in package.json, to local node_modules folder
+npm install <module>                            // installs module to local node_modules folder
+npm install -g <module>                         // ... not locally, but globally
+npm install --save <module>                     // installs module and saves it to package.json file
+npm install --save --save-exact <module>        // ... stores exact version instead of version range
 
-npm install --save datapay
-npm install --save bsv
-npm install --save --save-exact bsv
-
-npm install -g bitbus
-npm install -g bitbus --unsafe-perm
+npm install bitcom
+npm install datapay
+npm install bsv
+npm install typescript
+npm install bitbus
+npm install bitbus --unsafe-perm
 
 nvm install 12.18.0								// install specific node version
 nvm ls											// list locally installed versions

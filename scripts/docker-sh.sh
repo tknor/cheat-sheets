@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ~/Workspaces/Git/cheat-sheets/scripts/local/local.sh
+. ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
 script_start
 
