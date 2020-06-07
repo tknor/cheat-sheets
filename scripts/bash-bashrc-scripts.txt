@@ -1,3 +1,7 @@
+
+alias xcu=\'$ffs/./cheats-push.sh\'
+alias xcd=\'$ffs/./cheats-pull.sh\'
+
 alias xdc=\'$ffs/./docker-clean.sh\'
 alias xdl=\'$ffs/./docker-list.sh\'
 alias xdu=\'$ffs/./docker-local-up.sh\'
