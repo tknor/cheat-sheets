@@ -15,6 +15,7 @@ npm install <module>                            // installs module to local node
 npm install -g <module>                         // ... not locally, but globally
 npm install --save <module>                     // installs module and saves it to package.json file
 npm install --save --save-exact <module>        // ... stores exact version instead of version range
+npm remove <module>
 
 npm install bitcom
 npm install datapay
