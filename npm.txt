@@ -17,12 +17,13 @@ npm install --save <module>                     // installs module and saves it 
 npm install --save --save-exact <module>        // ... stores exact version instead of version range
 npm remove <module>
 
-npm install bitcom
-npm install datapay
-npm install bsv
-npm install typescript
-npm install bitbus
-npm install bitbus --unsafe-perm
+npm install @types/node
+npm install --save bitcom
+npm install --save datapay
+npm install --save bsv
+npm install --save typescript
+npm install --save bitbus
+npm install --save bitbus --unsafe-perm
 
 nvm install 12.18.0								// install specific node version
 nvm ls											// list locally installed versions
