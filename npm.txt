@@ -24,6 +24,8 @@ npm install --save bsv
 npm install --save typescript
 npm install --save bitbus
 npm install --save bitbus --unsafe-perm
+npm install --save googleapis@39
+npm install --save request
 
 nvm install 12.18.0								// install specific node version
 nvm ls											// list locally installed versions
