@@ -1,18 +1,29 @@
 #!/bin/bash
 
-# OPTIONS:
-# w - will wait in the end
-# x - will output commands
+  # OPTIONS:
+  # w - will wait in the end
+  # x - will output commands
 
-VAR_X_OPTION=0
-VAR_W_OPTION=0
+  VAR_X_OPTION=0
+  VAR_W_OPTION=0
 
-while getopts "xw" option; do
-	case "${option}" in
-		x) VAR_X_OPTION=1;;
-		w) VAR_W_OPTION=1;;
-	esac
- done
+  while getopts "xw" option; do
+    case "${option}" in
+      x) VAR_X_OPTION=1;;
+      w) VAR_W_OPTION=1;;
+    esac
+  done
+
+  shift $((OPTIND - 1))
+
+  set -e
+  set -u
+
+	if [[ $VAR_X_OPTION == 1 ]]; then
+		set -x
+	fi
+
+	trap script_end EXIT
 
 function separator() {
 	printf "\n"
@@ -24,23 +35,10 @@ function phase() {
 
 function script_end {
 	
-if [[ $VAR_W_OPTION == 1 ]]; then
+  if [[ $VAR_W_OPTION == 1 ]]; then
     phase "press any key to continue"
     read -n 1 -s -r
-fi
-	
-}
-
-function script_start() {
-
-    set -e
-    set -u
-
-	if [[ $VAR_X_OPTION == 1 ]]; then
-		set -x
-	fi
-
-	trap script_end EXIT
+  fi
 }
 
 # params:

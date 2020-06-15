@@ -2,8 +2,6 @@
 
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-script_start
-
   if [[ $1 == "u" ]]; then
 
     phase "starting ELK stack"

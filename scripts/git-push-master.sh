@@ -2,8 +2,6 @@
 
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-script_start
-
 cd $1
 
 if [ -d "scripts/scripts-local" ]; then

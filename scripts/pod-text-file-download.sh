@@ -2,8 +2,6 @@
 
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-script_start
-
 VAR_FILE_PATH="/usr/share/logstash/scripts/optimize.conf"
 
 ku_switch_and_set_pod_and_porting $1 $2
