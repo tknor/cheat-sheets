@@ -12,7 +12,10 @@ git config --global user.email johndoe@example.com
 git add .											// stage all files (considers .gitignore)
 git reset											// unstage all files
 git reset <file>
-git reset --hard									// revert changes to all modified files (destructive)
+git reset --soft HEAD~1                             // reverts last commit changes, but preserves them as staged & uncommited
+git reset --mixed HEAD~1                            // reverts last commit changes, but preserves them as unstaged (TODO)
+git reset --hard HEAD~1								// reverts last commit changes (destructive)
+git reset --hard									// reverts all uncommited changes (destructive)
 git reset <file> --hard
 
 git remote
@@ -46,6 +49,7 @@ git merge other-branch
 git checkout my-branch								// switch to branch
 
 git log
+git log --oneline --graph
 git log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
 
 git fetch origin HEAD								// first part of git pull
