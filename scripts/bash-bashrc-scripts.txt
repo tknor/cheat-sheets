@@ -10,6 +10,8 @@ alias xdtb=\'$ffs/./docker-bash.sh\'
 
 alias xk=\'$ffs/./ku-set-context.sh\'
 
+alias xpga=\'$ffs/./pgadmin.sh\'
+
 alias xpts=\'$ffs/./pod-sh.sh\'
 alias xptb=\'$ffs/./pod-bash.sh\'
 alias xpd=\'$ffs/./pod-delete.sh\'
