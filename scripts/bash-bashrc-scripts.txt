@@ -1,5 +1,6 @@
 
 alias xgp=\'$ffs/./git-push-master.sh\'
+alias xd=\'$ffs/scripts-local/./distribute-nodejs-lab.sh\'
 
 alias xdc=\'$ffs/./docker-clean.sh\'
 alias xdl=\'$ffs/./docker-list.sh\'

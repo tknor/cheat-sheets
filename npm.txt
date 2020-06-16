@@ -26,6 +26,8 @@ npm install --save bitbus
 npm install --save bitbus --unsafe-perm
 npm install --save googleapis@39
 npm install --save request
+npm install --save winston
+npm install --save winston-daily-rotate-file
 
 nvm install 12.18.0								// install specific node version
 nvm ls											// list locally installed versions
