@@ -142,7 +142,8 @@ function download_text_file_from_pod() {
 	rm -f $CONST_TEMP_FOLDER/temp.txt
 	echo "n/a" > $CONST_TEMP_FOLDER/text.txt
 
-	kubectl cp $1:$2 $CONST_TEMP_FOLDER/temp.txt
+  cd $CONST_TEMP_FOLDER
+	kubectl cp $1:$2 temp.txt
 
   if [ -f "$CONST_TEMP_FOLDER/temp.txt" ]; then
       cat $CONST_TEMP_FOLDER/temp.txt > $CONST_TEMP_FOLDER/text.txt
