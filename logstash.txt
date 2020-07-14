@@ -54,6 +54,21 @@ output {
 }
 
 ----------------------------
+elastic input with query
+----------------------------
+
+input {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        query => '{"query":{"query_string":{"query":"name:Tomas"}}}'
+        index => "source"
+        docinfo => true
+        docinfo_fields => ["_index", "_id"]
+        docinfo_target => "_originatingWLIndex"
+    }
+}
+
+----------------------------
 transformations / filters
 ----------------------------
 
