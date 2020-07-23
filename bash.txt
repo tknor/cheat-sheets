@@ -150,6 +150,22 @@ fi
 
 --------------
 
+// negation
+
+if ! [[ $? -eq 0 ]]; then
+    ...
+fi
+
+--------------
+
+// multiple conditions
+
+if [[ ( "$a" -eq 1 && "$c" = "123" ) || ( "$b" -eq 2 && "$c" = "456" ) ]]; then
+    ...
+fi
+
+--------------
+
 // test for non-empty commands output
 
 if [[ $(docker container ls -aq) ]]; then
