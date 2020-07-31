@@ -30,6 +30,9 @@ gradle test --tests *TestClass
 gradle test --tests specific.package*
 gradle someTestTask --tests *TestClass1 --tests *TestClass2
 
+gradle clean build --rerun-tasks
+gradle clean build --refresh-dependencies
+
 ------------------------------------
 
 plugins {

@@ -4,6 +4,8 @@ java -cp pitchfork.jar devil.pitchfork.Main // without manifest
 
 C:\Apps\openjdk-11.0.6.10\bin\java.exe -classpath C:\Users\Devil\Pitchfork\compiled devil.pitchfork.Main
 
+private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Foo.class);
+
 --------------
 Spring
 --------------
@@ -12,6 +14,10 @@ VM options
 -Dspring.profiles.active=local
 	
 spring.main.web-application-type=none
+
+logging.level:
+  com.foo.bar: DEBUG
+  ROOT: DEBUG
 
 --------------
 Kafka

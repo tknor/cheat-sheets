@@ -218,6 +218,19 @@ timestamp range search query example
 }
 
 ------------------------------
+existing field query example
+------------------------------
+
+GET /flies/_search
+{
+    "query": {
+        "exists": {
+            "field": "some-field"
+        }
+    }
+}
+
+------------------------------
 wildcard search query example
 ------------------------------
 
@@ -286,6 +299,32 @@ equivalent to:
 			]
 		}
 	}
+}
+
+------------------------------------
+script field query example
+------------------------------------
+
+GET /flies/_search
+{
+    "query": {
+        "match_all": {}
+    },
+    "script_fields": {
+      "custom-script-field": {
+        "script": {
+          "lang": "painless",
+          "source": """
+            if (doc.containsKey('some-field.keyword')) {
+              return doc['some-field.keyword'];
+            } else {
+              return "UNKNOWN"
+            }
+          """
+        }
+      }
+    },
+    "_source": [ "*" ]
 }
 
 ------------------------------------
