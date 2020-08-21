@@ -34,6 +34,7 @@ git branch  										// local
 git branch -a										// local & remote
 git branch -r										// remote only
 git branch my-branch								// creates branch
+git branch my-branch origin/my-branch               // creates branch tracking remote branch
 git branch -d my-branch								// deletes local branch
 git push origin --delete my-branch					// deletes remote branch
 
@@ -47,10 +48,14 @@ git commit --allow-empty							// allows empty commit with no changes, added fil
 git merge other-branch
 
 git checkout my-branch								// switch to branch
+git checkout -b my-branch origin/my-branch          // swithes to new branch tracking remote branch
 
 git log
 git log --oneline --graph
 git log --graph --pretty=format:'%h -%d %s %n' --abbrev-commit --date=relative --branches
+
+git fetch origin                                    // downloads current remote branches from remote
+git fetch                                           // from all remotes ?
 
 git fetch origin HEAD								// first part of git pull
 git merge HEAD										// second part of git pull
