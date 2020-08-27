@@ -18,6 +18,8 @@ git reset --hard HEAD~1								// reverts last commit changes (destructive)
 git reset --hard									// reverts all uncommited changes (destructive)
 git reset <file> --hard
 
+git clean -f -d                                     // removes all untracked files / folders (useful after hard reset)
+
 git remote
 git remote -v
 git remote add <preferred-name> <path-to-git-file>
@@ -47,8 +49,8 @@ git commit --allow-empty							// allows empty commit with no changes, added fil
 
 git merge other-branch
 
-git checkout my-branch								// switch to branch
-git checkout -b my-branch origin/my-branch          // swithes to new branch tracking remote branch
+git checkout my-branch								// switch to branch (in later version switches also to a new branch tracking remote branch, if it's been fetched)
+git checkout -b my-branch origin/my-branch          // switches to new branch tracking remote branch
 
 git log
 git log --oneline --graph
