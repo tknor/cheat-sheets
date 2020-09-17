@@ -520,9 +520,9 @@ curl -d @in.json -XPUT -H "Content-Type: application/json" localhost:9200/_all/_
 	"index.blocks.read_only_allow_delete": null
 }
 
---------------------------
-synonym analyzer example
---------------------------
+----------------------------------------------------
+synonym analyzer examples (inline & from file)
+----------------------------------------------------
 
 PUT /source
 {
@@ -543,6 +543,38 @@ PUT /source
                         "synonyms": [
                             "tom, tomas, thomas, tomik, tommy, tomasek"
                         ]
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "name": {
+                "type": "text",
+                "analyzer": "synonym_analyzer"
+            }
+        }
+    }
+}
+
+PUT /source
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "synonym_analyzer": {
+                        "tokenizer": "whitespace",
+                        "filter": [
+                            "lowercase",
+                            "synonym_filter"]
+                    }
+                },
+                "filter": {
+                    "synonym_filter": {
+                        "type": "synonym",
+                        "synonyms_path" : "analysis/synonyms.txt"
                     }
                 }
             }
@@ -648,6 +680,30 @@ PUT /flies
 		}
 	}
 }
+
+-----------------------
+query string query
+-----------------------
+
+GET /source/_search
+{
+  "query": {
+    "query_string": {
+      "query": "name:test"
+    }
+  }
+}
+
+"query": "name:Tom OR name:John"
+"query": "(name:prefix*) AND (name:*suffix)"
+"query": "!(_exists_:field)"
+
+# field exists and is not empty
+"query": "((_exists_:field) AND !(field.keyword:\"\"))"
+
+# field does not exist or it's empty
+"query": "!((_exists_:field) AND !(field.keyword:\"\"))"
+
 
 -----------------------
 update index mapping
