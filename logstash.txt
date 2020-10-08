@@ -1,12 +1,12 @@
 
 ----------------------------
-template XML file - stdout
+template event generator - standard output
 ----------------------------
 
 input {
-    file {
-        path => "/path_to_source/source.xml"
-        type => "xml"
+    exec {
+        command => "echo 'hello'"
+        interval => 10
     }
 }
 
@@ -54,6 +54,54 @@ output {
 }
 
 ----------------------------
+CSV file input
+----------------------------
+
+input {
+    file {
+        path => "/path_to_source/source.csv"
+        type => "csv"
+    }
+}
+
+----------------------------
+XML file input
+----------------------------
+
+input {
+    file {
+        path => "/path_to_source/source.xml"
+        type => "xml"
+    }
+}
+
+----------------------------
+Kafka input (JSON)
+----------------------------
+
+    kafka {
+        bootstrap_servers => "kafka-broker:9092"
+        topics => ["my.consumed.topic"]
+    }
+
+----------------------------
+Kafka input (AVRO from registry)
+----------------------------
+
+input {
+    kafka {
+        bootstrap_servers => "kafka-broker:9092"
+        codec => avro_schema_registry {
+            endpoint => "http://kafka-schema-registry:9010"
+            tag_on_failure => true
+        }
+        consumer_threads => 1
+        topics => ["my.consumed.topic"]
+        value_deserializer_class => "org.apache.kafka.common.serialization.ByteArrayDeserializer"
+    }
+}
+
+----------------------------
 elastic input with query
 ----------------------------
 
@@ -66,6 +114,39 @@ input {
         docinfo_fields => ["_index", "_id"]
         docinfo_target => "_originatingWLIndex"
     }
+}
+
+----------------------------
+Kafka output (JSON)
+----------------------------
+
+output {
+    kafka {
+        bootstrap_servers => "kafka-broker:9092"
+        codec=> "plain"
+        topic_id => "my.produced.topic"
+    }
+}
+
+----------------------------
+Kafka output (AVRO from registry)
+----------------------------
+
+output {
+	kafka {
+        bootstrap_servers => "kafka-broker:9092"
+		topic_id => "my.produced.topic"
+		value_serializer => "org.apache.kafka.common.serialization.ByteArraySerializer"
+		message_key => "%{[@metadata][_id]}"
+        codec => avro_schema_registry {
+			endpoint => "http://kafka-schema-registry:9010"
+			subject_name => "my.schema.subject"
+            schema_version => 1
+            register_schema => true
+			# seems to be serialized already
+			binary_encoded => false
+		}
+	}
 }
 
 ----------------------------
