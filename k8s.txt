@@ -5,17 +5,23 @@
 kubectl version
 kubectl cluster-info
 
+
+kubectl get pod <pod> -o name                               // only resource name
+kubectl get pod <pod> -o wide                               // output contains additional columns (if command outputs columns)
+kubectl get pod <pod> -o yaml                               // output formatted as yaml
+kubectl get pod <pod> -o json                               // output formatted as json
+kubectl get pod <pod> -o custom-columns-file=<filename>     // output formatted according to specification
+
+kubectl describe pod <pod>
+
 kubectl get nodes
 kubectl get namespaces
 kubectl get deployments
-kubectl get deployments -o wide
-kubectl get deployment <deployment> -o yaml
+kubectl get deployment <deployment>
 kubectl get pods
 kubectl get pod <pod>
-kubectl get pod <pod> -o yaml
-kubectl describe pod <pod>
 kubectl get configmaps
-kubectl get configmap <config_map> -o yaml
+kubectl get configmap <config_map>
 kubectl get pv
 kubectl get pvc
 kubectl get volumeattachment
@@ -23,7 +29,8 @@ kubectl get volumeattachment
 kubectl edit deployment <deployment>
 kubectl edit configmap <configmap>
 
-kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep <part-of-pod-name>
+// lists pod names containing string
+    kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep <part-of-pod-name>
 
 kubectl port-forward <pod> <port-in-pod>:<port-on-localhost>		// forwarding pod's port during process run
 
@@ -32,7 +39,6 @@ kubectl logs -f <pod>
 kubectl exec <pod> env
 kubectl exec -ti <pod> bash
 kubectl exec -ti <pod> sh
-curl localhost:8080
 
 kubectl exec <pod> df
 kubectl -n <namespace> exec <pod> df								// list all file systems, their disk space
@@ -41,22 +47,18 @@ kubectl cp <pod>:/folder/file.txt ./copied-here/
 kubectl cp <namespace>/<pod>:/folder/file.txt ./copied-here/
 
 kubectl apply -f xxx.yaml
+
 kubectl create namespace <namespace>
 
-kubectl delete pod <pod>
+kubectl delete pvc <pvc>
 kubectl delete deployment <deployment>
+kubectl delete pod <pod>
 kubectl delete pods --all --namespace <namespace>								// ??? syntax
 kubectl delete pods --all -n <namespace>										// ??? syntax
 kubectl delete pod <pod> --grace-period=0 --force --namespace <namespace>
 
-kubectl delete pvc <pvc>														// 
-
 kubectl config get-contexts
 kubectl config current-context
-kubectl config use-context garmin
-kubectl config use-context dev
-kubectl config use-context test
-kubectl config use-context uat
-
-kubectl config set-context --current --namespace=garmin				// changes current context in config file! rather add new context manually and use "config use-context"
+kubectl config use-context <context>
+kubectl config set-context --current --namespace=<namespace>
 kubectl config view | grep namespace

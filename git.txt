@@ -9,6 +9,8 @@ git config --global user.name "John Doe"
 git config user.email johndoe@example.com
 git config --global user.email johndoe@example.com
 
+git config --global http.sslVerify false            // workaround to resolve self-signed SSL certificate problems
+
 git add .											// stage all files (considers .gitignore)
 git reset											// unstage all files
 git reset <file>

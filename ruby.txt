@@ -1,0 +1,38 @@
+
+puts someString
+
+initializedString = ""
+initializedArray = Array.new
+
+unless someString.nil? || someString.strip.empty?
+    // if string not null or empty
+end
+
+stringArrayFromStringSplitByWhitespace = name.gsub(/\s+/, " ").split(" ")
+
+firstLetterFromSomeString = someString[0,1]
+
+stringArray.each { |stringArrayItem|
+   anotherStringArray.push(stringArrayItem)
+}
+
+lengthOfArray = someArray.length()
+
+for someIndex in 1..maximumIndex do
+    // something
+end
+
+if someVariable > 3
+    // something
+else
+    // something else
+end
+
+// permutation of strings in array (i.e. elements, e.g. letters)
+// permutations of 3-element length
+// creates array of permutation representations
+// joins (concats) permutation elements without whitespace
+
+stringArray.permutation(3).to_a.each { |permutation|
+	joinedPermutationElements = permutation.join('')
+}
