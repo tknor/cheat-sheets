@@ -1,4 +1,16 @@
 
+elk stack docker containers contain default configuration yaml files
+    can be overriden using volumes in docker-compose
+        providing another configuration yaml file (best based on the default one)
+    can be overriden using environment variables
+        "xpack.security.enabled: true" will have equivalent "XPACK_SECURITY_ENABLED: true"
+
+when running with security enabled
+    there's utility to initialize passwords
+        /usr/share/elasticsearch/bin/elasticsearch-setup-passwords
+
+./elasticsearch-setup-passwords auto                    // generates and prints users / passwords
+
 ----------------------------
 basic operations
 ----------------------------
@@ -6,10 +18,27 @@ basic operations
 GET /_aliases
 GET /_cat/indices
 GET /_cat/indices?v
+
 GET _ilm/policy/some_policy
+
 GET /some_index
 GET /some_index/_settings
 GET /some_index/_mappings
+
+GET /_security/_authenticate                            // information about authenticated user (or user used in basic-authenticated request)
+
+PUT /_security/user/<user>
+{
+  "password" : "<plain_text_password>",
+  "roles" : [ "admin", "superuser" ],
+  "full_name" : "",
+  "email" : "",
+  "metadata" : {}
+}
+
+                                                        // when security handled by opendistro plugin:
+
+GET /_opendistro/_security/authinfo                     // information about authenticated user
 
 GET /some_index/_search
 {
@@ -32,6 +61,11 @@ DELETE /some_index
 PUT /accounts
 
 POST /accounts/person/1
+{
+    "name" : "Tomas",
+}
+
+PUT /accounts/person/1
 {
     "name" : "Tomas",
 }
@@ -448,6 +482,86 @@ GET flies/_search
 			]
 		}
 	}
+}
+
+----------------------------
+simple ingest pipeline
+----------------------------
+
+PUT /_ingest/pipeline/my_simple_pipeline
+{
+  "description" : "",
+  "processors" : [
+    {
+      "set" : {
+        "field": "name",
+        "value": "this value SHOULD BE visible in inserted document"
+      }
+    }
+  ]
+}
+
+PUT /my_index/_doc/1?pipeline=my_simple_pipeline
+{
+  "name": "this value SHOULD NOT BE visible in inserted document"
+}
+
+----------------------------
+enrich ingest pipeline
+----------------------------
+
+POST /index_with_additional_info/_doc/1
+{
+	"name": "Frank",
+	"naughty": "yes"
+}
+
+POST /index_with_additional_info/_doc/2
+{
+	"name": "Lucy",
+	"naughty": "no"
+}
+
+PUT /_enrich/policy/naughty-policy
+{
+  "match": {
+    "indices": "index_with_additional_info",
+    "match_field": "name",
+    "enrich_fields": [ "naughty" ]
+  }
+}
+
+PUT /_enrich/policy/naughty-policy/_execute
+
+PUT /_ingest/pipeline/naughty-pipeline
+{
+  "description" : "",
+  "processors" : [
+    {
+      "enrich" : {
+        "policy_name": "naughty-policy",
+        "field": "first_name",
+        "target_field": "additional_info"
+      }
+    }
+  ]
+}
+
+PUT /my_index/_doc/1?pipeline=naughty-pipeline
+{
+  "first_name": "Frank",
+  "age": "70"
+}
+
+// inserted document should look like this:
+
+{
+  "first_name": "Frank",
+  "age": "70",
+  "additional_info": {
+    "name": "Frank",
+    "naughty": "yes"
+  }
 }
 
 ----------------------------

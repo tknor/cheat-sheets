@@ -88,6 +88,10 @@ Kafka input (JSON)
 Kafka input (AVRO from registry)
 ----------------------------
 
+// needs plugin
+// https://github.com/salsify/logstash-codec-avro_schema_registry
+RUN bin/logstash-plugin install logstash-codec-avro_schema_registry
+
 input {
     kafka {
         bootstrap_servers => "kafka-broker:9092"
@@ -117,6 +121,20 @@ input {
 }
 
 ----------------------------
+Elastic output with pipeline
+----------------------------
+
+output {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "target"
+        pipeline => "some_pipeline"
+        document_type => "_doc"
+        document_id => "%{[@metadata][_id]}"
+    }
+}
+
+----------------------------
 Kafka output (JSON)
 ----------------------------
 
@@ -131,6 +149,11 @@ output {
 ----------------------------
 Kafka output (AVRO from registry)
 ----------------------------
+
+// needs plugin
+// https://github.com/salsify/logstash-codec-avro_schema_registry
+RUN bin/logstash-plugin install logstash-codec-avro_schema_registry
+
 
 output {
 	kafka {
@@ -156,6 +179,14 @@ transformations / filters
 	# simple concatenate
 	mutate {
         add_field => { "target_field" => "%{source_field_1} %{source_field_2}"}
+    }
+
+    # multiple fields can be added
+    mutate {
+        add_field => {
+            "target_field1" => "%{source_field_1}"
+            "target_field2" => "%{source_field_2}"
+        }
     }
 	
 	mutate {
@@ -213,8 +244,11 @@ transformations / filters
 other
 --------------------------
 
-logstash -f myconfiguration.conf --path.data /usr/share/logstash/mydatafolder --debug
+logstash -f my_configuration.conf --path.data /usr/share/logstash/my_data_folder --debug
 
 logstash-plugin list
+logstash-plugin install logstash-filter-prune
 logstash-plugin install logstash-codec-avro_schema_registry
 logstash-plugin install logstash-codec-avro
+
+
