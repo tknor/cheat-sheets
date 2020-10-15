@@ -1,7 +1,7 @@
 
-----------------------------
-template event generator - standard output
-----------------------------
+--------------------------------------------------------
+template event generator - standard output (metadata shown)
+--------------------------------------------------------
 
 input {
     exec {
@@ -102,8 +102,11 @@ input {
         consumer_threads => 1
         topics => ["my.consumed.topic"]
         value_deserializer_class => "org.apache.kafka.common.serialization.ByteArrayDeserializer"
+        decorate_events => true
     }
 }
+
+// decorate_events => true              // appends Kafka specific metadata to logstash events
 
 ----------------------------
 elastic input with query

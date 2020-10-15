@@ -16,10 +16,13 @@ basic operations
 ----------------------------
 
 GET /_aliases
+GET /_cat/_aliases
+GET /_cat/_aliases?v
+
 GET /_cat/indices
 GET /_cat/indices?v
 
-GET _ilm/policy/some_policy
+GET /_ilm/policy/some_policy
 
 GET /some_index
 GET /some_index/_settings
@@ -333,6 +336,30 @@ equivalent to:
 			]
 		}
 	}
+}
+
+------------------------------------
+simple rollover index lifecycle policy (ILM)
+------------------------------------
+
+PUT /_ilm/policy/my_ilm_policy
+{
+    "policy": {
+        "phases": {
+            "hot": {
+                "min_age": "0ms",
+                "actions": {
+                    "rollover": {
+                        "max_age": "7d",
+                        "max_size": "1gb"
+                    },
+                    "set_priority": {
+                        "priority": 100
+                    }
+                }
+            }
+        }
+    }
 }
 
 ------------------------------------
@@ -840,11 +867,11 @@ PUT /flies/_mapping/fly
 	}
 }
 
-----------------------------
-nested fields example
-----------------------------
+--------------------------------------------------------
+nested fields example / create index with mapping example
+--------------------------------------------------------
 
-PUT / anindex
+PUT /some_index
 {
     "mappings": {
         "properties": {
@@ -863,7 +890,7 @@ PUT / anindex
     }
 }
 
-PUT /anindex/_doc/1
+PUT /some_index/_doc/1
 {
   "name" : "John Brambor",
   "address" : [
@@ -878,7 +905,7 @@ PUT /anindex/_doc/1
   ]
 }
 
-GET /anindex/_doc/_search
+GET /some_index/_doc/_search
 {
     "query": {
         "nested": {
