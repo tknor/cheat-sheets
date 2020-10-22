@@ -1,18 +1,17 @@
+# -------------------------------------
+# my scripts
+# -------------------------------------
+
+alias xs=\'$ffs/./scratch.sh\'
+alias xsl=\'$ffs/scripts-local/./scratch.sh\'
 
 alias xgp=\'$ffs/./git-push-master.sh\'
-alias xd=\'$ffs/scripts-local/./distribute-nodejs-lab.sh\'
 
 alias xdc=\'$ffs/./docker-clean.sh\'
-alias xdl=\'$ffs/./docker-list.sh\'
-alias xdu=\'$ffs/./docker-local-up.sh\'
-alias xdd=\'$ffs/./docker-local-down.sh\'
-alias xdts=\'$ffs/./docker-sh.sh\'
-alias xdtb=\'$ffs/./docker-bash.sh\'
 
 alias xk=\'$ffs/./ku-set-context.sh\'
 
-alias xpga=\'$ffs/./pgadmin.sh\'
-
+alias xpg=\'$ffs/./pod-get.sh\'
 alias xpts=\'$ffs/./pod-sh.sh\'
 alias xptb=\'$ffs/./pod-bash.sh\'
 alias xpd=\'$ffs/./pod-delete.sh\'
@@ -22,4 +21,40 @@ alias xptfd=\'$ffs/./pod-text-file-download.sh\'
 alias xppf=\'$ffs/./pod-port-forward.sh\'
 alias xse=\'$ffs/./service-endpoint.sh\'
 
-alias xe=\'$ffs/./elk.sh\'
+alias xpgadmin=\'$ffs/./pgadmin.sh\'
+alias xkibana=\'$ffs/./kibana.sh\'
+alias xelk=\'$ffs/./elk.sh\'
+
+# -------------------------------------
+# my commands
+# -------------------------------------
+
+alias adts='winpty docker exec -it $1 sh'
+alias adtb='winpty docker exec -it $1 bash'
+alias adl='docker ps -a'
+alias adlu='docker-compose -f deployment/docker/docker-compose.yml up -d --build'
+alias adld='docker-compose -f deployment/docker/docker-compose.yml down'
+
+alias akcd='ku config use-context dev'
+alias akct='ku config use-context test'
+alias akcu='ku config use-context uat'
+alias akgp='ku get pods'
+alias akgpg='ku get pods | grep $1'
+alias akgs='ku get services'
+alias akgsg='ku get services | grep $1'
+alias akgp='ku get pods'
+alias akgpw='ku get pods -o wide'
+alias akgpg='ku get pods | grep $1'
+alias akgpwg='ku get pods -o wide | grep $1'
+alias akgpy='ku get pod $1 -o yaml'
+alias akdp='ku describe pod $1'
+alias akl='ku logs $1'
+alias aklf='ku logs -f $1'
+alias akgs='ku get services'
+alias ag='grep'
+
+function example_function() {
+  echo "this is function"
+}
+
+alias xshello='echo "hello, $(example_function)"'

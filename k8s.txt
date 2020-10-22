@@ -35,6 +35,7 @@ kubectl edit configmap <configmap>
 kubectl port-forward <pod> <port-in-pod>:<port-on-localhost>		// forwarding pod's port during process run
 
 kubectl logs <pod>
+kubectl logs <pod> -c <container_if_needed>
 kubectl logs -f <pod>
 kubectl exec <pod> env
 kubectl exec -ti <pod> bash

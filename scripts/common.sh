@@ -33,6 +33,10 @@ function phase() {
 	printf "\n -> $1\n\n"
 }
 
+function timestamp() {
+  printf '%(%Y%m%d-%H%M%S)T' -1
+}
+
 function script_end {
 	
   if [[ $VAR_W_OPTION == 1 ]]; then
@@ -84,10 +88,14 @@ function remove_docker_image() {
 # params:
 # 1 pod name part
 # result in TEMP
-function pod_name() {
+function pod_name_from_name_part() {
+	kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep $1
+}
 
-	TEMP=$(kubectl get pods --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep $1)
-	phase "pod = '$TEMP'"
+# params:
+# 1 kubectl context
+function ku_switch() {
+  kubectl config use-context $1
 }
 
 # params:
@@ -117,15 +125,25 @@ function delete_pod() {
 
 # params:
 # 1 pod
+# 2 archived log name
 function download_logs_from_pod() {
 
   phase "downloading logs"
 
-	mkdir -p $CONST_TEMP_FOLDER
-	rm -f $CONST_TEMP_FOLDER/text.txt
-	echo "n/a" > $CONST_TEMP_FOLDER/text.txt
+  VAR_TIMESTAMP=$(timestamp)
 
-	kubectl logs $1 > $CONST_TEMP_FOLDER/text.txt
+  VAR_PRIMARY_FILE=$CONST_TEMP_FOLDER/text.txt
+  if [ $# -eq 2 ]; then
+    VAR_ALTERNATIVE_FILE=$CONST_TEMP_FOLDER/log-$2-$VAR_TIMESTAMP.txt
+  else
+    VAR_ALTERNATIVE_FILE=$CONST_TEMP_FOLDER/log-$VAR_TIMESTAMP.txt
+  fi
+
+	mkdir -p $CONST_TEMP_FOLDER
+	rm -f $VAR_PRIMARY_FILE
+	echo "n/a" > $VAR_PRIMARY_FILE
+
+	kubectl logs $1 | tee $VAR_PRIMARY_FILE $VAR_ALTERNATIVE_FILE > /dev/null
 
 	phase "logs downloaded"
 }

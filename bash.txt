@@ -51,6 +51,14 @@ read -n 1 -s -r -p "press any key to continue"
 
 chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
 
+command | tee file1 file2 file3                             // output of command to console and each file
+
+echo $(date '+%Y-%m-%d')                                    // formatted current date (old way)
+printf '%(%Y-%m-%d %H:%M:%S)T' -1                           // formatted current date (new way)
+
+command > /dev/null                                         // hide output
+command > /dev/null 2>&1                                    // hide output and errors (redirects stderr to stdout, so errors (if any) also goes to /dev/null)
+
 wc -l file.txt												// number of lines in a file
 wc -l < file.txt											// outputs only the number
 
@@ -149,24 +157,56 @@ else
 fi
 
 --------------
-
-// negation
+negation
+--------------
 
 if ! [[ $? -eq 0 ]]; then
     ...
 fi
 
 --------------
-
-// multiple conditions
+multiple conditions
+--------------
 
 if [[ ( "$a" -eq 1 && "$c" = "123" ) || ( "$b" -eq 2 && "$c" = "456" ) ]]; then
     ...
 fi
 
 --------------
+test for variable value
+--------------
 
-// test for non-empty commands output
+if [[ $VAR_SOME == 1 ]]; then
+    echo "variable value is 1"
+else
+    echo "variable value is not 1"
+fi
+
+if [[ $VAR_SOME == "some_value" ]]; then
+    echo "true"
+else
+    echo "false"
+fi
+
+--------------
+test for number of arguments
+--------------
+
+if [ $# -eq 0 ]; then
+    echo "No arguments supplied"
+fi
+
+--------------
+test of argument existence (not tested)
+--------------
+
+if [ -z "$1" ]; then
+    echo "No argument supplied"
+fi
+
+--------------
+test for non-empty commands output
+--------------
 
 if [[ $(docker container ls -aq) ]]; then
     echo "there are containers"
@@ -175,8 +215,8 @@ else
 fi
 
 --------------
-
-// test for folder existence
+test for folder existence
+--------------
 
 if [ -d "/folder" ]; then
     echo "exists"
@@ -184,7 +224,9 @@ else
     echo "does not exist"
 fi
 
-// test for file existence
+--------------
+test for file existence
+--------------
 
 if [ -f "/file.txt" ]; then
     echo "exists"
@@ -193,18 +235,8 @@ else
 fi
 
 --------------
-
-// test for variable value
-
-if [[ $VAR_SOME == 1 ]]; then
-    echo "variable value is 1"
-else
-    echo "variable value is not 1"
-fi
-
+test for last commands success
 --------------
-
-// test for last commands success
 
 if [[ $? != 0 ]]; then
     echo "last command failed"
@@ -213,8 +245,8 @@ else
 fi
 
 --------------
-
-// tests above combined
+tests above combined
+--------------
 
 VAR_COMMAND=$(docker container ls -aq)
 if [[ $? != 0 ]]; then

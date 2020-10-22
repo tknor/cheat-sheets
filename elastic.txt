@@ -63,6 +63,8 @@ DELETE /some_index
 
 PUT /accounts
 
+// differences?
+
 POST /accounts/person/1
 {
     "name" : "Tomas",
@@ -73,11 +75,31 @@ PUT /accounts/person/1
     "name" : "Tomas",
 }
 
+// outdated?
+
 PUT /accounts/person/1/_update
 {
     "doc": {
         "name": "Tomas"
     }
+}
+
+POST /accounts/_update/1
+{
+  "doc": {
+    "name": "John"
+  },
+  "doc_as_upsert": true
+}
+
+POST /accounts/_update/1
+{
+  "doc": {
+    "name": "John"
+  },
+  "upsert": {
+    "name": "John"
+  }
 }
 
 ------------------------------
@@ -574,6 +596,8 @@ PUT /_ingest/pipeline/naughty-pipeline
   ]
 }
 
+// create document using pipeline
+
 PUT /my_index/_doc/1?pipeline=naughty-pipeline
 {
   "first_name": "Frank",
@@ -652,7 +676,7 @@ GET /flies/fly/_search
 }
 
 ------------------------------------------------------------------------------------
-creating index pattern... hanging problem, 403 forbidden in browser console
+Kibana: creating index pattern... hanging problem, 403 forbidden in browser console
 ------------------------------------------------------------------------------------
 
 curl -d @in.json -XPUT -H "Content-Type: application/json" localhost:9200/_all/_settings
@@ -845,12 +869,100 @@ GET /source/_search
 # field does not exist or it's empty
 "query": "!((_exists_:field) AND !(field.keyword:\"\"))"
 
+-----------------------
+create index template examples
+-----------------------
+
+PUT /_template/some_index-template
+{
+    "index_patterns": ["some_index_prefix*"],
+    "settings" {
+        "number_of_shards": 1,
+        "number_of_replicas": 0,
+        "index.lifecycle.name": "some_ilm_policy",
+        "index.lifecycle.rollover_alias": "some_alias",
+        "default_pipeline": "some_ingest_pipeline"
+    },
+    "mappings": {
+        "properties": {
+            "some_field": {
+                "type": "keyword"
+            },
+            "another_field": {
+                "type": "text"
+            }
+        }
+    }
+}
+
+PUT /_template/flies_template
+{
+    "order": 0,
+    "index_patterns": [ "flies-*" ],
+    "settings": {
+        "index": {
+            "lifecycle": {
+                "name": "flies_policy",
+                "rollover_alias": "flies"
+            },
+            "number_of_shards": "1",
+            "number_of_replicas": "0"
+        }
+    },
+    "mappings": {
+        "properties": {
+            "timestamp": {
+                "type": "date"
+            }
+        }
+    },
+    "aliases": {}
+}
+
+----------------------------------
+setting pagination / paging limit
+----------------------------------
+
+PUT /world_check/_settings
+{
+    "index" : {
+        "max_result_window" : 100000
+    }
+}
 
 -----------------------
-update index mapping
+create / update index
 -----------------------
 
-PUT /flies/_mapping/fly
+PUT /some_index
+
+PUT /some_index
+{
+    "aliases": {
+        "some_alias": {
+            "is_write_index": true
+        }
+    },
+    "settings": {
+        "default_pipeline": "some_ingest_pipeline"
+    },
+    "mappings": {
+        "properties": {
+            "some_field": {
+                "type": "keyword"
+            },
+            "another_field": {
+                "type": "text"
+            }
+        }
+    }
+}
+
+-----------------------
+update index mapping / setting only
+-----------------------
+
+PUT /flies/_mapping
 {
 	"properties": {
 		"name": {
@@ -867,8 +979,15 @@ PUT /flies/_mapping/fly
 	}
 }
 
+PUT /some_index/_settings
+{
+    "index" : {
+        "max_result_window" : 100000
+    }
+}
+
 --------------------------------------------------------
-nested fields example / create index with mapping example
+create index with nested field mapping
 --------------------------------------------------------
 
 PUT /some_index
@@ -920,47 +1039,6 @@ GET /some_index/_doc/_search
             }
         }
     }
-}
-
-----------------------------------
-setting pagination / paging limit
-----------------------------------
-
-PUT /world_check/_settings
-{
-    "index" : {
-        "max_result_window" : 100000
-    }
-}
-
-----------------------------
-index template example
-----------------------------
-
-PUT _template/flies_template
-{
-    "order": 0,
-    "index_patterns": [
-        "flies-*"
-    ],
-    "settings": {
-        "index": {
-            "lifecycle": {
-                "name": "flies_policy",
-                "rollover_alias": "flies"
-            },
-            "number_of_shards": "1",
-            "number_of_replicas": "0"
-        }
-    },
-    "mappings": {
-        "properties": {
-            "timestamp": {
-                "type": "date"
-            }
-        }
-    },
-    "aliases": {}
 }
 
 ----------------------------

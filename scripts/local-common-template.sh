@@ -10,61 +10,64 @@ CONST_TEMP_FOLDER=~/Desktop/temp
 
 # params:
 # 1 env short name
-# result in TEMP
-function env() {
-  if [[ $1 == "x" ]]; then
-    TEMP="xxx"
+function env_resolve() {
+  if [[ $1 == "d" ]]; then
+    echo "dev"
+  elif [[ $1 == "t" ]]; then
+    echo "test"
   else
-    phase "unrecognized environment '$1'"
-    exit 1
+    phase "UNRESOLVED_ENVIRONMENT"
   fi
 }
 
 # params:
 # 1 env short name
-# result in TEMP
-function ku_switch() {
-  env $1
-  kubectl config use-context $TEMP
+# 2 pod short name
+function pod_resolve() {
+  if [[ $2 == "x" ]]; then
+    echo "xxx"
+  elif [[ $2 == "y" ]]; then
+    echo "yyy"
+  else
+    echo "UNRESOLVED_POD"
+  fi
 }
 
 # params:
 # 1 env short name
 # 2 pod short name
-# result in TEMP
-function pod() {
+function pod_container_resolve() {
   if [[ $2 == "x" ]]; then
-    pod_name "xxx"
+    echo "xxx"
   else
-    phase "unrecognized pod '$2'"
-    exit 1
+    echo ""
   fi
 }
 
 # params:
 # 1 env short name
 # 2 service short name
-# result in TEMP
-function service() {
+function service_resolve() {
   if [[ $2 == "x" ]]; then
-    TEMP="xxx"
-    phase "service = '$TEMP'"
+    echo "xxx"
+  elif [[ $2 == "y" ]]; then
+    echo "yyy"
   else
-    phase "unrecognized service '$2'"
-    exit 1
+    echo "UNRESOLVED_SERVICE"
   fi
 }
 
+# gets port forwarding setting by pod short name
 # params:
 # 1 env short name
 # 2 pod short name
-# result in TEMP
-function porting() {
+function porting_resolve() {
   if [[ $2 == "x" ]]; then
-    TEMP="8080:8080"
+    echo "8080:8080"
+  elif [[ $2 == "y" ]]; then
+    echo "8080:8080"
   else
-    phase "unrecognized pod '$2', setting default 8080:8080"
-    TEMP="8080:8080"
+    echo "UNRESOLVED_PORTING"
   fi
 }
 
@@ -73,12 +76,22 @@ function porting() {
 # 2 pod short name
 # result in VAR_ENV, VAR_POD, VAR_PORTING
 function ku_switch_and_set_pod_and_porting() {
-  ku_switch $1
-  VAR_ENV=$TEMP
-  pod $1 $2
-  VAR_POD=$TEMP
-  porting $1 $2
-  VAR_PORTING=$TEMP
+
+  VAR_ENV=$(env_resolve $1)
+  ku_switch $VAR_ENV
+
+  VAR_RESOLVED_POD_PART=$(pod_resolve $1 $2)
+  VAR_RESOLVED_POD_CONTAINER=$(pod_container_resolve $1 $2)
+
+  if [ -z "$VAR_RESOLVED_POD_CONTAINER" ]; then
+    VAR_POD="$(pod_name_from_name_part $VAR_RESOLVED_POD_PART)"
+  else
+    VAR_POD="$(pod_name_from_name_part $VAR_RESOLVED_POD_PART) -c $VAR_RESOLVED_POD_CONTAINER"
+  fi
+
+  VAR_PORTING=$(porting_resolve $1 $2)
+
+  phase "switched, VAR_ENV = '$VAR_ENV', VAR_POD = '$VAR_POD', VAR_PORTING = '$VAR_PORTING'"
 }
 
 # params:
@@ -86,8 +99,11 @@ function ku_switch_and_set_pod_and_porting() {
 # 2 service short name
 # result in VAR_ENV, VAR_SERVICE
 function ku_switch_and_set_service() {
-  ku_switch $1
-  VAR_ENV=$TEMP
-  service $1 $2
-  VAR_SERVICE=$TEMP
+
+  VAR_ENV=$(env_resolve $1)
+  ku_switch $VAR_ENV
+
+  VAR_SERVICE=$(service_resolve $1 $2)
+
+  phase "switched, VAR_ENV = '$VAR_ENV', VAR_SERVICE = '$VAR_SERVICE'"
 }

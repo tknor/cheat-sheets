@@ -3,24 +3,20 @@
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
   if [[ $1 == "u" ]]; then
-
     phase "starting ELK stack"
     docker-compose -f $ffs/docker-compose/elk.yml up -d
 
     docker exec logstash mkdir -p scripts
 
   elif [[ $1 == "d" ]]; then
-
     phase "stopping ELK stack"
     docker-compose -f $ffs/docker-compose/elk.yml down
 
   elif [[ $1 == "lsh" ]]; then
-
     phase "connecting to logstash"
     winpty docker exec -it logstash sh
 
   elif [[ $1 == "esh" ]]; then
-
     phase "connecting to elastic"
     winpty docker exec -it elastic sh
 

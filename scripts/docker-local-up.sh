@@ -1,1 +1,0 @@
-docker-compose -f deployment/docker/docker-compose.yml up -d --build
