@@ -51,6 +51,10 @@ read -n 1 -s -r -p "press any key to continue"
 
 chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
 
+[command] &                                                 // run command and push to background
+jobs                                                        // see commands pushed to background
+disown                                                      // commands will continue running even when terminal closes
+
 command | tee file1 file2 file3                             // output of command to console and each file
 
 echo $(date '+%Y-%m-%d')                                    // formatted current date (old way)
