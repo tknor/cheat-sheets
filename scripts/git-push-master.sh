@@ -29,11 +29,14 @@ select yn in "Yes" "No"; do
     esac
 done
 
-phase "Push?"
-select yn in "Yes" "No"; do
-    case $yn in
-        Yes ) phase "pushing"; git push origin master; break;;
-        No ) exit;;
+VAR_BRANCH=$(git branch)
+
+phase "Push? (detected: $VAR_BRANCH )"
+select yyn in "master" "main" "Cancel"; do
+    case $yyn in
+        master ) phase "pushing"; git push origin master; break;;
+        main ) phase "pushing"; git push origin main; break;;
+        Cancel ) exit;;
     esac
 done
 
