@@ -11,6 +11,10 @@ echo "Hello"
 echo 'Hello' > .gitignore									// write to file (overwrite)
 echo 'Hello' >> .gitignore									// write to file (append)
 
+nano [filename]
+
+whereis [command]
+
 find														// list folder structure
 find . -not -path '*/\.*'									// structure without those starting with dot
 
@@ -55,13 +59,17 @@ chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
 jobs                                                        // see commands pushed to background
 disown                                                      // commands will continue running even when terminal closes
 
-command | tee file1 file2 file3                             // output of command to console and each file
+[command] | tee file1 file2 file3                             // output of command to console and each file
+
+date                                                        // current time
+date --utc
+date -u
 
 echo $(date '+%Y-%m-%d')                                    // formatted current date (old way)
 printf '%(%Y-%m-%d %H:%M:%S)T' -1                           // formatted current date (new way)
 
-command > /dev/null                                         // hide output
-command > /dev/null 2>&1                                    // hide output and errors (redirects stderr to stdout, so errors (if any) also goes to /dev/null)
+[command] > /dev/null                                         // hide output
+[command] > /dev/null 2>&1                                    // hide output and errors (redirects stderr to stdout, so errors (if any) also goes to /dev/null)
 
 wc -l file.txt												// number of lines in a file
 wc -l < file.txt											// outputs only the number
@@ -92,6 +100,12 @@ apt upgrade
 apt install sudo
 
 usermod -aG sudo <username>
+
+crontab -l                                                  // see current user's cron jobs
+crontab -e                                                  // edit cron jobs
+sudo crontab -u [user] -l                                   // see different user's cron jobs
+
+cat /var/log/syslog                                         // log containing executions by cron
 
 --------------------------------
 Debian 9 management
