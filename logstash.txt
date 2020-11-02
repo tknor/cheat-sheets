@@ -179,12 +179,23 @@ output {
 transformations / filters
 ----------------------------
 
+    # simple ruby code
+
+    ruby {
+        code => '
+            input = event.get("INPUT_FIELD")
+            event.set("OUTPUT_FIELD", input)
+        '
+    }
+
 	# simple concatenate
+
 	mutate {
         add_field => { "target_field" => "%{source_field_1} %{source_field_2}"}
     }
 
     # multiple fields can be added
+
     mutate {
         add_field => {
             "target_field1" => "%{source_field_1}"
@@ -198,6 +209,7 @@ transformations / filters
 	
 	# works on object
 	# does not work on object arrays or nested object arrays
+
 	mutate {
         add_field => { "target_field" => "%{[source_object_field][source_object_sub_field]}"}
     }
@@ -205,6 +217,7 @@ transformations / filters
 	# works on nested object, having at least 1 item
 	# works on object array, having at least 1 item
 	# does not work on object
+
 	mutate {
         add_field => { "target_field" => "%{[source_nested_object_field][0][source_object_sub_field]}"}
 	}
@@ -219,29 +232,42 @@ transformations / filters
 
 	# works on object
 	# does not work on object arrays or nested object arrays
+
 	mutate {
 		remove_field => [ "[source_object_field][source_object_sub_field]" ]
 	}
 
 	# equivalent code for sub-field removal
+
     ruby {
         code => '
-            original_nested_object_array = event.get("NESTED");
+            original_nested_object_array = event.get("NESTED")
             new_nested_object_array = Array.new()
             original_nested_object_array.each { |original_nested_object|
-                original_nested_object.delete("an_objects_field");
-                new_nested_object_array.push(original_nested_object);
+                original_nested_object.delete("an_objects_field")
+                new_nested_object_array.push(original_nested_object)
             }
             event.set("NESTED", new_nested_object_array)
         '
     }
 
-	# create field (if it does not exist) with empty string value
+	# create field with empty string value if field does not exist
+	# but if field exists and contains empty value, this will transform it to array [ "", "" ]
+	# see script below
+
 	if !([field]) {
 		mutate {
 			add_field => { "field" => ""}
 		}
 	}
+
+    # create field with empty string value if field does not exist
+
+	if !([field]) and !("" in [field]) {
+        mutate {
+            add_field => { "field" => ""}
+        }
+    }
 	
 --------------------------
 other

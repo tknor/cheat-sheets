@@ -1,4 +1,75 @@
 
+----------------------------
+unorganized
+----------------------------
+
+GET /some/_search
+{
+    "query": {
+      "bool": {
+        "should": [
+          { "exists": { "field": "fields.parent.entityId" }},
+          { "exists": { "field": "fields.entityId" }}
+        ]
+      }
+    },
+    "script_fields": {
+      "tomEntityId": {
+        "script": {
+          "lang": "painless",
+          "source": """
+            String report = "";
+            if (doc.containsKey('fields.parent.entityId')) {
+              report = report + ' ::: containsKey(fields.parent.entityId)';
+            }
+            if (doc.containsKey('fields.parent.entityId.keyword')) {
+              report = report + ' ::: containsKey(fields.parent.entityId.keyword),value=' + doc['fields.parent.entityId.keyword'] + ',size=' + doc['fields.parent.entityId.keyword'].size();
+            }
+            if (doc.containsKey('fields.entityId')) {
+              report = report + ' ::: containsKey(fields.entityId)';
+            }
+            if (doc.containsKey('fields.entityId.keyword')) {
+              report = report + ' ::: containsKey(fields.entityId.keyword),value=' + doc['fields.entityId.keyword'] + ',size=' + doc['fields.entityId.keyword'].size();
+            }
+            return report;
+          """
+        }
+      }
+    },
+    "_source": [ "tomEntityId" ]
+}
+
+GET /some/_search
+{
+    "query": {
+      "bool": {
+        "should": [
+          { "exists": { "field": "fields.parent.entityId" }},
+          { "exists": { "field": "fields.entityId" }}
+        ]
+      }
+    },
+    "script_fields": {
+      "tomEntityId": {
+        "script": {
+          "lang": "painless",
+          "source": """
+            if (doc.containsKey('fields.parent.entityId.keyword') && doc['fields.parent.entityId.keyword'].size() > 0) {
+              return doc['fields.parent.entityId.keyword']
+            } else {
+              return doc['fields.entityId.keyword']
+            }
+          """
+        }
+      }
+    },
+    "_source": [ "*" ]
+}
+
+----------------------------
+general
+----------------------------
+
 elk stack docker containers contain default configuration yaml files
     can be overriden using volumes in docker-compose
         providing another configuration yaml file (best based on the default one)

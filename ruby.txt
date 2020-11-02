@@ -4,6 +4,8 @@ puts someString
 initializedString = ""
 initializedArray = Array.new
 
+trimmedString = someString.strip
+
 unless someString.nil? || someString.strip.empty?
     // if string not null or empty
 end
@@ -17,6 +19,7 @@ stringArray.each { |stringArrayItem|
 }
 
 lengthOfArray = someArray.length()
+lengthOfString = someString.length()
 
 for someIndex in 1..maximumIndex do
     // something
@@ -28,11 +31,16 @@ else
     // something else
 end
 
-// permutation of strings in array (i.e. elements, e.g. letters)
-// permutations of 3-element length
-// creates array of permutation representations
-// joins (concats) permutation elements without whitespace
+for index in 1..lastIndex do
+    // something
+end
 
-stringArray.permutation(3).to_a.each { |permutation|
-	joinedPermutationElements = permutation.join('')
-}
+// creates permutations of inputs from array
+// joins permutated inputs without whitespace
+// stores in permutation in another array
+
+for permutationLength in 1..maxPermutationLength do
+    inputArray.permutation(permutationLength).to_a.each { |permutation|
+        outputArray.push(permutation.join(""))
+    }
+end
