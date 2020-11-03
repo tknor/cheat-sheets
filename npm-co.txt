@@ -1,21 +1,27 @@
 
-npm init
-npm init -y
-
-npx license mit > LICENSE
-npx gitignore node
-npx covgen crimsondeed@gmail.com
-
-npm install firebase-functions@latest firebase-admin@latest --save
-npm install -g firebase-tools
+--------
+npm
+--------
 
 npm init                                        // create package.json file
+npm init -y
 npm install                                     // installs modules listed in package.json, to local node_modules folder
 npm install <module>                            // installs module to local node_modules folder
 npm install -g <module>                         // ... not locally, but globally
+npm install <module> --unsafe-perm              // easing security?
 npm install --save <module>                     // installs module and saves it to package.json file
 npm install --save --save-exact <module>        // ... stores exact version instead of version range
 npm remove <module>
+
+npm list                                        // show installed modules
+npm list -g                                     // show path to and list of globally installed modules
+
+------------------------
+npm - usual modules
+------------------------
+
+npm install -g @angular/cli
+npm install -g firebase-tools
 
 npm install @types/node
 npm install --save bitcom
@@ -29,10 +35,38 @@ npm install --save request
 npm install --save winston
 npm install --save winston-daily-rotate-file
 
+npm install --save firebase-functions@latest firebase-admin@latest
+
+----------------
+ng, angular
+----------------
+
+ng new <app_name>                               // creates folder, initializes angular application
+
+ng serve
+ng serve --open
+
+--------
+npx
+--------
+
+npx license mit > LICENSE
+npx gitignore node
+npx covgen crimsondeed@gmail.com
+
+--------
+nvm
+--------
+
 nvm install 12.18.0								// install specific node version
 nvm ls											// list locally installed versions
 nvm ls-remote									// list available remote versions
 nvm use 12.18.0									// switch to specific locally installed version
+
+--------
+node
+--------
+
 node -v											// run node and see version
 
 ----------------------------------------------------------------
