@@ -25,7 +25,7 @@ alias xpgadmin=\'$ffs/./pgadmin.sh\'
 alias xkibana=\'$ffs/./kibana.sh\'
 alias xelk=\'$ffs/./elk.sh\'
 
-alias xud=\'$ffs/scripts-local/./undead.sh\'
+alias xud=\'$ffs/./undead.sh\'
 
 # -------------------------------------
 # my commands
