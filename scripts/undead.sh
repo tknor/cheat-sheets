@@ -28,6 +28,15 @@
     phase "deploying undead to VPS"
     phase "NOT IMPLEMENTED"
 
+  elif [[ $1 == "gp" ]]; then
+    phase "pushing git repositories"
+    phase "-------------------------------- UNDEAD"
+    $ffs/./git-push-master.sh $ffud
+    phase "-------------------------------- NODEJS-LAB"
+    $ffs/./git-push-master.sh $ffnl
+    phase "-------------------------------- CHEAT-SHEETS"
+    $ffs/./git-push-master.sh $ffc
+
   else
     phase "what with it?"
     exit 1
