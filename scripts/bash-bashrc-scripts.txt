@@ -6,6 +6,7 @@ alias xs=\'$ffs/./scratch.sh\'
 alias xsl=\'$ffs/scripts-local/./scratch.sh\'
 
 alias xgp=\'$ffs/./git-push-master.sh\'
+alias xgpull=\'$ffs/./git-pull.sh\'
 
 alias xdc=\'$ffs/./docker-clean.sh\'
 
