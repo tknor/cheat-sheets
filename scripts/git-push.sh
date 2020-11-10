@@ -4,42 +4,42 @@
 
 phase "cheat-sheets"
 
-if ! [[ -z "$ffc" ]]; then
+if [[ -v ffc ]]; then
     $ffs/./git-push-specific.sh $ffc
 fi
 
 phase "jvm-lab"
 
-if ! [[ -z "$ffjl" ]]; then
+if [[ -v ffjl ]]; then
     $ffs/./git-push-specific.sh $ffjl
 fi
 
 phase "nodejs-lab"
 
-if ! [[ -z "$ffnl" ]]; then
+if [[ -v ffnl ]]; then
     $ffs/./git-push-specific.sh $ffnl
 fi
 
 phase "spring-lab"
 
-if ! [[ -z "$ffsl" ]]; then
+if [[ -v ffsl ]]; then
     $ffs/./git-push-specific.sh $ffsl
 fi
 
 phase "ConBank"
 
-if ! [[ -z "$ffcb" ]]; then
+if [[ -v ffcb ]]; then
     $ffs/./git-push-specific.sh $ffcb
 fi
 
 phase "ConBankUI"
 
-if ! [[ -z "$ffcbu" ]]; then
+if [[ -v ffcbu ]]; then
     $ffs/./git-push-specific.sh $ffcbu
 fi
 
 phase "undead"
 
-if ! [[ -z "$ffud" ]]; then
+if [[ -v ffud ]]; then
     $ffs/./git-push-specific.sh $ffud
 fi

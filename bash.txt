@@ -23,6 +23,9 @@ printf "Hello\n"											// more consistent than echo, definitely supports new
 VAR_MY="value_my"											// store value in variable
 cd $VAR_PWD													// retrieve value from variable
 
+VAR_A=10
+VAR_B=$(($VAR_A - 1))
+
 VAR_PWD=$(pwd)												// store command result to variable
 cd $VAR_PWD
 
@@ -215,14 +218,26 @@ if [ $# -eq 0 ]; then
 fi
 
 --------------
-test of argument / variable emptiness (true if not set or empty string)
+test of variable existence
 --------------
 
-if [ -z "$1" ]; then
+if [[ -v VAR_SOME ]]; then
+    echo "variable has been set"
+else
+    echo "variable has NOT been set"
+fi
+
+--------------
+test of argument / variable emptiness (true for empty string)
+--------------
+
+# does not prevent 'unbound variable' ?
+
+if [[ -z "$1" ]]; then
     echo "No argument supplied"
 fi
 
-if [ -z "$VAR_SOME" ]; then
+if [[ -z "$VAR_SOME" ]]; then
     echo "No argument supplied"
 fi
 
@@ -240,7 +255,7 @@ fi
 test for folder existence
 --------------
 
-if [ -d "/folder" ]; then
+if [[ -d "/folder" ]]; then
     echo "exists"
 else
     echo "does not exist"
@@ -250,7 +265,7 @@ fi
 test for file existence
 --------------
 
-if [ -f "/file.txt" ]; then
+if [[ -f "/file.txt" ]]; then
     echo "exists"
 else
     echo "does not exist"

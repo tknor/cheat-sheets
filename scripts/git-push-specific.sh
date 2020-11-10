@@ -32,9 +32,9 @@ done
 VAR_BRANCH=$(git branch | grep -o 'm.\+')
 
 phase "Push? (detected: $VAR_BRANCH )"
-select yn in "$VAR_BRANCH" "Cancel"; do
+select yn in "Push" "Cancel"; do
     case $yn in
-        $VAR_BRANCH ) phase "pushing"; git push origin $VAR_BRANCH; break;;
+        Push ) phase "pushing"; git push origin $VAR_BRANCH; break;;
         Cancel ) exit;;
     esac
 done
