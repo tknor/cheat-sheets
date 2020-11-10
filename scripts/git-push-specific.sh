@@ -14,28 +14,27 @@ phase "status:"
 git status
 
 phase "Add?"
-select yn in "Yes" "No"; do
+select yn in "Add" "Cancel"; do
     case $yn in
-        Yes ) phase "added status:"; git add .; git status; break;;
-        No ) exit;;
+        Add ) phase "added status:"; git add .; git status; break;;
+        Cancel ) exit;;
     esac
 done
 
 phase "Commit?"
-select yn in "Yes" "No"; do
+select yn in "Commit" "Cancel"; do
     case $yn in
-        Yes ) phase "commiting"; git commit -a -m "auto push"; break;;
-        No ) exit;;
+        Commit ) phase "committing"; git commit -a -m "auto push"; break;;
+        Cancel ) exit;;
     esac
 done
 
-VAR_BRANCH=$(git branch)
+VAR_BRANCH=$(git branch | grep -o 'm.\+')
 
 phase "Push? (detected: $VAR_BRANCH )"
-select yyn in "master" "main" "Cancel"; do
-    case $yyn in
-        master ) phase "pushing"; git push origin master; break;;
-        main ) phase "pushing"; git push origin main; break;;
+select yn in "$VAR_BRANCH" "Cancel"; do
+    case $yn in
+        $VAR_BRANCH ) phase "pushing"; git push origin $VAR_BRANCH; break;;
         Cancel ) exit;;
     esac
 done

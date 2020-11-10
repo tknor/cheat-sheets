@@ -24,22 +24,24 @@ output {
 template elastic - elastic
 ----------------------------
 
+// preserves original document ID
+
 input {
     elasticsearch {
         hosts => [ "elastic:9200" ]
         index => "source"
         docinfo => true
         docinfo_fields => ["_index", "_id"]
-        docinfo_target => "_originatingWLIndex"
+        docinfo_target => "_originalIndex"
     }
 }
 
 filter {
     mutate {
         add_field => {
-            "[@metadata][_id]" => "%{[_originatingWLIndex][_id]}"
+            "[@metadata][_id]" => "%{[_originalIndex][_id]}"
             "[@metadata][_type]" => "_doc"
-            "[@metadata][_index]" => "%{[_originatingWLIndex][_index]}"
+            "[@metadata][_index]" => "%{[_originalIndex][_index]}"
         }
     }
 }
@@ -109,7 +111,7 @@ input {
 // decorate_events => true              // appends Kafka specific metadata to logstash events
 
 ----------------------------
-elastic input with query
+Elastic input with query
 ----------------------------
 
 input {
@@ -119,8 +121,21 @@ input {
         index => "source"
         docinfo => true
         docinfo_fields => ["_index", "_id"]
-        docinfo_target => "_originatingWLIndex"
+        docinfo_target => "_originalIndex"
     }
+}
+
+----------------------------------------------
+Elastic output with upsert (update or insert)
+----------------------------------------------
+
+elasticsearch {
+    hosts => [ "elastic:9200" ]
+    index => "target"
+    document_type => "_doc"
+    document_id => "%{[field_containing_id]}"
+    doc_as_upsert => true
+    action => "update"
 }
 
 ----------------------------
