@@ -133,7 +133,7 @@ function download_logs_from_pod() {
   VAR_TIMESTAMP=$(timestamp)
 
   VAR_PRIMARY_FILE=$CONST_TEMP_FOLDER/text.txt
-  if [ $# -eq 2 ]; then
+  if [[ $# -eq 2 ]]; then
     VAR_ALTERNATIVE_FILE=$CONST_TEMP_FOLDER/log-$2-$VAR_TIMESTAMP.txt
   else
     VAR_ALTERNATIVE_FILE=$CONST_TEMP_FOLDER/log-$VAR_TIMESTAMP.txt
@@ -163,7 +163,7 @@ function download_text_file_from_pod() {
   cd $CONST_TEMP_FOLDER
 	kubectl cp $1:$2 temp.txt
 
-  if [ -f "$CONST_TEMP_FOLDER/temp.txt" ]; then
+  if [[ -f "$CONST_TEMP_FOLDER/temp.txt" ]]; then
       cat $CONST_TEMP_FOLDER/temp.txt > $CONST_TEMP_FOLDER/text.txt
 	  rm -f $CONST_TEMP_FOLDER/temp.txt
   fi

@@ -215,10 +215,14 @@ if [ $# -eq 0 ]; then
 fi
 
 --------------
-test of argument existence (not tested)
+test of argument / variable emptiness (true if not set or empty string)
 --------------
 
 if [ -z "$1" ]; then
+    echo "No argument supplied"
+fi
+
+if [ -z "$VAR_SOME" ]; then
     echo "No argument supplied"
 fi
 

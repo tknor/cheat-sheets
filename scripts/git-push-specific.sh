@@ -4,7 +4,7 @@
 
 cd $1
 
-if [ -d "scripts/scripts-local" ]; then
+if [[ -d "scripts/scripts-local" ]]; then
     phase "I guess we're in cheat-sheets, copying scripts-local folder"
     cp -r scripts/scripts-local $CONST_SCRIPTS_LOCAL_BACKUP_FOLDER
     cp scripts/local-common.sh $CONST_SCRIPTS_LOCAL_BACKUP_FOLDER/local-common.sh

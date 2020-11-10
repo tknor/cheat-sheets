@@ -4,49 +4,49 @@
 
 phase "cheat-sheets"
 
-if [ -d "$ffc" ]; then
+if ! [[ -z "$ffc" ]]; then
     cd $ffc
     git pull
 fi
 
 phase "jvm-lab"
 
-if [ -d "$ffjl" ]; then
+if ! [[ -z "$ffjl" ]]; then
     cd $ffjl
     git pull
 fi
 
 phase "nodejs-lab"
 
-if [ -d "$ffnl" ]; then
+if ! [[ -z "$ffnl" ]]; then
     cd $ffnl
     git pull
 fi
 
 phase "spring-lab"
 
-if [ -d "$ffsl" ]; then
+if ! [[ -z "$ffsl" ]]; then
     cd $ffsl
     git pull
 fi
 
 phase "ConBank"
 
-if [ -d "$ffcb" ]; then
+if ! [[ -z "$ffcb" ]]; then
     cd $ffcb
     git pull
 fi
 
 phase "ConBankUI"
 
-if [ -d "$ffcbu" ]; then
+if ! [[ -z "$ffcbu" ]]; then
     cd $ffcbu
     git pull
 fi
 
 phase "undead"
 
-if [ -d "$ffud" ]; then
+if ! [[ -z "$ffud" ]]; then
     cd $ffud
     git pull
 fi
