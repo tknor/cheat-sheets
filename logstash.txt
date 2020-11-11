@@ -1,4 +1,21 @@
 
+----------------------------
+unorganized
+----------------------------
+
+aggregate {
+    task_id => "%{TASK_ID}" # custom field with unique value (all events with same value will be aggregated)
+    code => "
+        map['AGGREGATED'] ||= 'false'
+        map['output_field'] ||= event.get('input_field')
+        event.cancel() # optionally cancels this event, and only aggregated event goes through
+    "
+    timeout_code => "event.set('AGGREGATED', 'true')"
+    push_map_as_event_on_timeout => true
+    timeout => 60 # in seconds
+    timeout_tags => ['_aggregatetimeout']
+}
+
 --------------------------------------------------------
 template event generator - standard output (metadata shown)
 --------------------------------------------------------

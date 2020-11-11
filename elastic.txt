@@ -5,6 +5,21 @@ unorganized
 
 GET /some/_search
 {
+  "query": {
+    "bool": {
+        "must": [
+          { "match": { "field": "value" }},
+          { "range": { "timestamp": {
+                "gte": "2020-11-11T07:00:00",
+                "lte": "2020-11-11T19:00:00"
+          }}}
+        ]
+    }
+  }
+}
+
+GET /some/_search
+{
     "query": {
       "bool": {
         "should": [

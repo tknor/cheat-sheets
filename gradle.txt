@@ -12,6 +12,7 @@ gradle --info <task>											//
 gradle -d <task>												// DEBUG and higher (that is, all log messages)
 gradle --debug <task>											//
 
+gradle -q projects                                              // see projects in multi-project build
 gradle dependencies
 gradle tasks
 gradle tasks --all
