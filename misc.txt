@@ -1,33 +1,7 @@
 
 --------------
-Java
---------------
-
-java -jar pitchfork.jar // with manifest
-java -cp pitchfork.jar devil.pitchfork.Main // without manifest
-
-C:\Apps\openjdk-11.0.6.10\bin\java.exe -classpath C:\Users\Devil\Pitchfork\compiled devil.pitchfork.Main
-
-private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Foo.class);
-
---------------
-Spring
---------------
-
-VM options
--Dspring.profiles.active=local
-	
-spring.main.web-application-type=none
-
-logging.level:
-  com.foo.bar: DEBUG
-  ROOT: DEBUG
-
---------------
 Kafka
 --------------
-
-winpty docker exec -it docker_zookeeper bash
 
 /usr/bin/kafka-console-consumer --bootstrap-server broker:9092 --topic cs180.test
 

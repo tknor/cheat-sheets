@@ -1,0 +1,38 @@
+
+mvn -v
+mvn --version
+mvn -h
+mvn --help
+
+--------------------------
+generate simple project
+--------------------------
+
+// in parent folder
+
+mvn archetype:generate -DgroupId=io.mavenlab -DartifactId=hello -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
+
+---------------------------------------------------
+executing phases (all phases up to and including)
+---------------------------------------------------
+
+// clean - pre-clean, clean, post-clean
+// default - validate, initialize, generate-sources, process-sources, generate-resources, process-resources, compile, process-classes, generate-test-sources, process-test-sources, generate-test-resources, process-test-resources, test-compile, process-test-classes, test, prepare-package, package, pre-integration-test, integration-test, post-integration-test, verify, install, deploy
+// site - pre-site, site, post-site, site-deploy
+
+mvn clean
+
+mvn validate
+mvn compile
+mvn test
+mvn package
+mvn install
+mvn deploy
+
+mvn site
+
+-----------------------------------------------
+executing specific plugin goals (plugin:goal)
+-----------------------------------------------
+
+mvn archetype:generate

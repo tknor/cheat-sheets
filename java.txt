@@ -1,0 +1,17 @@
+
+// jar with manifest
+
+java -jar pitchfork.jar
+
+// jar without manifest
+
+java -cp pitchfork.jar devil.pitchfork.Main
+java -cp target/pitchfork.jar devil.pitchfork.Main
+
+// compiled classes
+
+C:\Apps\openjdk-11.0.6.10\bin\java.exe -classpath C:\Users\Devil\Pitchfork\compiled devil.pitchfork.Main
+
+// slf4j
+
+private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(Foo.class);

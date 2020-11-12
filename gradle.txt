@@ -1,4 +1,7 @@
 
+gradle wrapper                                                  // gradle wrapper setup (you need gradle)
+gradle wrapper --gradle-version <version>
+
 // logging setting (levels: quiet, error, warn, lifecycle, info, debug, trace)
 
 gradle <task>													// LIFECYCLE and higher
