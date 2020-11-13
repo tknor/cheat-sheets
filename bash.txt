@@ -1,4 +1,8 @@
 
+--------------------------------
+scripts
+--------------------------------
+
 #!/bin/bash													// header
 
 . common.sh													// including other scripts
@@ -7,33 +11,33 @@ set -e														// immediate exit on error
 set -u														// immediate exit on unset variable
 set -x														// mirroring commands to stderr
 
-echo "Hello"
-echo 'Hello' > .gitignore									// write to file (overwrite)
-echo 'Hello' >> .gitignore									// write to file (append)
-
-nano [filename]
-
-whereis [command]
-
-find														// list folder structure
-find . -not -path '*/\.*'									// structure without those starting with dot
-
-printf "Hello\n"											// more consistent than echo, definitely supports newlines
-
-VAR_MY="value_my"											// store value in variable
-cd $VAR_PWD													// retrieve value from variable
+VAR_MY="value"					    						// store value in variable
+echo $VAR_PWD												// retrieve value from variable
 
 VAR_A=10
 VAR_B=$(($VAR_A - 1))
 
+$(($VAR_NUMBER - 1))										// arithmetic evaluation
+
 VAR_PWD=$(pwd)												// store command result to variable
 cd $VAR_PWD
 
-$(($VAR_NUMBER - 1))										// arithmetic evaluation
+[ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
 
-echo $VAR_R
+--------------------------------
+commands
+--------------------------------
 
-cp -r /source-folder /destination-folder					// recursive copy
+read -p "press ENTER continue"
+read -n 1 -s -r -p "press any key to continue"
+
+whereis [command]
+
+echo "Hello"
+echo 'Hello' > .gitignore									// write to file (overwrite)
+echo 'Hello' >> .gitignore									// write to file (append)
+
+printf "Hello\n"											// more consistent than echo, definitely supports newlines
 
 mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
@@ -42,27 +46,24 @@ rm [file_prefix]*
 rm -f file.txt												// forced - deletes write-protected file & silent when file does not exist
 rm -rf folder												// delete folder recursively and forced
 
+find														// list folder structure
+find . -not -path '*/\.*'									// structure without those starting with dot
+
+cp -r /source-folder /destination-folder					// recursive copy
+
 tail file.txt
 tail -f file.txt
 tail -1000 file.txt
 
-[ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
-
-sudo lsof -i -P -n | grep LISTEN
-sudo netstat -tulpn | grep LISTEN
-sudo lsof -i:22 ## see a specific port such as 22 ##
-sudo nmap -sTU -O IP-address-Here
-
-read -p "press ENTER continue"
-read -n 1 -s -r -p "press any key to continue"
-
 chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
+
+nano [filename]
 
 [command] &                                                 // run command and push to background
 jobs                                                        // see commands pushed to background
 disown                                                      // commands will continue running even when terminal closes
 
-[command] | tee file1 file2 file3                             // output of command to console and each file
+[command] | tee file1 file2 file3                           // output of command to console and each file
 
 date                                                        // current time
 date --utc
@@ -71,29 +72,17 @@ date -u
 echo $(date '+%Y-%m-%d')                                    // formatted current date (old way)
 printf '%(%Y-%m-%d %H:%M:%S)T' -1                           // formatted current date (new way)
 
-[command] > /dev/null                                         // hide output
-[command] > /dev/null 2>&1                                    // hide output and errors (redirects stderr to stdout, so errors (if any) also goes to /dev/null)
+[command] > /dev/null                                       // hide output
+[command] > /dev/null 2>&1                                  // hide output and errors (redirects stderr to stdout, so errors (if any) also goes to /dev/null)
 
 wc -l file.txt												// number of lines in a file
 wc -l < file.txt											// outputs only the number
 
-yum install lsof											// installing lsof command
 
 return <n>
 exit <n>
 
 sed -i 's/\r//' file.txt									// line endings (win -> unix)
-
-curl localhost:8080
-curl localhost:9200 | json_pp								// prettify JSON
-curl -v localhost:8080										// ?
-
-curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
-
-ssh root@<ip>
 
 adduser <username>
 passwd
@@ -109,6 +98,28 @@ crontab -e                                                  // edit cron jobs
 sudo crontab -u [user] -l                                   // see different user's cron jobs
 
 cat /var/log/syslog                                         // log containing executions by cron
+
+yum install lsof											// installing lsof command
+
+--------------------------------
+network related
+--------------------------------
+
+sudo lsof -i -P -n | grep LISTEN
+sudo netstat -tulpn | grep LISTEN
+sudo lsof -i:22                                             // see a specific port such as 22
+sudo nmap -sTU -O <some_IP_address>
+
+curl localhost:8080
+curl localhost:9200 | json_pp								// prettify JSON
+curl -v localhost:8080										// ?
+
+curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
+
+ssh root@<ip>
 
 --------------------------------
 Debian 9 management
@@ -177,25 +188,25 @@ else
     ...
 fi
 
---------------
+--------------------------------
 negation
---------------
+--------------------------------
 
 if ! [[ $? -eq 0 ]]; then
     ...
 fi
 
---------------
+--------------------------------
 multiple conditions
---------------
+--------------------------------
 
 if [[ ( "$a" -eq 1 && "$c" = "123" ) || ( "$b" -eq 2 && "$c" = "456" ) ]]; then
     ...
 fi
 
---------------
+--------------------------------
 test for variable value
---------------
+--------------------------------
 
 if [[ $VAR_SOME == 1 ]]; then
     echo "variable value is 1"
@@ -209,17 +220,17 @@ else
     echo "false"
 fi
 
---------------
+--------------------------------
 test for number of arguments
---------------
+--------------------------------
 
 if [ $# -eq 0 ]; then
     echo "No arguments supplied"
 fi
 
---------------
+--------------------------------
 test of variable existence
---------------
+--------------------------------
 
 if [[ -v VAR_SOME ]]; then
     echo "variable has been set"
@@ -227,9 +238,9 @@ else
     echo "variable has NOT been set"
 fi
 
---------------
+--------------------------------
 test of argument / variable emptiness (true for empty string)
---------------
+--------------------------------
 
 # does not prevent 'unbound variable' ?
 
@@ -241,9 +252,9 @@ if [[ -z "$VAR_SOME" ]]; then
     echo "No argument supplied"
 fi
 
---------------
+--------------------------------
 test for non-empty commands output
---------------
+--------------------------------
 
 if [[ $(docker container ls -aq) ]]; then
     echo "there are containers"
@@ -251,9 +262,9 @@ else
     echo "there are no containers"
 fi
 
---------------
+--------------------------------
 test for folder existence
---------------
+--------------------------------
 
 if [[ -d "/folder" ]]; then
     echo "exists"
@@ -261,9 +272,9 @@ else
     echo "does not exist"
 fi
 
---------------
+--------------------------------
 test for file existence
---------------
+--------------------------------
 
 if [[ -f "/file.txt" ]]; then
     echo "exists"
@@ -271,9 +282,9 @@ else
     echo "does not exist"
 fi
 
---------------
+--------------------------------
 test for last commands success
---------------
+--------------------------------
 
 if [[ $? != 0 ]]; then
     echo "last command failed"
@@ -281,9 +292,9 @@ else
     echo "last command succeeded"
 fi
 
---------------
+--------------------------------
 tests above combined
---------------
+--------------------------------
 
 VAR_COMMAND=$(docker container ls -aq)
 if [[ $? != 0 ]]; then

@@ -188,43 +188,7 @@ POST /accounts/_update/1
   }
 }
 
-------------------------------
-CURL
-------------------------------
 
-curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
-curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
-
-------------------------------
-URL params
-------------------------------
-
-/_search?q=john
-/_search?q=job_description:veteran
-
-/accounts/person/_search?q=john
-/accounts/person/_search?q=job_description:veteran
-
-/_search?q=john&size=10
-
-------------------------------
-searches
-------------------------------
-
-Leaf:
-	term, terms
-	match, multi_match
-	match_phrase
-	match_all
-	match_none
-	range
-
-Compound:
-	bool query
-		- must, filter, should, must_not
-		
 ------------------------------
 simple search query examples
 ------------------------------
@@ -1133,26 +1097,6 @@ bulk / batch create
 
 POST /flies/fly/_bulk
 { "create": { "_id" : 100 } }
-{ "vendor" : "McDonnell Douglas", "model" : "F-15 Eagle", "country" : "US", "status" : "Operational" }
-{ "create": { "_id" : 101 } }
-{ "vendor" : "McDonnell Douglas", "model" : "AV-8B Harrier", "country" : "US, UK", "status" : "Operational" }
-{ "create": { "_id" : 102 } }
-{ "vendor" : "McDonnell Douglas", "model" : "F/A-18 Hornet", "country" : "US", "status" : "Operational" }
-{ "create": { "_id" : 103 } }
-{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-15", "country" : "USSR", "status" : "Production" }
-{ "create": { "_id" : 104 } }
-{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-19", "country" : "USSR", "status" : "Production" }
-{ "create": { "_id" : 105 } }
-{ "vendor" : "Mikoyan-Gurevich", "model" : "Mig-21", "country" : "USSR", "status" : "Operational" }
-{ "create": { "_id" : 106 } }
-{ "vendor" : "Sukhoi", "model" : "Su-27", "country" : "USSR", "status" : "Operational" }
-{ "create": { "_id" : 107 } }
-{ "vendor" : "Sukhoi", "model" : "Su-33", "country" : "Russia", "status" : "Operational" }
-{ "create": { "_id" : 108 } }
-{ "vendor" : "Grumman", "model" : "F-14 Tomcat", "country" : "US", "status" : "Operational" }
-
-POST /flies/fly/_bulk
-{ "create": { "_id" : 100 } }
 { "vendor" : "McDonnell Douglas", "model" : "F-15 Eagle", "country" : "US", "status" : "Operational", "pretty" : "true", "invented" : "1972-01-01", "manufactured" : "1196", "designation" : "Eagle" }
 { "create": { "_id" : 101 } }
 { "vendor" : "McDonnell Douglas", "model" : "AV-8B Harrier", "country" : "US, UK", "status" : "Operational", "pretty" : "false", "invented" : "1993-01-01", "manufactured" : "133", "designation" : "Harrier" }
@@ -1197,223 +1141,23 @@ Compound:
 
 ***	
 
-# works
-# document has "status" : "Operational"
-# elastic stores term "status" : "operational"
-# term query looks for "status" : "operational"
+------------------------------
+REST by CURL
+------------------------------
 
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status" : "operational" }
-  }
-}
+curl -o out.json -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPOST -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XPUT -H "Content-Type: application/json" localhost:9200/_search
+curl -d @in.json -o out.json -XDELETE -H "Content-Type: application/json" localhost:9200/_search
 
-# does not work
-# document has "status" : "Operational"
-# elastic stores term "status" : "operational"
-# term query looks for "status" : "Operational"
-# it does not exist
+------------------------------
+URL params examples
+------------------------------
 
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status" : "Operational" }
-  }
-}
+/_search?q=john
+/_search?q=job_description:veteran
 
------------------
+/accounts/person/_search?q=john
+/accounts/person/_search?q=job_description:veteran
 
-# works
-# document has "status" : "Operational"
-# elastic stores field "status.keyword" : "Operational"
-# term query looks for "status.keyword" : "Operational"
-
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status.keyword" : "Operational" }
-  }
-}
-
-# does not work
-# document has "status" : "Operational"
-# elastic stores field "status.keyword" : "Operational"
-# term query looks for "status.keyword" : "operational"
-# it does not exist
-
-GET /flies/fly/_search
-{
-  "query" : {
-    "term" : { "status.keyword" : "operational" }
-  }
-}
-
------------------
-
-# does not work
-# equivalent to "term" : { "vendor.keyword" : "sukhoi" }
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor.keyword" : "sukhoi" }
-    }
-}
-
-# works
-# equivalent to "term" : { "vendor.keyword" : "Sukhoi" }
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor.keyword" : "Sukhoi" }
-    }
-}
-
------------------
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "sukhoi", constructs temporary terms:
-	"vendor" : "sukhoi"
-# one of the values is present, it returns documents with "Sukhoi"
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor" : "sukhoi" }
-    }
-}
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "Sukhoi", constructs temporary terms:
-	"vendor" : "sukhoi"
-# one of the values is present, it returns documents with "Sukhoi"
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor" : "Sukhoi" }
-    }
-}
-
------------------
-
-# works
-# documents have
-	"vendor" : "Sukhoi"
-	"vendor" : "Mikoyan-Gurevich"
-# elastic stores terms
-	"vendor" : "sukhoi"
-	"vendor" : "mikoyan"
-	"vendor" : "gurevich"
-# match query takes "vendor" : "sukhoi-gurevich", constructs temporary terms:
-	"vendor" : "sukhoi"
-	"vendor" : "gurevich"
-# two values are present, it returns documents with "Sukhoi" and documents with "Mikoyan-Gurevich"
-
-GET /flies/fly/_search
-{
-    "query" : {
-        "match" : { "vendor" : "sukhoi-gurevich" }
-    }
-}
-
------------------
-
-# must is IF
-# equivalent to filter, filter is in filter context, must is in query context
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "must": [
-          { "match": { "vendor" : "Sukhoi" }}
-        ]
-      }
-    }
-}
-
-# must is AND
-# equivalent to filter, filter is in filter context, must is in query context
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "must": [
-          { "match": { "vendor" : "Sukhoi" }}, 
-          { "term": { "model" : "27" }}
-        ]
-      }
-    }
-}
-
------------------
-
-# must_not is IF NOT
-# in filter context
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "must_not": [
-          { "match": { "vendor" : "Sukhoi" }}
-        ]
-      }
-    }
-}
-
-# must_not is NAND
-# in filter context
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "must_not": [
-          { "match": { "vendor" : "Sukhoi" }},
-          { "match": { "country" : "UK" }}
-        ]
-      }
-    }
-}
-
------------------
-
-# should is IF
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "should": [
-          { "match": { "vendor" : "Grumman" }}
-        ]
-      }
-    }
-}
-
-# should is OR
-GET /flies/fly/_search
-{
-    "query": { 
-      "bool": { 
-        "should": [
-          { "match": { "vendor" : "Sukhoi" }},
-          { "match": { "vendor" : "Grumman" }}
-        ]
-      }
-    }
-}
+/_search?q=john&size=10

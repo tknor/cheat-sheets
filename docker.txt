@@ -1,8 +1,8 @@
 
-docker images											// alias to docker image ls
-docker build											// alias to docker image build
-docker ps												// alias to docker container ls
-docker rm												// alias to docker container rm
+docker images											            // alias to docker image ls
+docker build										            	// alias to docker image build
+docker ps											            	// alias to docker container ls
+docker rm											            	// alias to docker container rm
 
 docker image ls
 docker image build .												// . is a PATH to build file and copied folders, etc.
@@ -63,37 +63,39 @@ docker cp <container>:/file.txt file.txt
 
 // <image> specification can contain registry and user: <registry>/<user>/<image>
 
-docker create											// part of docker run
-docker start <container>								// part of docker run
+docker create											            // part of docker run
+docker start <container>								            // part of docker run
 
 // build (from image) is not part of docker run - image must be in local registry or docker hub registry
 
 docker stop <container>
-docker stop $(docker container ls -aq)					// stopping all containers
+docker stop $(docker container ls -aq)					            // stopping all containers
 
 // pruning (should not affect running containers):
 
-docker image prune -f									// all dangling images (unreferenced, untagged)
-docker image prune -a -f								// all images unused by existing containers
-docker container prune -f								// all stopped containers
-docker volume prune -f									// all unused volumes
-docker network prune -f									// all unused networks
-docker system prune --volumes -f						// everything
+docker image prune -f							            		// all dangling images (unreferenced, untagged)
+docker image prune -a -f					            			// all images unused by existing containers
+docker container prune -f					            			// all stopped containers
+docker volume prune -f						            			// all unused volumes
+docker network prune -f						            			// all unused networks
+docker system prune --volumes -f			            			// everything
 
 docker-compose up
-docker-compose up -d									// detached
-docker-compose up -d --build							// clean builds containers
+docker-compose up -d						            			// detached
+docker-compose up -d --build				            			// clean builds containers
 docker-compose -f <alt-docker-compose-file> up
 docker-compose down
-docker-compose create <container>						// part of docker-compose up
-docker-compose start <container>						// part of docker-compose up
+docker-compose create <container>					            	// part of docker-compose up
+docker-compose start <container>					            	// part of docker-compose up
 docker-compose nework create <network>
 docker-compose nework create docker_default
 
+----------------------------
+Dockerfile
+----------------------------
+
 ARG <name>[=<default value>]
+
 --build-arg <varname>=<value>
 
-// add to docker file if you need to keep container running
-
-CMD tail -f /dev/null
-
+CMD tail -f /dev/null                                               // add to docker file if you need to keep container running

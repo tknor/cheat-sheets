@@ -35,9 +35,11 @@ for index in 1..lastIndex do
     // something
 end
 
-// creates permutations of inputs from array
-// joins permutated inputs without whitespace
-// stores in permutation in another array
+-----------------------------------------------------
+creates permutations of inputs from array
+joins permutated inputs without whitespace
+stores in permutation in another array
+-----------------------------------------------------
 
 for permutationLength in 1..maxPermutationLength do
     inputArray.permutation(permutationLength).to_a.each { |permutation|

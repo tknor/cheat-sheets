@@ -1,0 +1,10 @@
+
+ctrl + tab                                      // switcher
+alt + right or left                             // tabs
+ctrl + e                                        // recent
+ctrl + shift + a                                // actions
+ctrl + shift + space                            // ?
+2x ctrl + space                                 // ?
+clicking tab's X with alt                       // close everything except tab
+ctrl + alt + shift + t                          // list of refactorings
+ctrl + shift + j                                // join lines without whitespaces

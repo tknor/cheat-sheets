@@ -1,8 +1,4 @@
 
---------------
-Kafka
---------------
-
 /usr/bin/kafka-console-consumer --bootstrap-server broker:9092 --topic cs180.test
 
 /usr/bin/kafka-avro-console-producer --broker-list broker:9092 --topic cs180.test --property value.schema='{"type":"record","name":"myschema","fields":[{"name":"myfield","type":"string"}]}'

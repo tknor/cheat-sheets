@@ -1,0 +1,192 @@
+
+------------------------------------------------------------
+template event generator - standard output (metadata shown)
+------------------------------------------------------------
+
+input {
+    exec {
+        command => "echo 'hello'"
+        interval => 10
+    }
+}
+
+filter {
+
+}
+
+output {
+    stdout {
+        codec => rubydebug { metadata => true }
+    }
+}
+
+----------------------------
+template elastic - elastic
+----------------------------
+
+// preserves original document IDs
+
+input {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "source"
+        docinfo => true
+        docinfo_fields => ["_index", "_id"]
+        docinfo_target => "_originalIndex"
+    }
+}
+
+filter {
+    mutate {
+        add_field => {
+            "[@metadata][_id]" => "%{[_originalIndex][_id]}"
+            "[@metadata][_type]" => "_doc"
+            "[@metadata][_index]" => "%{[_originalIndex][_index]}"
+        }
+    }
+}
+
+output {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "target"
+        document_type => "_doc"
+        document_id => "%{[@metadata][_id]}"
+    }
+}
+
+----------------------------
+CSV file input
+----------------------------
+
+input {
+    file {
+        path => "/path_to_source/source.csv"
+        type => "csv"
+    }
+}
+
+----------------------------
+XML file input
+----------------------------
+
+input {
+    file {
+        path => "/path_to_source/source.xml"
+        type => "xml"
+    }
+}
+
+----------------------------
+Kafka input (JSON)
+----------------------------
+
+kafka {
+    bootstrap_servers => "kafka-broker:9092"
+    topics => ["my.consumed.topic"]
+}
+
+-----------------------------------------
+Kafka input (AVRO from registry)
+-----------------------------------------
+
+// needs plugin
+// https://github.com/salsify/logstash-codec-avro_schema_registry
+RUN bin/logstash-plugin install logstash-codec-avro_schema_registry
+
+input {
+    kafka {
+        bootstrap_servers => "kafka-broker:9092"
+        codec => avro_schema_registry {
+            endpoint => "http://kafka-schema-registry:9010"
+            tag_on_failure => true
+        }
+        consumer_threads => 1
+        topics => ["my.consumed.topic"]
+        value_deserializer_class => "org.apache.kafka.common.serialization.ByteArrayDeserializer"
+        decorate_events => true
+    }
+}
+
+// 'decorate_events => true' appends Kafka specific metadata to logstash events
+
+----------------------------
+Elastic input with query
+----------------------------
+
+input {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        query => '{"query":{"query_string":{"query":"name:thomas"}}}'
+        index => "source"
+        docinfo => true
+        docinfo_fields => ["_index", "_id"]
+        docinfo_target => "_originalIndex"
+    }
+}
+
+-----------------------------------------------------
+Elastic output with upsert (update or insert)
+-----------------------------------------------------
+
+elasticsearch {
+    hosts => [ "elastic:9200" ]
+    index => "target"
+    document_type => "_doc"
+    document_id => "%{[field_containing_id]}"
+    doc_as_upsert => true
+    action => "update"
+}
+
+-----------------------------------
+Elastic output with pipeline
+-----------------------------------
+
+output {
+    elasticsearch {
+        hosts => [ "elastic:9200" ]
+        index => "target"
+        pipeline => "some_pipeline"
+        document_type => "_doc"
+        document_id => "%{[@metadata][_id]}"
+    }
+}
+
+----------------------------
+Kafka output (JSON)
+----------------------------
+
+output {
+    kafka {
+        bootstrap_servers => "kafka-broker:9092"
+        codec=> "plain"
+        topic_id => "my.produced.topic"
+    }
+}
+
+-----------------------------------
+Kafka output (AVRO from registry)
+-----------------------------------
+
+// needs plugin
+// https://github.com/salsify/logstash-codec-avro_schema_registry
+RUN bin/logstash-plugin install logstash-codec-avro_schema_registry
+
+
+output {
+	kafka {
+        bootstrap_servers => "kafka-broker:9092"
+		topic_id => "my.produced.topic"
+		value_serializer => "org.apache.kafka.common.serialization.ByteArraySerializer"
+		message_key => "%{[@metadata][_id]}"
+        codec => avro_schema_registry {
+			endpoint => "http://kafka-schema-registry:9010"
+			subject_name => "my.schema.subject"
+            schema_version => 1
+            register_schema => true
+			binary_encoded => false
+		}
+	}
+}
+
+// 'binary_encoded => false' because it seems to be serialized already
