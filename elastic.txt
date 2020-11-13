@@ -85,14 +85,17 @@ GET /some/_search
 general
 ----------------------------
 
-elk stack docker containers contain default configuration yaml files
-    can be overriden using volumes in docker-compose
-        providing another configuration yaml file (best based on the default one)
-    can be overriden using environment variables
+ELK stack docker containers contain default configuration yaml files
+
+    # can be overriden using volumes in docker-compose
+        # providing another configuration yaml file (best based on the default one)
+
+    # can be overriden using environment variables
         "xpack.security.enabled: true" will have equivalent "XPACK_SECURITY_ENABLED: true"
 
 when running with security enabled
-    there's utility to initialize passwords
+
+    # there's utility to initialize passwords
         /usr/share/elasticsearch/bin/elasticsearch-setup-passwords
 
 ./elasticsearch-setup-passwords auto                    // generates and prints users / passwords
@@ -245,127 +248,73 @@ GET /flies/_search
 }
 
 ------------------------------
-bool search query examples
+bool search queries
 ------------------------------
 
-{
-    "query": { 
-      "bool": { 
-        "must": [
-          { "match": { "vendor" : "Sukhoi" }}
-        ]
-      }
+"bool": {
+      "must": [
+        { XXX }
+      ]
     }
-}
 
-{
-    "query": { 
-      "bool": { 
-        "must": [
-          { "match": { "vendor" : "Sukhoi" }}, 
-          { "term": { "model" : "27" }}
-        ]
-      }
-    }
-}
-
-{
-    "query": { 
-      "bool": { 
+      "bool": {
         "must_not": [
           { "match": { "vendor" : "Sukhoi" }}
         ]
       }
-    }
-}
 
-{
-    "query": { 
-      "bool": { 
-        "must_not": [
-          { "match": { "vendor" : "Sukhoi" }},
-          { "match": { "country" : "UK" }}
-        ]
-      }
-    }
-}
-
-{
-    "query": { 
-      "bool": { 
+      "bool": {
         "should": [
           { "match": { "vendor" : "Grumman" }}
         ]
       }
+
+
+
+
+
+
+"match": { "vendor" : "Sukhoi" }
+"multi_match" : {
+      "query": "Gurevich",
+      "fields": [ "vendor", "model" ]
     }
-}
 
-{
-    "query": { 
-      "bool": { 
-        "should": [
-          { "match": { "vendor" : "Sukhoi" }},
-          { "match": { "vendor" : "Grumman" }}
-        ]
-      }
-    }
-}
+"term": { "model" : "27" }
+"terms" : { "vendor": ["sukhoi", "grumman"] }
 
---------------------------------------
-timestamp range search query example
---------------------------------------
-
-{
-    "query": {
-        "range": {
+"range": {
             "@timestamp": {
                 "gte": "2019-12-09T11:30:00",
                 "lte": "2019-12-09T11:33:00"
             }
         }
-    }
-}
 
-------------------------------
-existing field query example
-------------------------------
-
-GET /flies/_search
 {
     "query": {
-        "exists": {
-            "field": "some-field"
-        }
+        XXX
     }
 }
 
-------------------------------
-wildcard search query example
-------------------------------
+"exists": { "field": "some-field" }
 
-{
-    "query" : {
-        "wildcard": { "model.keyword": "M*" }
-    }
-}
+"wildcard": { "model.keyword": "M*" }
 
+
+
+
+
+
+
+
+
+
+!!!!!!!!!!!!!!
 ---------------------------------
-multi term search query example
+multi term equivalence
 ---------------------------------
 
-{
-    "query" : {
-        "term" : { "vendor": "sukhoi" }
-    }
-}
-
-{
-    "query" : {
-        "terms" : { "vendor": ["sukhoi", "grumman"] }
-    }
-}
-
-is equivalent to:
+"terms": { "vendor": ["sukhoi", "grumman"] }
 
 {
 	"query" : {
@@ -378,15 +327,10 @@ is equivalent to:
 	}
 }
 
+!!!!!!!!!!!!!!!!
 ----------------------------------
-multi match search query example
+multi match equivalence
 ----------------------------------
-
-{
-    "query" : {
-        "match" : { "vendor" : "Gurevich" }
-    }
-}
 
 {
   "query": {
