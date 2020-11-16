@@ -2,7 +2,7 @@
 
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-  if [[ $1 == "di" ]]; then
+  if [[ $1 == "dist" ]]; then
     phase "distribution of nodejs-lab/util"
     cp -r $ffnl/src/util $ffud/src
 
@@ -24,18 +24,9 @@
     tsc
     node compiled/scratch.js
 
-  elif [[ $1 == "de" ]]; then
+  elif [[ $1 == "deploy" ]]; then
     phase "deploying undead to VPS"
     phase "NOT IMPLEMENTED"
-
-  elif [[ $1 == "gp" ]]; then
-    phase "pushing git repositories"
-    phase "-------------------------------- UNDEAD"
-    $ffs/./git-push-master.sh $ffud
-    phase "-------------------------------- NODEJS-LAB"
-    $ffs/./git-push-master.sh $ffnl
-    phase "-------------------------------- CHEAT-SHEETS"
-    $ffs/./git-push-master.sh $ffc
 
   else
     phase "what with it?"
