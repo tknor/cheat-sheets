@@ -7,10 +7,10 @@
     cp -r $ffnl/src/util $ffud/src
 
   elif [[ $1 == "rnd" ]]; then
-    phase "running undead/notok/notok-main-dev.ts"
+    phase "running undead/notok/notok-dev.ts"
     cd $ffud
     tsc
-    node compiled/notok/notok-main-dev.js
+    node compiled/notok/notok-dev.js
 
   elif [[ $1 == "rns" ]]; then
     phase "running undead/notok/notok-scratch.ts"
