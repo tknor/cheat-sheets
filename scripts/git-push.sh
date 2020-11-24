@@ -26,20 +26,20 @@ if [[ -v ffsl ]]; then
     $ffs/./git-push-specific.sh $ffsl
 fi
 
-phase "ConBank"
+phase "aranea (spring)"
 
-if [[ -v ffcb ]]; then
-    $ffs/./git-push-specific.sh $ffcb
+if [[ -v ffara ]]; then
+    $ffs/./git-push-specific.sh $ffara
 fi
 
-phase "ConBankUI"
+phase "ankylos (angular)"
 
-if [[ -v ffcbu ]]; then
-    $ffs/./git-push-specific.sh $ffcbu
+if [[ -v ffank ]]; then
+    $ffs/./git-push-specific.sh $ffank
 fi
 
-phase "undead"
+phase "nok"
 
-if [[ -v ffud ]]; then
-    $ffs/./git-push-specific.sh $ffud
+if [[ -v ffnok ]]; then
+    $ffs/./git-push-specific.sh $ffnok
 fi

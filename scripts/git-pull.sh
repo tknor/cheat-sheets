@@ -30,23 +30,23 @@ if [[ -v ffsl ]]; then
     git pull
 fi
 
-phase "ConBank"
+phase "aranea (spring)"
 
-if [[ -v ffcb ]]; then
-    cd $ffcb
+if [[ -v ffara ]]; then
+    cd $ffara
     git pull
 fi
 
-phase "ConBankUI"
+phase "ankylos (angular)"
 
-if [[ -v ffcbu ]]; then
-    cd $ffcbu
+if [[ -v ffank ]]; then
+    cd $ffank
     git pull
 fi
 
-phase "undead"
+phase "nok"
 
-if [[ -v ffud ]]; then
-    cd $ffud
+if [[ -v ffnok ]]; then
+    cd $ffnok
     git pull
 fi

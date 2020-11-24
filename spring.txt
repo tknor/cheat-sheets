@@ -1,4 +1,6 @@
 
-// VM options
+// profile specified by VM options:
+-Dspring.profiles.active=development
 
--Dspring.profiles.active=local
+//  profile specified in properties (SpringBoot standard property):
+spring.profiles.active = development

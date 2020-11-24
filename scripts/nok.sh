@@ -4,17 +4,17 @@
 
   if [[ $1 == "dist" ]]; then
     phase "distribution of nodejs-lab/util"
-    cp -r $ffnl/src/util $ffud/src
+    cp -r $ffnl/src/util $ffnok/src
 
   elif [[ $1 == "rnd" ]]; then
-    phase "running undead/notok/notok-dev.ts"
-    cd $ffud
+    phase "running nok/notok/notok-dev.ts"
+    cd $ffnok
     tsc
     node compiled/notok/notok-dev.js
 
   elif [[ $1 == "rns" ]]; then
-    phase "running undead/notok/notok-scratch.ts"
-    cd $ffud
+    phase "running nok/notok/notok-scratch.ts"
+    cd $ffnok
     tsc
     node compiled/notok/notok-scratch.js
 
@@ -25,7 +25,7 @@
     node compiled/scratch.js
 
   elif [[ $1 == "deploy" ]]; then
-    phase "deploying undead to VPS"
+    phase "deploying nok to VPS"
     phase "NOT IMPLEMENTED"
 
   else
