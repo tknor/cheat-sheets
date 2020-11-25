@@ -2,5 +2,5 @@
 // profile specified by VM options:
 -Dspring.profiles.active=development
 
-//  profile specified in properties (SpringBoot standard property):
+// profile specified in properties (SpringBoot standard property):
 spring.profiles.active = development

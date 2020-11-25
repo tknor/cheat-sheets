@@ -33,6 +33,9 @@ alias xnok=\'$ffs/./nok.sh\'
 # my commands
 # -------------------------------------
 
+alias al='ls -la'
+alias ag='./gradlew'
+
 alias adts='winpty docker exec -it $1 sh'
 alias adtb='winpty docker exec -it $1 bash'
 alias adl='docker ps -a'
@@ -55,7 +58,6 @@ alias akdp='ku describe pod $1'
 alias akl='ku logs $1'
 alias aklf='ku logs -f $1'
 alias akgs='ku get services'
-alias ag='grep'
 
 function example_function() {
   echo "this is function"
