@@ -11,15 +11,12 @@ function commit_ufr() {
 
   cd "$CONST_UFR_FOLDER"
 
-	VAR_UNSTAGED_OUTPUT=$(git diff)
-  VAR_STAGED_OUTPUT=$(git diff --staged)
-
-  if [[ ($VAR_UNSTAGED_OUTPUT == "") && ($VAR_STAGED_OUTPUT == "") ]]; then
-    header2 "no changes in UFR detected"
-  else
+  if [[ $(git status --porcelain) ]]; then
     header2 "changes in UFR detected"
     git add .
     git commit -m "auto push"
+  else
+    header2 "no changes in UFR detected"
   fi
 
   cd "$VAR_PUSHED_FOLDER"
@@ -31,26 +28,23 @@ VAR_MSG_UNVERSIONED="copying unversioned files to UFR"
 
 if [[ $VAR_PUSHED_FOLDER =~ Git/cheat-sheets$ ]]; then
   header2 "$VAR_CHEATS :: $VAR_MSG_UNVERSIONED"
-  mkdir -p "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/scripts-local"
-  cp -r scripts/scripts-local "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/scripts-local"
+  mkdir -p "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts"
+  cp -r scripts/scripts-local "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts"
   cp scripts/local-common.sh "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/local-common.sh"
   commit_ufr
 
 elif [[ $VAR_PUSHED_FOLDER =~ Git/nok-20201124$ ]]; then
   header2 "$VAR_NOK :: $VAR_MSG_UNVERSIONED"
-  mkdir -p "$CONST_UFR_FOLDER/$VAR_NOK/unversioned"
-  cp -r unversioned "$CONST_UFR_FOLDER/$VAR_NOK/unversioned"
+  mkdir -p "$CONST_UFR_FOLDER/$VAR_NOK"
+  cp -r unversioned "$CONST_UFR_FOLDER/$VAR_NOK"
   commit_ufr
 fi
 
-VAR_UNSTAGED_OUTPUT=$(git diff)
-VAR_STAGED_OUTPUT=$(git diff --staged)
-
-if [[ ($VAR_UNSTAGED_OUTPUT == "") && ($VAR_STAGED_OUTPUT == "") ]]; then
+if [[ $(git status --porcelain) ]]; then
+  header2 "changes in pushed folder detected"
+else
   header2 "no changes in pushed folder detected"
   exit
-else
-  header2 "changes in pushed folder detected"
 fi
 
 header2 "status:"

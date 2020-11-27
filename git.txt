@@ -44,13 +44,17 @@ git push origin --delete my-branch					// deletes remote branch
 
 git add .
 git add "file"
-git status
-git commit -m "commit message"
-git commit --amend
-git commit --allow-empty							// allows empty commit with no changes, added files, etc.
 
-// makes commit only if there are changes
-git diff --quiet && git diff --staged --quiet || git commit -am "something has changed"
+git status
+git status --porcelain                              // short output perfect for script checking any changes
+
+git commit -m "commit message"
+git commit -am "commit message"                     // allows empty commit with no changes, added files, etc.
+git commit --allow-empty							// allows empty commit with no changes, added files, etc.
+git commit --amend
+
+git diff                                            // show un-staged differences
+git diff --staged                                   // show staged differences
 
 git merge other-branch
 

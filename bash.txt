@@ -115,7 +115,7 @@ find . -not -path '*/\.*'									// structure without those starting with dot
 
 mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
-cp -r /source-folder /destination-folder					// recursive folder copy
+cp -r /folder /destination              					// recursive folder copy (as /destination/folder)
 cp "path/file.txt" "another/file.txt"                       // file copy
 
 tail file.txt
