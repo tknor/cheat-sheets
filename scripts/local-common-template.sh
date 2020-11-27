@@ -16,7 +16,7 @@ function env_resolve() {
   elif [[ $1 == "t" ]]; then
     echo "test"
   else
-    phase "UNRESOLVED_ENVIRONMENT"
+    header2 "UNRESOLVED_ENVIRONMENT"
   fi
 }
 
@@ -91,7 +91,7 @@ function ku_switch_and_set_pod_and_porting() {
 
   VAR_PORTING=$(porting_resolve $1 $2)
 
-  phase "switched, VAR_ENV = '$VAR_ENV', VAR_POD = '$VAR_POD', VAR_PORTING = '$VAR_PORTING'"
+  header2 "switched, VAR_ENV = '$VAR_ENV', VAR_POD = '$VAR_POD', VAR_PORTING = '$VAR_PORTING'"
 }
 
 # params:
@@ -105,5 +105,5 @@ function ku_switch_and_set_service() {
 
   VAR_SERVICE=$(service_resolve $1 $2)
 
-  phase "switched, VAR_ENV = '$VAR_ENV', VAR_SERVICE = '$VAR_SERVICE'"
+  header2 "switched, VAR_ENV = '$VAR_ENV', VAR_SERVICE = '$VAR_SERVICE'"
 }

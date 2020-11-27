@@ -3,14 +3,14 @@
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
 if [[ $1 == "u" ]]; then
-  phase "starting pgadmin"
+  header2 "starting pgadmin"
   docker-compose -f $ffs/docker-compose/pgadmin.yml up -d
 
 elif [[ $1 == "d" ]]; then
-  phase "stopping pgadmin"
+  header2 "stopping pgadmin"
   docker-compose -f $ffs/docker-compose/pgadmin.yml down
 
 else
-  phase "what with it?"
+  header2 "what with it?"
   exit 1
 fi

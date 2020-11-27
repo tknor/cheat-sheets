@@ -25,12 +25,16 @@
 
 	trap script_end EXIT
 
-function separator() {
-	printf "\n"
+# -------------------
+# common functions
+# -------------------
+
+function header1() {
+  printf "\n -----------------------| %s\n\n" "$1"
 }
 
-function phase() {
-	printf "\n -> $1\n\n"
+function header2() {
+	printf "\n -> %s\n\n" "$1"
 }
 
 function timestamp() {
@@ -38,9 +42,9 @@ function timestamp() {
 }
 
 function script_end {
-	
+
   if [[ $VAR_W_OPTION == 1 ]]; then
-    phase "press any key to continue"
+    header2 "press any key to continue"
     read -n 1 -s -r
   fi
 }
@@ -49,40 +53,40 @@ function script_end {
 # 1 container
 function stop_docker_container() {
 
-	phase "stopping container '$1'"
+	header2 "stopping container '$1'"
 
 	TEMP=$(docker container ls -aqf "name=^$1$")
 	if [[ $TEMP ]]; then
 		docker stop $TEMP
 	fi
 
-	phase "container stopped"
+	header2 "container stopped"
 }
 
 function stop_and_remove_docker_containers() {
 
-	phase "stopping and removing all containers"
+	header2 "stopping and removing all containers"
 
 	TEMP=$(docker container ls -aq)
 	if [[ $TEMP ]]; then
 		docker container rm -f $TEMP
 	fi
 
-	phase "done"
+	header2 "all containers removed"
 }
 
 # params:
 # 1 image
 function remove_docker_image() {
 
-	phase "removing image '$1'"
+	header2 "removing image '$1'"
 
 	TEMP=$(docker image ls $1 | wc -l)
 	if [[ $TEMP == 2 ]]; then
 		docker image rm $1
 	fi
 
-	phase "done"
+	header2 "image removed"
 }
 
 # params:
@@ -128,7 +132,7 @@ function delete_pod() {
 # 2 archived log name
 function download_logs_from_pod() {
 
-  phase "downloading logs"
+  header2 "downloading logs"
 
   VAR_TIMESTAMP=$(timestamp)
 
@@ -145,7 +149,7 @@ function download_logs_from_pod() {
 
 	kubectl logs $1 | tee $VAR_PRIMARY_FILE $VAR_ALTERNATIVE_FILE > /dev/null
 
-	phase "logs downloaded"
+	header2 "logs downloaded"
 }
 
 # params:
@@ -153,7 +157,7 @@ function download_logs_from_pod() {
 # 2 absolute file path
 function download_text_file_from_pod() {
 
-  phase "downloading text file"
+  header2 "downloading text file"
 
 	mkdir -p $CONST_TEMP_FOLDER
 	rm -f $CONST_TEMP_FOLDER/text.txt
@@ -168,14 +172,14 @@ function download_text_file_from_pod() {
 	  rm -f $CONST_TEMP_FOLDER/temp.txt
   fi
 
-  phase "text file downloaded"
+  header2 "text file downloaded"
 }
 
 # params:
 # 1 pod
 function show_logs_from_pod() {
 
-  phase "showing logs"
+  header2 "showing logs"
 
 	kubectl logs $1
 }

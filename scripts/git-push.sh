@@ -1,48 +1,45 @@
 #!/bin/bash
 
+# shellcheck source=./local-common.sh
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-function announce() {
-  phase "----------------| $1"
-}
-
-announce "cheat-sheets"
+header1 "cheat-sheets"
 
 if [[ -v ffc ]]; then
     $ffs/./git-push-specific.sh $ffc
 fi
 
-announce "jvm-lab"
+header1 "jvm-lab"
 
 if [[ -v ffjl ]]; then
     $ffs/./git-push-specific.sh $ffjl
 fi
 
-announce "nodejs-lab"
+header1 "nodejs-lab"
 
 if [[ -v ffnl ]]; then
     $ffs/./git-push-specific.sh $ffnl
 fi
 
-announce "spring-lab"
+header1 "spring-lab"
 
 if [[ -v ffsl ]]; then
     $ffs/./git-push-specific.sh $ffsl
 fi
 
-announce "aranea (spring)"
+header1 "aranea (spring)"
 
 if [[ -v ffara ]]; then
     $ffs/./git-push-specific.sh $ffara
 fi
 
-announce "ankylos (angular)"
+header1 "ankylos (angular)"
 
 if [[ -v ffank ]]; then
     $ffs/./git-push-specific.sh $ffank
 fi
 
-announce "nok"
+header1 "nok"
 
 if [[ -v ffnok ]]; then
     $ffs/./git-push-specific.sh $ffnok

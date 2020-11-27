@@ -11,37 +11,99 @@ set -e														// immediate exit on error
 set -u														// immediate exit on unset variable
 set -x														// mirroring commands to stderr
 
-VAR_MY="value"					    						// store value in variable
+VAR_MY="value"					    						// store value in variable (no whitespace!)
 echo $VAR_PWD												// retrieve value from variable
 
+echo $A                                                     // prints value
+echo "$A"                                                   // prints value
+echo '$A'                                                   // prints literally
+
 VAR_A=10
-VAR_B=$(($VAR_A - 1))
+VAR_B=$(($VAR_A - 1))                                       // arithmetic
 
 $(($VAR_NUMBER - 1))										// arithmetic evaluation
 
-VAR_PWD=$(pwd)												// store command result to variable
-cd $VAR_PWD
+VAR_PWD=$(pwd)												// store command result (from sub-shell) to variable
+VAR_PWD=`pwd`                                               // ... same
 
-command1 || command2                                        // XXX
+command1 || command2                                        // chaining, command2 only if first fails
+command1 && command2                                        // chaining, command2 only if first succeeds
+command1 ; command2                                         // both run
 
-[ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
+[[ ... ]]                                                   // evaluates as true / false (success / failure)
+false || echo "this will be shown"
+
+if [[ ... ]]; then
+elif [[ ... ]]; then
+else
+fi
+
+! [[ ... ]]                                                 // negation (whitespace needed)
+
+[[ -v VAR_SOME ]]                                           // variable exists
+
+[[ $VAR_SOME ]]                                             // variable not empty (contains non-empty string or number), does not prevent 'unbound variable'
+[[ "$VAR_SOME" ]]                                           // ... same
+[[ -z $VAR_SOME ]]                                          // variable is empty string, does not prevent 'unbound variable'
+[[ -z "$VAR_SOME" ]]                                        // ... same
+
+[[ $VAR_SOME -eq 1 ]]                                       // integer conditions (eq / ne / gt / ge / lt / le)
+[[ "$VAR_SOME" == "some_value" ]]                           // string conditions (==, !=), quotes optional
+
+[[ ( $a -eq 1 && $b -eq 2 ) || ( ... ) ]]                   // multiple conditions
+
+[[ $? == 0 ]]                                               // last command succeeded
+[[ $(docker container ls -aq) ]]                            // non-empty command output
+
+VAR_COMMAND=$(docker container ls -aq)
+[[ $? == 0 ]] && [[ $VAR_COMMAND ]]                         // last command succeeded, with non-empty output
+
+[[ $VAR_SOME =~ suffix$ ]]                                  // VAR_SOME matches RegEx suffix$
+
+[[ -f "/file.txt" ]]                                        // file exists
+[[ -d "/folder" ]]                                          // folder exists
+[[ -d "/path/folder/" ]]            						// folder exists
+
+$#                                                          // number of arguments
+$1                                                          // value of first argument
+$?                                                          // last command's exit code
+
+!!                                                          // repeats last command
+!$                                                          // repeats last argument of the last command
+!$:h                                                        // if the last argument was a path/file, outputs path
 
 --------------------------------
 commands
 --------------------------------
 
+grep PATTERN                                                // find matching, input from stdin, repeats if matches
+grep PATTERN file1 file2                                    // find matching, input from file(s)
+grep -i                                                     // ignore case
+grep -w                                                     // whole words only
+grep -B 3                                                   // with context, lines A after, B before, C both
+grep -e PATTERN1 -e PATTERN2                                // multiple patterns easily
+grep -F PATTERN1                                            // fixed pattern, no regex meta-characters
+
+egrep                                                       // short for grep -E (extended regex pattern)
+fgrep                                                       // short for grep -F (fixed string pattern)
+
+diff file1 file2                                            // show differences between files
+diff <(grep PATTERN file1) <(grep PATTERN file2)
+
+read -p "write your name: " VAR_NAME
 read -p "press ENTER continue"
 read -n 1 -s -r -p "press any key to continue"
 
 whereis [command]
+
+echo "$A"                                                   // prints value
+echo '$A'                                                   // prints literally
 
 echo "Hello"
 echo 'Hello' > .gitignore									// write to file (overwrite)
 echo 'Hello' >> .gitignore									// write to file (append)
 
 printf "Hello\n"											// more consistent than echo, definitely supports newlines
-
-mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
 rm file.txt
 rm [file_prefix]*
@@ -51,7 +113,10 @@ rm -rf folder												// delete folder recursively and forced
 find														// list folder structure
 find . -not -path '*/\.*'									// structure without those starting with dot
 
-cp -r /source-folder /destination-folder					// recursive copy
+mkdir -p src/main/resources/META-INF						// create folder with all the parents
+
+cp -r /source-folder /destination-folder					// recursive folder copy
+cp "path/file.txt" "another/file.txt"                       // file copy
 
 tail file.txt
 tail -f file.txt
@@ -171,138 +236,17 @@ bash prompt
 echo "Question?"
 select yn in "Yes" "No"; do
     case $yn in
-        Yes ) command-that-does-something; break;;
+        Yes ) command; break;;
         No ) exit;;
     esac
 done
 
 --------------------------------
-bash conditions
+notes
 --------------------------------
 
-// else if
-
-if [[ $1 == "a" ]]; then
-	...
-elif [[ $1 == "b" ]]; then
-	...
-else
-    ...
-fi
-
---------------------------------
-negation
---------------------------------
-
-if ! [[ $? -eq 0 ]]; then
-    ...
-fi
-
---------------------------------
-multiple conditions
---------------------------------
-
-if [[ ( "$a" -eq 1 && "$c" = "123" ) || ( "$b" -eq 2 && "$c" = "456" ) ]]; then
-    ...
-fi
-
---------------------------------
-test for variable value
---------------------------------
-
-if [[ $VAR_SOME == 1 ]]; then
-    echo "variable value is 1"
-else
-    echo "variable value is not 1"
-fi
-
-if [[ "$VAR_SOME" == "some_value" ]]; then
-    echo "true"
-else
-    echo "false"
-fi
-
---------------------------------
-test for number of arguments
---------------------------------
-
-if [ $# -eq 0 ]; then
-    echo "No arguments supplied"
-fi
-
---------------------------------
-test of variable existence
---------------------------------
-
-if [[ -v VAR_SOME ]]; then
-    echo "variable has been set"
-else
-    echo "variable has NOT been set"
-fi
-
---------------------------------
-test of argument / variable emptiness (true for empty string)
---------------------------------
-
-# does not prevent 'unbound variable' ?
-
-if [[ -z "$1" ]]; then
-    echo "No argument supplied"
-fi
-
-if [[ -z "$VAR_SOME" ]]; then
-    echo "No argument supplied"
-fi
-
---------------------------------
-test for non-empty commands output
---------------------------------
-
-if [[ $(docker container ls -aq) ]]; then
-    echo "there are containers"
-else
-    echo "there are no containers"
-fi
-
---------------------------------
-test for folder existence
---------------------------------
-
-if [[ -d "/folder" ]]; then
-    echo "exists"
-else
-    echo "does not exist"
-fi
-
---------------------------------
-test for file existence
---------------------------------
-
-if [[ -f "/file.txt" ]]; then
-    echo "exists"
-else
-    echo "does not exist"
-fi
-
---------------------------------
-test for last commands success
---------------------------------
-
-if [[ $? != 0 ]]; then
-    echo "last command failed"
-else
-    echo "last command succeeded"
-fi
-
---------------------------------
-tests above combined
---------------------------------
-
-VAR_COMMAND=$(docker container ls -aq)
-if [[ $? != 0 ]]; then
-    echo "last command failed"
-elif [[ $VAR_COMMAND ]]; then
-    echo "last command succeeded, non-empty output"
-else
-    echo "last command succeeded, empty output"
-fi
+$() creates sub-shell
+script (command) has arguments, exit code, may have output
+variables from script or sub-shell are not accessible from outside
+function in script can have local variables
+non-local function variables and script variables are accessible from anywhere in the script itself

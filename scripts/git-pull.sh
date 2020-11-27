@@ -1,50 +1,51 @@
 #!/bin/bash
 
+# shellcheck source=./local-common.sh
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-phase "cheat-sheets"
+header1 "cheat-sheets"
 
 if [[ -v ffc ]]; then
     cd $ffc
     git pull
 fi
 
-phase "jvm-lab"
+header1 "jvm-lab"
 
 if [[ -v ffjl ]]; then
     cd $ffjl
     git pull
 fi
 
-phase "nodejs-lab"
+header1 "nodejs-lab"
 
 if [[ -v ffnl ]]; then
     cd $ffnl
     git pull
 fi
 
-phase "spring-lab"
+header1 "spring-lab"
 
 if [[ -v ffsl ]]; then
     cd $ffsl
     git pull
 fi
 
-phase "aranea (spring)"
+header1 "aranea (spring)"
 
 if [[ -v ffara ]]; then
     cd $ffara
     git pull
 fi
 
-phase "ankylos (angular)"
+header1 "ankylos (angular)"
 
 if [[ -v ffank ]]; then
     cd $ffank
     git pull
 fi
 
-phase "nok"
+header1 "nok"
 
 if [[ -v ffnok ]]; then
     cd $ffnok
