@@ -2,43 +2,47 @@
 
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-phase "cheat-sheets"
+function announce() {
+  phase "----------------| $1"
+}
+
+announce "cheat-sheets"
 
 if [[ -v ffc ]]; then
     $ffs/./git-push-specific.sh $ffc
 fi
 
-phase "jvm-lab"
+announce "jvm-lab"
 
 if [[ -v ffjl ]]; then
     $ffs/./git-push-specific.sh $ffjl
 fi
 
-phase "nodejs-lab"
+announce "nodejs-lab"
 
 if [[ -v ffnl ]]; then
     $ffs/./git-push-specific.sh $ffnl
 fi
 
-phase "spring-lab"
+announce "spring-lab"
 
 if [[ -v ffsl ]]; then
     $ffs/./git-push-specific.sh $ffsl
 fi
 
-phase "aranea (spring)"
+announce "aranea (spring)"
 
 if [[ -v ffara ]]; then
     $ffs/./git-push-specific.sh $ffara
 fi
 
-phase "ankylos (angular)"
+announce "ankylos (angular)"
 
 if [[ -v ffank ]]; then
     $ffs/./git-push-specific.sh $ffank
 fi
 
-phase "nok"
+announce "nok"
 
 if [[ -v ffnok ]]; then
     $ffs/./git-push-specific.sh $ffnok

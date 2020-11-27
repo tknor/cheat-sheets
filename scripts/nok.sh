@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# shellcheck source=./local-common.sh
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
   if [[ $1 == "dist" ]]; then
@@ -7,16 +8,28 @@
     cp -r $ffnl/src/util $ffnok/src
 
   elif [[ $1 == "rnd" ]]; then
-    phase "running nok/notok/notok-dev.ts"
+    phase "running notok in development mode"
     cd $ffnok
     tsc
-    node compiled/notok/notok-dev.js
+    node compiled/notok/main.js dev
+
+  elif [[ $1 == "rnt" ]]; then
+    phase "running notok in token mode"
+    cd $ffnok
+    tsc
+    node compiled/notok/main.js token
+
+  elif [[ $1 == "rnp" ]]; then
+    phase "running notok in production mode"
+    cd $ffnok
+    tsc
+    node compiled/notok/main.js
 
   elif [[ $1 == "rns" ]]; then
-    phase "running nok/notok/notok-scratch.ts"
+    phase "running notok/scratch.ts"
     cd $ffnok
     tsc
-    node compiled/notok/notok-scratch.js
+    node compiled/notok/scratch.js
 
   elif [[ $1 == "rls" ]]; then
     phase "running nodejs-lab/scratch.ts"

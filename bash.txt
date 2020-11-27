@@ -22,6 +22,8 @@ $(($VAR_NUMBER - 1))										// arithmetic evaluation
 VAR_PWD=$(pwd)												// store command result to variable
 cd $VAR_PWD
 
+command1 || command2                                        // XXX
+
 [ -d "/path/dir/" ] && echo "exists"						// one line folder existence check
 
 --------------------------------
@@ -214,7 +216,7 @@ else
     echo "variable value is not 1"
 fi
 
-if [[ $VAR_SOME == "some_value" ]]; then
+if [[ "$VAR_SOME" == "some_value" ]]; then
     echo "true"
 else
     echo "false"

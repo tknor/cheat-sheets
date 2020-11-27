@@ -1,13 +1,56 @@
 #!/bin/bash
 
+# shellcheck source=./local-common.sh
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-cd $1
+cd "$1" # moving to pushed folder
 
-if [[ -d "scripts/scripts-local" ]]; then
-    phase "I guess we're in cheat-sheets, copying scripts-local folder"
-    cp -r scripts/scripts-local $CONST_SCRIPTS_LOCAL_BACKUP_FOLDER
-    cp scripts/local-common.sh $CONST_SCRIPTS_LOCAL_BACKUP_FOLDER/local-common.sh
+PUSHED_FOLDER=$(pwd)
+
+function commit_ufr() {
+
+  cd "$CONST_UFR_FOLDER"
+
+	VAR_UNSTAGED_OUTPUT=$(git diff)
+  VAR_STAGED_OUTPUT=$(git diff --staged)
+
+  if [[ ($VAR_UNSTAGED_OUTPUT == "") && ($VAR_STAGED_OUTPUT == "") ]]; then
+    phase "no changes in UFR detected"
+  else
+    phase "changes in UFR detected"
+    git add .
+    git commit -m "auto push"
+  fi
+
+  cd "$PUSHED_FOLDER"
+}
+
+VAR_CHEATS="cheat-sheets"
+VAR_NOK="nok-20201124"
+VAR_MSG_UNVERSIONED="copying unversioned files to UFR"
+
+if [[ $PUSHED_FOLDER =~ Git/cheat-sheets$ ]]; then
+  phase "$VAR_CHEATS :: $VAR_MSG_UNVERSIONED"
+  mkdir -p "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/scripts-local"
+  cp -r scripts/scripts-local "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/scripts-local"
+  cp scripts/local-common.sh "$CONST_UFR_FOLDER/$VAR_CHEATS/scripts/local-common.sh"
+  commit_ufr
+
+elif [[ $PUSHED_FOLDER =~ Git/nok-20201124$ ]]; then
+  phase "$VAR_NOK :: $VAR_MSG_UNVERSIONED"
+  mkdir -p "$CONST_UFR_FOLDER/$VAR_NOK/unversioned"
+  cp -r unversioned "$CONST_UFR_FOLDER/$VAR_NOK/unversioned"
+  commit_ufr
+fi
+
+VAR_UNSTAGED_OUTPUT=$(git diff)
+VAR_STAGED_OUTPUT=$(git diff --staged)
+
+if [[ ($VAR_UNSTAGED_OUTPUT == "") && ($VAR_STAGED_OUTPUT == "") ]]; then
+  phase "no changes in pushed folder detected"
+  exit
+else
+  phase "changes in pushed folder detected"
 fi
 
 phase "status:"

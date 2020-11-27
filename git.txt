@@ -49,6 +49,9 @@ git commit -m "commit message"
 git commit --amend
 git commit --allow-empty							// allows empty commit with no changes, added files, etc.
 
+// makes commit only if there are changes
+git diff --quiet && git diff --staged --quiet || git commit -am "something has changed"
+
 git merge other-branch
 
 git checkout my-branch								// switch to branch (in later version switches also to a new branch tracking remote branch, if it's been fetched)
