@@ -11,3 +11,4 @@ clicking tab's X with alt                       // close everything except tab
 ctrl + alt + shift + t                          // list of refactorings
 ctrl + shift + j                                // join lines without whitespaces
 alt + shift + double-click                      // multiple word selection
+ctrl + alt + l                                  // reformat code / json

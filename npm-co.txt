@@ -36,6 +36,7 @@ npm install --save winston
 npm install --save winston-daily-rotate-file
 npm install --save xml2js
 npm install --save dotenv
+npm install --save mkdirp
 
 npm install --save firebase-functions@latest firebase-admin@latest
 
