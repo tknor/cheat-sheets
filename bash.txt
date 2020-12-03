@@ -1,5 +1,12 @@
 
 --------------------------------
+unorganized
+--------------------------------
+
+sudo apt-get update
+sudo apt-get install node-typescript
+
+--------------------------------
 scripts
 --------------------------------
 
@@ -122,7 +129,7 @@ tail file.txt
 tail -f file.txt
 tail -1000 file.txt
 
-chmod u=rwx,g=rwx,o=rwx file.txt							// permissions
+chmod u=rwx,g=rx,o=r file.txt		    					// permissions
 
 nano [filename]
 

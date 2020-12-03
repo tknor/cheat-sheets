@@ -1,4 +1,12 @@
 
+--------------------------------
+unorganized
+--------------------------------
+
+npm i --save-dev @types/node
+
+npm install -g typescript
+
 --------
 npm
 --------
@@ -11,6 +19,7 @@ npm install -g <module>                         // ... not locally, but globally
 npm install <module> --unsafe-perm              // easing security?
 npm install --save <module>                     // installs module and saves it to package.json file
 npm install --save --save-exact <module>        // ... stores exact version instead of version range
+npm i                                           // alias for install
 npm remove <module>
 
 npm list                                        // show installed modules
@@ -58,15 +67,6 @@ npx gitignore node
 npx covgen crimsondeed@gmail.com
 
 --------
-nvm
---------
-
-nvm install 12.18.0								// install specific node version
-nvm ls											// list locally installed versions
-nvm ls-remote									// list available remote versions
-nvm use 12.18.0									// switch to specific locally installed version
-
---------
 node
 --------
 
@@ -77,12 +77,17 @@ install nodejs with nvm :: https://github.com/nvm-sh/nvm
 ----------------------------------------------------------------
 
 # download and run installation script
+
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
 
 # logout and login
+
 # check successful installation
 
 command -v nvm									# should output "nvm" if all is ok
 
-
+nvm install 12.18.0								// install specific node version
+nvm ls											// list locally installed versions
+nvm ls-remote									// list available remote versions
+nvm use 12.18.0									// switch to specific locally installed version
