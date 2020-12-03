@@ -3,9 +3,21 @@
 # shellcheck source=./local-common.sh
 . ~/Workspaces/Git/cheat-sheets/scripts/local-common.sh
 
-  if [[ $1 == "dist" ]]; then
-    header2 "distribution of nodejs-lab/util"
-    cp -r $ffnl/src/util $ffnok/src
+  if [[ $1 == "download" ]]; then
+    header2 "nok/tools <- nodejs-lab/tools"
+    rm -rf "$ffnok/src/tools/"
+    cp -r "$ffnl/src/tools/" "$ffnok/src/"
+
+  elif [[ $1 == "upload" ]]; then
+    header2 "nok/tools -> nodejs-lab/tools"
+    rm -rf "$ffnl/src/tools/"
+    cp -r "$ffnok/src/tools/" "$ffnl/src/"
+
+  elif [[ $1 == "rnn" ]]; then
+    header2 "running notok in no mode"
+    cd $ffnok
+    tsc
+    node compiled/notok/main.js
 
   elif [[ $1 == "rnd" ]]; then
     header2 "running notok in development mode"
@@ -23,13 +35,13 @@
     header2 "running notok in production mode"
     cd $ffnok
     tsc
-    node compiled/notok/main.js
+    node compiled/notok/main.js prod
 
   elif [[ $1 == "rns" ]]; then
-    header2 "running notok/scratch.ts"
+    header2 "running nok/scratch.ts"
     cd $ffnok
     tsc
-    node compiled/notok/scratch.js
+    node compiled/scratch.js
 
   elif [[ $1 == "rls" ]]; then
     header2 "running nodejs-lab/scratch.ts"

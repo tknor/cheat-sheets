@@ -108,14 +108,14 @@ printf "Hello\n"											// more consistent than echo, definitely supports new
 rm file.txt
 rm [file_prefix]*
 rm -f file.txt												// forced - deletes write-protected file & silent when file does not exist
-rm -rf folder												// delete folder recursively and forced
+rm -rf "folder/"											// delete folder recursively and forced
 
 find														// list folder structure
 find . -not -path '*/\.*'									// structure without those starting with dot
 
 mkdir -p src/main/resources/META-INF						// create folder with all the parents
 
-cp -r /folder /destination              					// recursive folder copy (as /destination/folder)
+cp -r "/folder/" "/destination/"           					// recursive folder copy (as /destination/folder)
 cp "path/file.txt" "another/file.txt"                       // file copy
 
 tail file.txt
