@@ -13,6 +13,12 @@
     rm -rf "$ffnl/src/tools/"
     cp -r "$ffnok/src/tools/" "$ffnl/src/"
 
+  elif [[ $1 == "rnws" ]]; then
+    header2 "running nok web server"
+    cd $ffnok
+    tsc
+    node bin/www
+
   elif [[ $1 == "rnn" ]]; then
     header2 "running notok in no mode"
     cd $ffnok
