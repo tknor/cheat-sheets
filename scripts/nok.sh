@@ -14,9 +14,11 @@
     cp -r "$ffnok/src/tools/" "$ffnl/src/"
 
   elif [[ $1 == "rnws" ]]; then
-    header2 "running nok web server"
+    header2 "starting nok web server"
     cd $ffnok
+    header2 "compiling"
     tsc
+    header2 "running"
     node bin/www
 
   elif [[ $1 == "rnn" ]]; then
