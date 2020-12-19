@@ -27,19 +27,19 @@
     tsc
     node compiled/notok/main.js
 
-  elif [[ $1 == "rnd" ]]; then
+  elif [[ $1 == "rnnd" ]]; then
     header2 "running notok in development mode"
     cd $ffnok
     tsc
     node compiled/notok/main.js dev
 
-  elif [[ $1 == "rnt" ]]; then
+  elif [[ $1 == "rnnt" ]]; then
     header2 "running notok in token mode"
     cd $ffnok
     tsc
     node compiled/notok/main.js token
 
-  elif [[ $1 == "rnp" ]]; then
+  elif [[ $1 == "rnnp" ]]; then
     header2 "running notok in production mode"
     cd $ffnok
     tsc
