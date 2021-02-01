@@ -4,6 +4,8 @@ mvn --version
 mvn -h
 mvn --help
 
+mvn install -U                                                  // forces update of dependencies (snapshots)
+
 --------------------------
 generate simple project
 --------------------------
