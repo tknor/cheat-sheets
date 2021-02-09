@@ -4,6 +4,9 @@ mvn --version
 mvn -h
 mvn --help
 
+mvn clean install
+mvn -DskipTests clean install
+
 mvn install -U                                                  // forces update of dependencies (snapshots)
 
 --------------------------
