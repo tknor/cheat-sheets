@@ -29,6 +29,7 @@ git remote add <preferred-name> <path-to-git-file>
 // remote can also be stored locally
 
 git rebase -i HEAD~4								// rebasing (e.g. squashing) last 4 commits to one
+git rebase --abort
 
 git stash											// alias for 'git stash push'
 git stash push
