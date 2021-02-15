@@ -13,3 +13,5 @@ ctrl + shift + j                                // join lines without whitespace
 alt + shift + double-click                      // multiple word selection
 ctrl + alt + l                                  // reformat code / json
 shift + scroll                                  // horizontal scroll
+ctrl + j                                        // live template suggestions (after dot)
+F6                                              // move dialog

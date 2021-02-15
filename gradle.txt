@@ -37,6 +37,45 @@ gradle someTestTask --tests *TestClass1 --tests *TestClass2
 gradle clean build --rerun-tasks
 gradle clean build --refresh-dependencies
 
+gradle -q dependencyInsight --dependency commons-codec          // inspect one dependency resolution
+
+gradle --scan                                                   // whole build inspection (uploaded and report generated on server)
+
+------------------------------------
+unorganized dependency resolution
+------------------------------------
+
+implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client"){
+	version {
+		strictly '7.9.2'
+	}
+}
+
+constraints {
+	implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.9.2") {
+		because 'reason for this constraint'
+	}
+}
+
+implementation("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.9.2") {
+	exclude group: 'org.elasticsearch.client', module: 'elasticsearch-rest-high-level-client'
+}
+
+------------------------------------
+force versions globally
+------------------------------------
+
+configurations.all {
+	resolutionStrategy {
+		force("org.elasticsearch:elasticsearch:7.9.2")
+		force("org.elasticsearch.client:elasticsearch-rest-high-level-client:7.9.2")
+	}
+}
+
+dependencies {
+    ...
+}
+
 ------------------------------------
 task tree plugin
 ------------------------------------
@@ -46,14 +85,14 @@ plugins {
 }
 
 buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
-  }
-  dependencies {
-    classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.4"
-  }
+    dependencies {
+        classpath "gradle.plugin.com.dorongold.plugins:task-tree:1.4"
+    }
 }
 
 apply plugin: "com.dorongold.task-tree"

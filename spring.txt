@@ -1,6 +1,31 @@
 
-// profile specified by VM options:
+------------------------------------------------------
+profile specified by VM options:
+------------------------------------------------------
+
 -Dspring.profiles.active=development
 
-// profile specified in properties (SpringBoot standard property):
+------------------------------------------------------
+profile specified in properties (SpringBoot standard property):
+------------------------------------------------------
+
 spring.profiles.active = development
+
+------------------------------------------------------
+exlusion of auto-configuration
+------------------------------------------------------
+
+@Configuration
+@EnableAutoConfiguration(exclude={ DataFlowClientAutoConfiguration.class })
+
+for parent classes:
+
+@TestPropertySource(properties = "spring.autoconfigure.exclude=org.springframework.cloud.dataflow.rest.client.config.DataFlowClientAutoConfiguration")
+
+------------------------------------------------------
+logging level in properties
+------------------------------------------------------
+
+logging.level:
+  ROOT: WARN
+  com.cgi: INFO
