@@ -7,6 +7,16 @@ npm i --save-dev @types/node
 
 npm install -g typescript
 
+yarn add ramda --save
+yarn add @types/ramda --dev
+	import * as R from 'ramda'
+
+ng add @angular/pwa
+
+ng new <app_name> --create-application=false
+
+ng generate library <my_lib_name>
+
 --------
 npm
 --------
@@ -54,9 +64,17 @@ ng, angular
 ----------------
 
 ng new <app_name>                               // creates folder, initializes angular application
+ng new <app_name> --strict                      // no null
 
 ng serve
 ng serve --open
+
+ng generate
+
+ng build
+ng build --prod
+
+ng update
 
 --------
 npx
