@@ -7,6 +7,8 @@ npm i --save-dev @types/node
 
 npm install -g typescript
 
+npm install -g @angular/cli
+
 yarn add ramda --save
 yarn add @types/ramda --dev
 	import * as R from 'ramda'
@@ -39,8 +41,9 @@ npm list -g                                     // show path to and list of glob
 npm - usual modules
 ------------------------
 
-npm install -g @angular/cli
+npm install -g @angular/cli                     // ng
 npm install -g firebase-tools
+npm install --save-dev @angular-devkit/build-angular
 
 npm install @types/node
 npm install --save bitcom
