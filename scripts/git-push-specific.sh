@@ -66,7 +66,7 @@ select yn in "Commit" "Cancel"; do
     esac
 done
 
-VAR_BRANCH=$(git branch | grep -o 'm.\+')
+VAR_BRANCH=$(git branch | grep -e 'master' -e 'main' | grep -o 'm.\+')
 
 header2 "Push? (detected: $VAR_BRANCH )"
 select yn in "Push" "Cancel"; do

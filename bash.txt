@@ -89,7 +89,8 @@ grep -i                                                     // ignore case
 grep -w                                                     // whole words only
 grep -B 3                                                   // with context, lines A after, B before, C both
 grep -e PATTERN1 -e PATTERN2                                // multiple patterns easily
-grep -F PATTERN1                                            // fixed pattern, no regex meta-characters
+grep -F PATTERN                                             // fixed pattern, no regex meta-characters
+grep -o PATTERN                                             //
 
 egrep                                                       // short for grep -E (extended regex pattern)
 fgrep                                                       // short for grep -F (fixed string pattern)
