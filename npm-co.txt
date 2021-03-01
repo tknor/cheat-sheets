@@ -15,9 +15,13 @@ yarn add @types/ramda --dev
 
 ng add @angular/pwa
 
+ng add @angular/material
+
 ng new <app_name> --create-application=false
 
 ng generate library <my_lib_name>
+
+ng --version
 
 --------
 npm
@@ -59,6 +63,7 @@ npm install --save winston-daily-rotate-file
 npm install --save xml2js
 npm install --save dotenv
 npm install --save mkdirp
+npm install --save node-fetch
 
 npm install --save firebase-functions@latest firebase-admin@latest
 

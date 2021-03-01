@@ -24,6 +24,7 @@ function commit_ufr() {
 
 VAR_CHEATS="cheat-sheets"
 VAR_NOK="nok-20201124"
+VAR_ANKYLOS="ankylos"
 VAR_MSG_UNVERSIONED="copying unversioned files to UFR"
 
 if [[ $VAR_PUSHED_FOLDER =~ Git/cheat-sheets$ ]]; then
@@ -37,6 +38,12 @@ elif [[ $VAR_PUSHED_FOLDER =~ Git/nok-20201124$ ]]; then
   header2 "$VAR_NOK :: $VAR_MSG_UNVERSIONED"
   mkdir -p "$CONST_UFR_FOLDER/$VAR_NOK"
   cp -r unversioned "$CONST_UFR_FOLDER/$VAR_NOK"
+  commit_ufr
+
+elif [[ $VAR_PUSHED_FOLDER =~ Git/ankylos$ ]]; then
+  header2 "$VAR_NOK :: $VAR_MSG_UNVERSIONED"
+  mkdir -p "$CONST_UFR_FOLDER/$VAR_ANKYLOS"
+  cp -r unversioned "$CONST_UFR_FOLDER/$VAR_ANKYLOS"
   commit_ufr
 fi
 
