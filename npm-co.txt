@@ -3,6 +3,8 @@
 unorganized
 --------------------------------
 
+ng generate module app-routing --flat --module=app
+
 npm i --save-dev @types/node
 
 npm install -g typescript
