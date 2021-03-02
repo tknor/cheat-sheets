@@ -41,7 +41,7 @@ elif [[ $VAR_PUSHED_FOLDER =~ Git/nok-20201124$ ]]; then
   commit_ufr
 
 elif [[ $VAR_PUSHED_FOLDER =~ Git/ankylos$ ]]; then
-  header2 "$VAR_NOK :: $VAR_MSG_UNVERSIONED"
+  header2 "$VAR_ANKYLOS :: $VAR_MSG_UNVERSIONED"
   mkdir -p "$CONST_UFR_FOLDER/$VAR_ANKYLOS"
   cp -r unversioned "$CONST_UFR_FOLDER/$VAR_ANKYLOS"
   commit_ufr
