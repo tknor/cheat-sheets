@@ -16,3 +16,4 @@ shift + scroll                                  // horizontal scroll
 ctrl + j                                        // live template suggestions (after dot)
 F6                                              // move dialog
 ctrl + shift + i                                // quick definition
+ctrl + shift + e                                // recent code fragment changes
