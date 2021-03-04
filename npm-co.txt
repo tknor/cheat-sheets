@@ -3,6 +3,27 @@
 unorganized
 --------------------------------
 
+npm install -g @angular/cli
+ng new myapp
+[cd]
+ng serve
+    dev server
+ng generate
+ng build
+ng build --prod
+ng update
+    update.angular.io
+        checklist for updates
+ng new myapp --strict
+    never null
+ng add @angular/pwa
+yarn add ramda --save
+yarn add @types/ramda --dev
+    import * as R from 'ramda'
+ng new mywork --create-application=false
+[cd]
+ng generate library mylib
+
 ng generate module app-routing --flat --module=app
 
 npm i --save-dev @types/node
