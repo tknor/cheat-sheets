@@ -31,14 +31,21 @@ if [[ -v ffsl ]]; then
     git pull
 fi
 
-header1 "aranea (spring)"
+header1 "aranea"
 
 if [[ -v ffara ]]; then
     cd $ffara
     git pull
 fi
 
-header1 "ankylos (angular)"
+header1 "celeri"
+
+if [[ -v ffcel ]]; then
+    cd $ffcel
+    git pull
+fi
+
+header1 "ankylos"
 
 if [[ -v ffank ]]; then
     cd $ffank
